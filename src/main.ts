@@ -1,4 +1,3 @@
-import axios from 'axios'
 import { XMLBuilder, XMLParser } from 'fast-xml-parser'
 import fs from 'fs'
 import { BaseService } from './BaseService'
