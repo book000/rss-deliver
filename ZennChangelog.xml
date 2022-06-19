@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?><rss version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Zenn Changelog</title>
+    <link>https://zenn.dev/changelog/</link>
+    <description>What&apos;s new on zenn.dev</description>
+    <image>
+      <url>https://zenn.dev/images/logo-only-dark.png</url>
+      <title>Zenn Changelog</title>
+      <link>https://zenn.dev/changelog/</link>
+    </image>
+    <generator>book000/rss-deliver</generator>
+    <language>ja</language>
+  </channel>
+  <item>
+    <title>Apple Pay、Google Payでの決済に対応</title>
+    <link>https://zenn.dev/changelog#20220616</link>
+    <content:encoded></content:encoded>
+  </item>
+  <item>
+    <title>JCBカードでの決済に対応</title>
+    <link>https://zenn.dev/changelog#20220609</link>
+    <content:encoded></content:encoded>
+  </item>
+  <item>
+    <title>日時を指定して記事を公開できるように</title>
+    <link>https://zenn.dev/changelog#20220608</link>
+    <content:encoded>記事の編集画面で、公開予約設定ができるようになりました。Zenn CLIでの設定方法はこちら。</content:encoded>
+  </item>
+  <item>
+    <title>再設定用のメールアドレスからアカウントの復元ができるように</title>
+    <link>https://zenn.dev/changelog#20220531</link>
+    <content:encoded>&lt;a href=&quot;/faq#backup-email&quot;&gt;/faq#backup-email&lt;/a&gt;</content:encoded>
+  </item>
+  <item>
+    <title>投稿コンテンツにはてなIDを指定できるように</title>
+    <link>https://zenn.dev/changelog#20220516</link>
+    <content:encoded>&lt;a href=&quot;/zenn/articles/connect-with-hatena&quot;&gt;/zenn/articles/connect-with-hatena&lt;/a&gt;</content:encoded>
+  </item>
+  <item>
+    <title>GitHub上のソースコードを埋め込みできるように</title>
+    <link>https://zenn.dev/changelog#20220419</link>
+    <content:encoded>&lt;a href=&quot;/zenn/articles/markdown-guide#github&quot;&gt;/zenn/articles/markdown-guide#github&lt;/a&gt;</content:encoded>
+  </item>
+  <item>
+    <title>購入済みの有料の本に対してバッジを贈れるように</title>
+    <link>https://zenn.dev/changelog#20220412</link>
+    <content:encoded>&lt;a href=&quot;https://github.com/zenn-dev/zenn-community/issues/387&quot;&gt;https://github.com/zenn-dev/zenn-community/issues/387&lt;/a&gt;</content:encoded>
+  </item>
+  <item>
+    <title>利用規約を改定</title>
+    <link>https://zenn.dev/changelog#20220401</link>
+    <content:encoded>それに伴い選択できるバッジの種類の変更や収益ダッシュボードの大幅改修を行いました。
+
+&lt;a href=&quot;https://github.com/zenn-dev/zenn-docs/pull/29&quot;&gt;https://github.com/zenn-dev/zenn-docs/pull/29&lt;/a&gt;</content:encoded>
+  </item>
+  <item>
+    <title>記事やスクラップの返信のUIを改善</title>
+    <link>https://zenn.dev/changelog#20220316</link>
+    <content:encoded></content:encoded>
+  </item>
+  <item>
+    <title>:::message 記法のセマンティクスを改善</title>
+    <link>https://zenn.dev/changelog#20220317</link>
+    <content:encoded>&lt;a href=&quot;https://github.com/zenn-dev/zenn-editor/pull/274&quot;&gt;https://github.com/zenn-dev/zenn-editor/pull/274&lt;/a&gt;</content:encoded>
+  </item>
+  <item>
+    <title>スクラップのエディターでクリップボードから画像をペーストできるように</title>
+    <link>https://zenn.dev/changelog#20220131</link>
+    <content:encoded></content:encoded>
+  </item>
+  <item>
+    <title>Zenn CLIのプレビューを起動するときに--hostオプションを指定できるように</title>
+    <link>https://zenn.dev/changelog#20220127</link>
+    <content:encoded>&lt;a href=&quot;https://github.com/zenn-dev/zenn-editor/issues/228&quot;&gt;https://github.com/zenn-dev/zenn-editor/issues/228&lt;/a&gt;</content:encoded>
+  </item>
+</rss>
