@@ -41,7 +41,7 @@ async function generateRSS() {
 async function generateList() {
   console.log('Generating list...')
   const files = fs.readdirSync('output')
-  const header = '# rss-deliver\n\n## RSS files\n\n'
+  const template = fs.readFileSync('template.html', 'utf8')
   const list = files.map((file) => {
     const parser = new XMLParser({
       ignoreAttributes: false,
@@ -49,15 +49,12 @@ async function generateList() {
 
     const feed = parser.parse(fs.readFileSync('output/' + file, 'utf8'))
     const title = feed.rss.channel.title
-    return (
-      '- [' +
-      title +
-      '](https://book000.github.io/rss-deliver/' +
-      file +
-      '.xml)'
-    )
+    return "<li><a href='" + file + "'>" + title + '</a></li>'
   })
-  fs.writeFileSync('output/README.md', header + list.join('\n'))
+  fs.writeFileSync(
+    'output/index.html',
+    template.replace('{{ RSS-FILES }}', '<ul>' + list.join('\n') + '</ul>')
+  )
 }
 
 async function main() {
