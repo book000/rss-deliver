@@ -4,7 +4,6 @@ import ServiceInformation from '@/model/service-information'
 import axios from 'axios'
 import { XMLParser } from 'fast-xml-parser'
 import cheerio from 'cheerio'
-import fs from 'fs'
 
 export default class ZennChangelog extends BaseService {
   information(): ServiceInformation {
@@ -29,10 +28,6 @@ export default class ZennChangelog extends BaseService {
     })
     const response = await axios.get('https://zenn.dev/changelog/feed/')
     const oldFeed = parser.parse(response.data)
-    fs.writeFileSync(
-      'output/zenn-changelog-original.xml',
-      JSON.stringify(oldFeed)
-    )
     const items: Item[] = []
     for (const item of oldFeed.rss.channel.item) {
       const link: string = item.link

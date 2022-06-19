@@ -4,6 +4,9 @@ import { BaseService } from './BaseService'
 import ZennChangelog from './services/zenn-changelog'
 
 async function main() {
+  if (!fs.existsSync('output')) {
+    fs.mkdirSync('output')
+  }
   const services: BaseService[] = [new ZennChangelog()]
   for (const service of services) {
     const filename = service.constructor.name
@@ -32,9 +35,6 @@ async function main() {
 
     const feed = builder.build(obj)
 
-    if (!fs.existsSync('output')) {
-      fs.mkdirSync('output')
-    }
     fs.writeFileSync('output/' + filename + '.xml', feed.toString())
     console.timeEnd(service.information().title)
   }
