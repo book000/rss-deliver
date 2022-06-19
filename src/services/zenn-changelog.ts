@@ -56,13 +56,13 @@ export default class ZennChangelog extends BaseService {
 
       items.push({
         title: item.title,
-        link: link,
+        link,
         'content:encoded': contents.map((s) => s && s?.trim()).join('\n\n'),
       })
     }
     return {
       status: true,
-      items: items,
+      items,
     }
   }
 }
