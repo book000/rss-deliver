@@ -57,7 +57,7 @@ async function generateList() {
       '.xml)'
     )
   })
-  fs.writeFileSync('README.md', header + list.join('\n'))
+  fs.writeFileSync('output/README.md', header + list.join('\n'))
 }
 
 async function main() {
