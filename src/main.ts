@@ -1,12 +1,11 @@
-import { XMLBuilder } from 'fast-xml-parser'
+import axios from 'axios'
+import { XMLBuilder, XMLParser } from 'fast-xml-parser'
 import fs from 'fs'
 import { BaseService } from './BaseService'
 import ZennChangelog from './services/zenn-changelog'
 
-async function main() {
-  if (!fs.existsSync('output')) {
-    fs.mkdirSync('output')
-  }
+async function generateRSS() {
+  console.log('Generating RSS...')
   const services: BaseService[] = [new ZennChangelog()]
   for (const service of services) {
     const filename = service.constructor.name
@@ -38,6 +37,37 @@ async function main() {
     fs.writeFileSync('output/' + filename + '.xml', feed.toString())
     console.timeEnd(service.information().title)
   }
+}
+
+async function generateList() {
+  console.log('Generating list...')
+  const files = fs.readdirSync('output')
+  const header = '# rss-deliver\n\n## RSS files\n\n'
+  const list = files.map((file) => {
+    const parser = new XMLParser({
+      ignoreAttributes: false,
+    })
+
+    const feed = parser.parse(fs.readFileSync('output/' + file, 'utf8'))
+    const title = feed.rss.channel.title
+    return (
+      '- [' +
+      title +
+      '](https://book000.github.io/rss-deliver/' +
+      file +
+      '.xml)'
+    )
+  })
+  fs.writeFileSync('README.md', header + list.join('\n'))
+}
+
+async function main() {
+  if (!fs.existsSync('output')) {
+    fs.mkdirSync('output')
+  }
+
+  await generateRSS()
+  await generateList()
 }
 
 ;(async () => {
