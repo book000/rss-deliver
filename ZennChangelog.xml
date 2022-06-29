@@ -12,6 +12,13 @@
     <language>ja</language>
   </channel>
   <item>
+    <title>本の閲覧履歴を自動で保存するように</title>
+    <link>https://zenn.dev/changelog#20220628</link>
+    <content:encoded>使用方法はこちら。
+
+&lt;a href=&quot;https://github.com/zenn-dev/zenn-community/issues/390&quot;&gt;https://github.com/zenn-dev/zenn-community/issues/390&lt;/a&gt;</content:encoded>
+  </item>
+  <item>
     <title>Apple Pay、Google Payでの決済に対応</title>
     <link>https://zenn.dev/changelog#20220616</link>
     <content:encoded></content:encoded>
@@ -67,10 +74,5 @@
     <title>スクラップのエディターでクリップボードから画像をペーストできるように</title>
     <link>https://zenn.dev/changelog#20220131</link>
     <content:encoded></content:encoded>
-  </item>
-  <item>
-    <title>Zenn CLIのプレビューを起動するときに--hostオプションを指定できるように</title>
-    <link>https://zenn.dev/changelog#20220127</link>
-    <content:encoded>&lt;a href=&quot;https://github.com/zenn-dev/zenn-editor/issues/228&quot;&gt;https://github.com/zenn-dev/zenn-editor/issues/228&lt;/a&gt;</content:encoded>
   </item>
 </rss>
