@@ -1,0 +1,464 @@
+<?xml version="1.0" encoding="UTF-8"?><rss version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>FF14 Lodestone Obstacle</title>
+    <link>https://jp.finalfantasyxiv.com/lodestone/</link>
+    <description>Obstacle - FINAL FANTASY XIV, The Lodestone</description>
+    <generator>book000/rss-deliver</generator>
+    <language>ja</language>
+  </channel>
+  <item>
+    <title>[続報]データセンタートラベルの状況ならびにホームワールド変更サービスのオープン時期について(7/14)</title>
+    <link>https://jp.finalfantasyxiv.com/lodestone/news/detail/6d78c03553d99843430ea340abaad2144a1d181f</link>
+    <content:encoded>データセンタートラベルの状況ならびに、一時停止しておりますホームワールド変更サービスのオープン時期についてご案内いたします。&lt;br&gt;
+&lt;br&gt;
+2022年7月13日(水)に実施したパッチ6.18 HotFixesにおいて、データセンタートラベルの負荷対策が完了いたしました。その後、高負荷となることはなく利用数は順調に増加し、安定して稼働できていることが確認できております。ただし、週末には利用数の増加が予想されるため、念のため、週明けまで引き続きモニタリングを続け、週末を越えても安定して稼働できることを確認させていただきたく存じます。&lt;br&gt;
+&lt;br&gt;
+ホームワールド変更サービスにつきましては、データセンタートラベルと同じ仕組みを利用しているため、週明けまで様子をみて問題ないことが確認できたのち、来週中にオープンさせていただく予定です。具体的なオープン時期が決まり次第、あらためてご案内いたします。&lt;br&gt;
+&lt;br&gt;
+大変お待たせしており誠に申し訳ございませんが、いましばらくお待ちくださいますようお願いいたします。&lt;br&gt;
+&lt;br&gt;
+お客様にはご迷惑をおかけしておりますことをお詫びいたします。</content:encoded>
+    <pubDate>Thu, 14 Jul 2022 04:15:00 GMT</pubDate>
+  </item>
+  <item>
+    <title>[復旧]アドベンチャラープレート機能 障害復旧作業完了のお知らせ(7/11)</title>
+    <link>https://jp.finalfantasyxiv.com/lodestone/news/detail/89f5242391aeec676350d4a20f02559307a5113d</link>
+    <content:encoded>下記日時におきまして、アドベンチャラープレート機能を利用できない場合がある障害が発生しておりました。&lt;br&gt;
+&lt;br&gt;
+現在は復旧しておりますが、お客様にはご迷惑をおかけいたしましたことをお詫びいたします。&lt;br&gt;
+&lt;br&gt;
+　　　　　　　　　　　　　記&lt;br&gt;
+&lt;br&gt;
+日　時：2022年7月10日(日) 23:52頃より&lt;br&gt;
+　　　　2022年7月11日(月) 16:04頃まで&lt;br&gt;
+&lt;br&gt;
+障害内容：アドベンチャラープレート機能を利用できない場合がある&lt;br&gt;
+&lt;br&gt;
+原　因：サーバープログラムの不具合&lt;br&gt;
+&lt;br&gt;
+対　象：ファイナルファンタジーXIVをご利用のお客様</content:encoded>
+    <pubDate>Mon, 11 Jul 2022 07:09:00 GMT</pubDate>
+  </item>
+  <item>
+    <title>[復旧]アドベンチャラープレート機能 障害復旧作業完了のお知らせ(7/8)</title>
+    <link>https://jp.finalfantasyxiv.com/lodestone/news/detail/2ab2d1f8aefe9e80a2bd9273d30d778a83b50fb5</link>
+    <content:encoded>下記日時におきまして、アドベンチャラープレート機能を利用できない場合がある障害が発生しておりました。&lt;br&gt;
+&lt;br&gt;
+現在は復旧しておりますが、お客様にはご迷惑をおかけいたしましたことをお詫びいたします。&lt;br&gt;
+&lt;br&gt;
+　　　　　　　　　　　　　記&lt;br&gt;
+&lt;br&gt;
+日　時：2022年7月7日(木) 23:40頃より&lt;br&gt;
+　　　　2022年7月8日(金) 16:37頃まで&lt;br&gt;
+&lt;br&gt;
+障害内容：アドベンチャラープレート機能を利用できない場合がある&lt;br&gt;
+&lt;br&gt;
+原　因：サーバープログラムの不具合&lt;br&gt;
+&lt;br&gt;
+対　象：ファイナルファンタジーXIVをご利用のお客様</content:encoded>
+    <pubDate>Fri, 08 Jul 2022 07:40:00 GMT</pubDate>
+  </item>
+  <item>
+    <title>[続報]データセンタートラベル機能 障害発生のお知らせ(7/5)：続報3</title>
+    <link>https://jp.finalfantasyxiv.com/lodestone/news/detail/0a7b64f4445e1846d44d80c552e0aa99e69b4db0</link>
+    <content:encoded>データセンタートラベルにつきまして、現在の状況をお知らせいたします。&lt;br&gt;
+&lt;br&gt;
+すべてのワールドでデータセンタートラベル機能をオープンして以降の負荷状況をふまえ、サーバーの設定変更等によりさらなる負荷対策を実施いたしました。その後モニタリングを続けておりましたが、ログインのピーク時間でも数分程度で移動処理が完了し、安定して移動できていることが確認できております。&lt;br&gt;
+&lt;br&gt;
+なお、メンテナンスの直後などの集中するタイミングや特定のワールドに移動リクエストが集中した場合などに、引き続き超高負荷となってしまう可能性がございます。それらに関する対策には、クライアント側の修正が必要になるため、週明けにHOTFIXを実施できるよう、急ぎ修正および検証作業を行っております。HOTFIXの実施日程が決まり次第、あらためてお知らせいたします。&lt;br&gt;
+&lt;br&gt;
+お客様にはご迷惑をおかけしておりますことをお詫びいたします。</content:encoded>
+    <pubDate>Fri, 08 Jul 2022 03:40:00 GMT</pubDate>
+  </item>
+  <item>
+    <title>[復旧]コンパニオンアプリ 障害復旧作業完了のお知らせ(7/8)</title>
+    <link>https://jp.finalfantasyxiv.com/lodestone/news/detail/c0fbbb929808f7c8d2bea3aef8d7a3b8077959f6</link>
+    <content:encoded>下記日時におきまして、ファイナルファンタジーXIV コンパニオンにおいて、以下の障害が発生しておりました。&lt;br&gt;
+&lt;br&gt;
+現在は復旧しておりますが、お客様にはご迷惑をおかけいたしましたことをお詫びいたします。&lt;br&gt;
+&lt;br&gt;
+　　　　　　　　　　　　　記&lt;br&gt;
+&lt;br&gt;
+日　時：2022年7月5日(火) 20:00頃より&lt;br&gt;
+　　　　2022年7月8日(金) 0:00頃まで&lt;br&gt;
+&lt;br&gt;
+障害内容：チャットグループに招待されても、チャット一覧に表示されない場合がある。&lt;br&gt;
+&lt;br&gt;
+原　因：サーバーの通信障害&lt;br&gt;
+&lt;br&gt;
+対　象：ファイナルファンタジーXIV コンパニオンをご利用のお客様</content:encoded>
+    <pubDate>Thu, 07 Jul 2022 15:40:00 GMT</pubDate>
+  </item>
+  <item>
+    <title>[続報]データセンタートラベル機能 障害発生のお知らせ(7/5)：続報2</title>
+    <link>https://jp.finalfantasyxiv.com/lodestone/news/detail/261d0aa712a0048948aa40086435c3e9a270985b</link>
+    <content:encoded>データセンタートラベルにつきまして、現在の状況をお知らせいたします。&lt;br&gt;
+&lt;br&gt;
+データセンタートラベル機能を一時的に停止させていただいてから、設定の変更等を行ったうえでワールド単位で徐々にオープンし、現時点ではすべてのワールドでデータセンタートラベル機能をご利用いただけます。&lt;br&gt;
+&lt;br&gt;
+しかしながら、移動のテストをされたいというプレイヤーの方も非常に多く、ログインのピーク時間には移動まで30分程度の時間を要する場合もございます。引き続き、負荷を下げ混雑時でも快適な移動となるよう、できるだけ早く対策を講じてまいります。&lt;br&gt;
+&lt;br&gt;
+なお、状況によっては、サーバーダウンやデータセンタートラベル機能全体に障害が発生してしまうことを防止するために、再度ワールド単位で一時的に停止させていただく場合もございます。データセンタートラベル機能を実行した際に、現在は利用できない旨のメッセージが表示されたりワールドを選択できない場合は、しばらく時間をおいてからお試しいただければ幸いです。&lt;br&gt;
+&lt;br&gt;
+お客様にはご迷惑をおかけしておりますことをお詫びいたします。</content:encoded>
+    <pubDate>Wed, 06 Jul 2022 08:40:00 GMT</pubDate>
+  </item>
+  <item>
+    <title>[続報]データセンタートラベル機能 障害発生のお知らせ(7/5)：続報</title>
+    <link>https://jp.finalfantasyxiv.com/lodestone/news/detail/5875e320eb797c86782ff43ef7b6c497b0e5f226</link>
+    <content:encoded>現在発生しているデータセンタートラベルの障害につきまして、分間15,000を超える移動リクエストが寄せられており、膨大な負荷によりサーバーの処理が追い付かない状況であることが確認できました。&lt;br&gt;
+&lt;br&gt;
+ご迷惑をおかけして誠に申し訳ございませんが、データセンタートラベル機能をオープンさせたまま問題を解消することが難しい数の移動リクエストとなっているため、データセンタートラベル機能を一時的に停止させていただき、状況を見ながら徐々にオープンさせていただきます。&lt;br&gt;
+&lt;br&gt;
+お客様にはご迷惑をおかけしておりますことをお詫びいたします。</content:encoded>
+    <pubDate>Tue, 05 Jul 2022 12:32:03 GMT</pubDate>
+  </item>
+  <item>
+    <title>データセンタートラベル機能 障害発生のお知らせ(7/5)</title>
+    <link>https://jp.finalfantasyxiv.com/lodestone/news/detail/842189d866f6732f0a6702e6e08818d0691e5905</link>
+    <content:encoded>現在、データセンタートラベル機能が利用できない障害が発生しております。&lt;br&gt;
+調査・復旧作業を実施しておりますので、いましばらくお待ちくださいますようお願いいたします。&lt;br&gt;
+&lt;br&gt;
+お客様にはご迷惑をおかけしておりますことをお詫びいたします。&lt;br&gt;
+&lt;br&gt;
+　　　　　　　　　　　　　記&lt;br&gt;
+&lt;br&gt;
+日　時：2022年7月5日(火) 19:20頃より&lt;br&gt;
+&lt;br&gt;
+障害内容：データセンタートラベル機能が利用できない&lt;br&gt;
+&lt;br&gt;
+原　因：アクセス集中&lt;br&gt;
+&lt;br&gt;
+対　象：ファイナルファンタジーXIVをご利用のお客様</content:encoded>
+    <pubDate>Tue, 05 Jul 2022 10:40:00 GMT</pubDate>
+  </item>
+  <item>
+    <title>[復旧]DDoS攻撃によるネットワーク障害復旧のお知らせ(7/1)</title>
+    <link>https://jp.finalfantasyxiv.com/lodestone/news/detail/1e5af269fbcfc6b83e81fd41c9e1da04cea3476e</link>
+    <content:encoded>下記日時に、DDoS攻撃によるネットワーク障害が発生し、この影響により下記の状況が発生する場合がございました。&lt;br&gt;
+引き続き状況を注視し、ISP様とも協力して対策を進めてまいります。&lt;br&gt;
+&lt;br&gt;
+　　　　　　　　　　　　　記&lt;br&gt;
+&lt;br&gt;
+日　時：2022年7月1日(金) 2:22頃より2:25頃まで&lt;br&gt;
+&lt;br&gt;
+影　響：&lt;br&gt;
+・北米データセンターに配置されているワールドから切断される場合がある&lt;br&gt;
+・北米データセンターに配置されているワールドへのログインがしづらい場合がある&lt;br&gt;
+・北米データセンターへの接続およびデータ送受信がしづらい場合がある&lt;br&gt;
+&lt;br&gt;
+対　象：ファイナルファンタジーXIVをご利用のお客様</content:encoded>
+    <pubDate>Fri, 01 Jul 2022 00:45:00 GMT</pubDate>
+  </item>
+  <item>
+    <title>DDoS攻撃によるネットワーク障害発生のお知らせ(7/1)</title>
+    <link>https://jp.finalfantasyxiv.com/lodestone/news/detail/a2af6f0815e4218b43b8fda5ec0a0422b04f6e2c</link>
+    <content:encoded>現在、DDoS攻撃によるネットワーク障害が発生していることを確認しており、この影響により、下記の状況が発生する場合があります。&lt;br&gt;
+&lt;br&gt;
+攻撃手法を確認しつつ対策を行っておりますので、状況に進展があり次第、あらためてお知らせいたします。&lt;br&gt;
+&lt;br&gt;
+　　　　　　　　　　　　　記&lt;br&gt;
+&lt;br&gt;
+日　時：2022年7月1日(金) 2:22頃より&lt;br&gt;
+&lt;br&gt;
+影　響：&lt;br&gt;
+・北米データセンターに配置されているワールドから切断される場合がある&lt;br&gt;
+・北米データセンターに配置されているワールドへのログインがしづらい場合がある&lt;br&gt;
+・北米データセンターへの接続およびデータ送受信がしづらい場合がある&lt;br&gt;
+&lt;br&gt;
+対　象：ファイナルファンタジーXIVをご利用のお客様</content:encoded>
+    <pubDate>Thu, 30 Jun 2022 18:35:00 GMT</pubDate>
+  </item>
+  <item>
+    <title>[復旧]Lodestone 障害復旧作業完了のお知らせ(6/19)</title>
+    <link>https://jp.finalfantasyxiv.com/lodestone/news/detail/56ea953705767d483ec07ff8be0ef9774c59deff</link>
+    <content:encoded>下記日時に、Lodestoneにおきまして、検索の結果が正常に表示されない場合がある障害が発生しておりました。&lt;br&gt;
+&lt;br&gt;
+現在は復旧しておりますが、お客様にはご迷惑をおかけいたしましたことをお詫びいたします。&lt;br&gt;
+&lt;br&gt;
+　　　　　　　　　　　　　記&lt;br&gt;
+&lt;br&gt;
+日　時：2022年6月19日(日) 18:00頃より19:13頃まで&lt;br&gt;
+&lt;br&gt;
+障害内容：Lodestoneの検索機能において、障害発生日時以降に作成された以下の内容が検索結果に表示されない場合がある&lt;br&gt;
+　　　　・日記&lt;br&gt;
+　　　　・ニュース&lt;br&gt;
+　　　　・トピックス&lt;br&gt;
+　　　　・キャラクター&lt;br&gt;
+　　　　・フリーカンパニー&lt;br&gt;
+　　　　・リンクシェル&lt;br&gt;
+　　　　・クロスワールドリンクシェル&lt;br&gt;
+　　　　・イベント＆パーティ募集&lt;br&gt;
+　　　　・PvPチーム&lt;br&gt;
+　　　　・コミュニティファインダー&lt;br&gt;
+&lt;br&gt;
+原　因：サーバー機器の障害&lt;br&gt;
+&lt;br&gt;
+対　象：Lodestoneをご利用のお客様</content:encoded>
+    <pubDate>Sun, 19 Jun 2022 10:30:00 GMT</pubDate>
+  </item>
+  <item>
+    <title>Lodestone 障害発生のお知らせ(6/19)</title>
+    <link>https://jp.finalfantasyxiv.com/lodestone/news/detail/7f8087e01ead7d4949c2fc67e29fc976e9bd4357</link>
+    <content:encoded>現在、Lodestoneにおきまして、検索の結果が正常に表示されない場合がある障害が発生しております。調査・復旧作業を行っておりますので、いましばらくお待ちください。&lt;br&gt;
+&lt;br&gt;
+お客様にはご迷惑をおかけしておりますことをお詫びいたします。&lt;br&gt;
+&lt;br&gt;
+　　　　　　　　　　　　　記&lt;br&gt;
+&lt;br&gt;
+日　時：2022年6月19日(日) 18:00頃より&lt;br&gt;
+&lt;br&gt;
+障害内容：Lodestoneの検索機能において、障害発生日時以降に作成された以下の内容が検索結果に表示されない場合がある&lt;br&gt;
+　　　　・日記&lt;br&gt;
+　　　　・ニュース&lt;br&gt;
+　　　　・トピックス&lt;br&gt;
+　　　　・キャラクター&lt;br&gt;
+　　　　・フリーカンパニー&lt;br&gt;
+　　　　・リンクシェル&lt;br&gt;
+　　　　・クロスワールドリンクシェル&lt;br&gt;
+　　　　・イベント＆パーティ募集&lt;br&gt;
+　　　　・PvPチーム&lt;br&gt;
+　　　　・コミュニティファインダー&lt;br&gt;
+&lt;br&gt;
+原　因：サーバー機器の障害&lt;br&gt;
+&lt;br&gt;
+対　象：Lodestoneをご利用のお客様</content:encoded>
+    <pubDate>Sun, 19 Jun 2022 10:00:00 GMT</pubDate>
+  </item>
+  <item>
+    <title>[復旧]ネットワーク障害復旧のお知らせ(6/16)</title>
+    <link>https://jp.finalfantasyxiv.com/lodestone/news/detail/baee1fd405fd04d1a690ca9daedfefdc50469c5b</link>
+    <content:encoded>下記日時におきまして、一部のインターネット経路の通信が不安定な状況になっておりました。&lt;br&gt;
+&lt;br&gt;
+この影響により、下記の状況が発生する場合がありましたが、現在は正常にご利用いただけます。&lt;br&gt;
+&lt;br&gt;
+　　　　　　　　　　　　　記&lt;br&gt;
+&lt;br&gt;
+日　時：2022年6月16日(木) 1:35頃より1:40頃まで&lt;br&gt;
+&lt;br&gt;
+影　響：&lt;br&gt;
+・欧州データセンターに配置されているワールドから切断される場合がある&lt;br&gt;
+・欧州データセンターに配置されているワールドへのログインがしづらい場合がある&lt;br&gt;
+・欧州データセンターへの接続およびデータ送受信がしづらい場合がある &lt;br&gt;
+&lt;br&gt;
+対　象：ファイナルファンタジーXIVをご利用のお客様</content:encoded>
+    <pubDate>Wed, 15 Jun 2022 17:55:00 GMT</pubDate>
+  </item>
+  <item>
+    <title>[復旧][Chaos] コンテンツワールド 障害復旧作業完了のお知らせ(6/11)</title>
+    <link>https://jp.finalfantasyxiv.com/lodestone/news/detail/77cdda89d9b278c4288a88ee5078c29c10a46157</link>
+    <content:encoded>下記日時におきまして、Chaosデータセンターの一部のコンテンツワールドに障害が発生し、この影響により、コンテンツでプレイ中の一部のお客様がサーバーから切断され、ログインできなくなっておりました。&lt;br&gt;
+&lt;br&gt;
+現在は復旧しておりますが、お客様にはご迷惑をおかけいたしましたことをお詫びいたします。&lt;br&gt;
+&lt;br&gt;
+　　　　　　　　　　　　　記&lt;br&gt;
+&lt;br&gt;
+日　時：2022年6月11日(土) 0:03頃より0:20頃まで&lt;br&gt;
+&lt;br&gt;
+障害内容：コンテンツでプレイ中の一部のお客様がサーバーから切断され、ログインできなくなる&lt;br&gt;
+&lt;br&gt;
+原　因：サーバープログラムの不具合&lt;br&gt;
+&lt;br&gt;
+対　象：Chaosデータセンター配下のワールドをご利用のお客様&lt;br&gt;
+　　　　・Cerberus&lt;br&gt;
+　　　　・Louisoix&lt;br&gt;
+　　　　・Moogle&lt;br&gt;
+　　　　・Omega&lt;br&gt;
+　　　　・Ragnarok&lt;br&gt;
+　　　　・Spriggan</content:encoded>
+    <pubDate>Fri, 10 Jun 2022 15:24:00 GMT</pubDate>
+  </item>
+  <item>
+    <title>[復旧][Mana] Beliasワールド 障害復旧作業完了のお知らせ(6/2)</title>
+    <link>https://jp.finalfantasyxiv.com/lodestone/news/detail/580c26b21f2f24064ccc68511554dfbd3b1087f4</link>
+    <content:encoded>下記日時におきまして、Beliasワールドの一部エリアが利用できない障害が発生しておりました。&lt;br&gt;
+&lt;br&gt;
+現在は復旧しておりますが、お客様にはご迷惑をおかけいたしましたことをお詫びいたします。&lt;br&gt;
+&lt;br&gt;
+　　　　　　　　　　　　　記&lt;br&gt;
+&lt;br&gt;
+障害内容：Beliasワールドの対象エリアが利用できない&lt;br&gt;
+&lt;br&gt;
+原　因：サーバー機器の障害&lt;br&gt;
+&lt;br&gt;
+日　時：2022年6月2日(木) 9:05頃より10:19頃まで&lt;br&gt;
+対　象：エンピレアム第13区から第18区のハウス外&lt;br&gt;
+　　　　ミスト・ヴィレッジ第7区から第12区のハウス外&lt;br&gt;
+&lt;br&gt;
+日　時：2022年6月2日(木) 9:05頃より9:25頃まで&lt;br&gt;
+対　象：オールド・シャーレアン&lt;br&gt;
+　　　　ウルティマ・トゥーレ&lt;br&gt;
+　　　　リムサ・ロミンサ：上甲板層&lt;br&gt;
+　　　　クルザス西部高地&lt;br&gt;
+　　　　黒衣森：北部森林&lt;br&gt;
+　　　　中央ラノシア&lt;br&gt;
+　　　　レイクランド&lt;br&gt;
+　　　　アム・アレーン&lt;br&gt;
+　　　　ラケティカ大森林&lt;br&gt;
+　　　　聖アンダリム神学院&lt;br&gt;
+　　　　神殿騎士団総長室&lt;br&gt;
+　　　　フォルタン伯爵邸&lt;br&gt;
+　　　　ライトフェザー闘技場&lt;br&gt;
+　　　　決闘裁判場&lt;br&gt;
+　　　　供物穴&lt;br&gt;
+　　　　マトーヤの洞窟&lt;br&gt;
+　　　　機工城アレキサンダーの一部&lt;br&gt;
+　　　　魔大陸中枢&lt;br&gt;
+　　　　パロック繋留基地&lt;br&gt;
+　　　　レオファードの私室&lt;br&gt;
+　　　　雲廊&lt;br&gt;
+　　　　死者の宮殿の一部&lt;br&gt;
+　　　　ハート・オブ・アレキサンダー&lt;br&gt;
+　　　　フロンデール薬学院小児病棟</content:encoded>
+    <pubDate>Thu, 02 Jun 2022 01:40:00 GMT</pubDate>
+  </item>
+  <item>
+    <title>[Mana] Beliasワールド 障害発生のお知らせ(6/2)</title>
+    <link>https://jp.finalfantasyxiv.com/lodestone/news/detail/82c4f05b7031155a754a70a797060588aea25432</link>
+    <content:encoded>現在、Beliasワールドの一部エリアが利用できない障害が発生しております。調査・復旧作業を実施しておりますので、いましばらくお待ちくださいますようお願いいたします。&lt;br&gt;
+&lt;br&gt;
+お客様にはご迷惑をおかけしておりますことをお詫びいたします。&lt;br&gt;
+&lt;br&gt;
+　　　　　　　　　　　　　記&lt;br&gt;
+&lt;br&gt;
+日　時：2022年6月2日(木) 9:05頃より&lt;br&gt;
+&lt;br&gt;
+障害内容：Beliasワールドの対象エリアが利用できない&lt;br&gt;
+&lt;br&gt;
+原　因：調査中&lt;br&gt;
+&lt;br&gt;
+対　象：エンピレアム第13区から第18区のハウス外&lt;br&gt;
+　　　　ミスト・ヴィレッジ第7区から第12区のハウス外&lt;br&gt;
+&lt;br&gt;
+なお、以下の一部エリアが利用できない障害も発生しておりましたが、現在は復旧しております。&lt;br&gt;
+&lt;br&gt;
+日　時：2022年6月2日(木) 9:05頃より9:25頃まで&lt;br&gt;
+&lt;br&gt;
+障害内容：Beliasワールドの対象エリアが利用できない&lt;br&gt;
+&lt;br&gt;
+原　因：サーバー機器の障害&lt;br&gt;
+&lt;br&gt;
+対　象：オールド・シャーレアン&lt;br&gt;
+　　　　ウルティマ・トゥーレ&lt;br&gt;
+　　　　リムサ・ロミンサ：上甲板層&lt;br&gt;
+　　　　クルザス西部高地&lt;br&gt;
+　　　　黒衣森：北部森林&lt;br&gt;
+　　　　中央ラノシア&lt;br&gt;
+　　　　レイクランド&lt;br&gt;
+　　　　アム・アレーン&lt;br&gt;
+　　　　ラケティカ大森林&lt;br&gt;
+　　　　聖アンダリム神学院&lt;br&gt;
+　　　　神殿騎士団総長室&lt;br&gt;
+　　　　フォルタン伯爵邸&lt;br&gt;
+　　　　ライトフェザー闘技場&lt;br&gt;
+　　　　決闘裁判場&lt;br&gt;
+　　　　供物穴&lt;br&gt;
+　　　　マトーヤの洞窟&lt;br&gt;
+　　　　機工城アレキサンダーの一部&lt;br&gt;
+　　　　魔大陸中枢&lt;br&gt;
+　　　　パロック繋留基地&lt;br&gt;
+　　　　レオファードの私室&lt;br&gt;
+　　　　雲廊&lt;br&gt;
+　　　　死者の宮殿の一部&lt;br&gt;
+　　　　ハート・オブ・アレキサンダー&lt;br&gt;
+　　　　フロンデール薬学院小児病棟</content:encoded>
+    <pubDate>Thu, 02 Jun 2022 01:10:00 GMT</pubDate>
+  </item>
+  <item>
+    <title>[復旧][Materia] ログイン障害復旧のお知らせ(5/18)</title>
+    <link>https://jp.finalfantasyxiv.com/lodestone/news/detail/d57e3d8a5e15aa3f133d4104b47b447237116839</link>
+    <content:encoded>下記日時におきまして、Materiaデータセンター配下のワールドにログインできない場合がある障害が発生しておりました。&lt;br&gt;
+&lt;br&gt;
+現在は復旧しておりますが、お客様にはご迷惑をおかけいたしましたことをお詫びいたします。&lt;br&gt;
+&lt;br&gt;
+　　　　　　　　　　　　　記&lt;br&gt;
+&lt;br&gt;
+日　時：2022年5月18日(水) 19:07頃より21:45頃&lt;br&gt;
+&lt;br&gt;
+障害内容：Materiaデータセンター配下のワールドにログインできない&lt;br&gt;
+&lt;br&gt;
+原　因：サーバー機器の障害&lt;br&gt;
+&lt;br&gt;
+対　象：Materiaデータセンターをご利用のお客様</content:encoded>
+    <pubDate>Wed, 18 May 2022 13:00:10 GMT</pubDate>
+  </item>
+  <item>
+    <title>[Materia] ログイン障害発生のお知らせ(5/18)</title>
+    <link>https://jp.finalfantasyxiv.com/lodestone/news/detail/bc7c9f014f2d22beacb866d8fcd0995199da8d59</link>
+    <content:encoded>現在、ファイナルファンタジーXIVにおきまして、Materiaデータセンター配下のワールドにログインできない障害が発生しております。調査・復旧作業を実施しておりますので、いましばらくお待ちくださいますようお願いいたします。&lt;br&gt;
+&lt;br&gt;
+お客様にはご迷惑をおかけしておりますことをお詫びいたします。&lt;br&gt;
+&lt;br&gt;
+　　　　　　　　　　　　　記&lt;br&gt;
+&lt;br&gt;
+日　時：2022年5月18日(水) 19:07頃より&lt;br&gt;
+&lt;br&gt;
+障害内容：Materiaデータセンター配下のワールドにログインできない&lt;br&gt;
+&lt;br&gt;
+原　因：サーバー機器の障害&lt;br&gt;
+&lt;br&gt;
+対　象：Materiaデータセンターをご利用のお客様</content:encoded>
+    <pubDate>Wed, 18 May 2022 12:30:00 GMT</pubDate>
+  </item>
+  <item>
+    <title>[復旧][Aether] クロスワールド機能 復旧作業完了のお知らせ(5/18)</title>
+    <link>https://jp.finalfantasyxiv.com/lodestone/news/detail/aec7eb323353575aa02e961ba1271e1de17c515e</link>
+    <content:encoded>下記日時におきまして、Aetherデータセンターのクロスワールド機能に障害が発生し、以下の機能が利用できない状況でした。&lt;br&gt;
+&lt;br&gt;
+・パーティ募集／チャット&lt;br&gt;
+・クロスワールドパーティ／チャット&lt;br&gt;
+・パーティ募集用アライアンス／チャット&lt;br&gt;
+・クロスワールドリンクシェル／チャット&lt;br&gt;
+・PvPチームの結成／解散／メンバーリストのオンライン情報／チャット&lt;br&gt;
+・別ワールド所属キャラクターのフレンド登録／オンライン情報／チャット&lt;br&gt;
+&lt;br&gt;
+現在は復旧しており正常にご利用いただけますが、本障害の影響により、障害前に登録されていたパーティ募集および、パーティ募集で作成されたクロスワールドパーティ／パーティ募集用アライアンスは、終了／解散されています。そのため、誠に申し訳ございませんがあらためて登録／参加してくださいますようお願いいたします。&lt;br&gt;
+&lt;br&gt;
+※障害発生時に、クロスワールドパーティ／パーティ募集用アライアンスを組んだ状態でコンテンツに移動していた場合は、コンテンツから戻った際にクロスワールドパーティ／パーティ募集用アライアンスが解散されます。&lt;br&gt;
+&lt;br&gt;
+お客様にはご迷惑をおかけいたしましたことをお詫びいたします。&lt;br&gt;
+&lt;br&gt;
+　　　　　　　　　　　　　記&lt;br&gt;
+&lt;br&gt;
+日　時：2022年5月18日(水) 15:41頃より15:45頃まで&lt;br&gt;
+&lt;br&gt;
+障害内容：以下の機能が利用できない&lt;br&gt;
+　　　　・パーティ募集／チャット&lt;br&gt;
+　　　　・クロスワールドパーティ／チャット&lt;br&gt;
+　　　　・パーティ募集用アライアンス／チャット&lt;br&gt;
+　　　　・クロスワールドリンクシェル／チャット&lt;br&gt;
+　　　　・PvPチームの結成／解散／メンバーリストのオンライン情報／チャット&lt;br&gt;
+　　　　・別ワールド所属キャラクターのフレンド登録／オンライン情報／チャット&lt;br&gt;
+&lt;br&gt;
+原　因：サーバープログラムの不具合&lt;br&gt;
+&lt;br&gt;
+対　象：Aetherデータセンター配下のワールドをご利用のお客様&lt;br&gt;
+　　　　・Adamantoise&lt;br&gt;
+　　　　・Cactuar&lt;br&gt;
+　　　　・Faerie&lt;br&gt;
+　　　　・Gilgamesh&lt;br&gt;
+　　　　・Jenova&lt;br&gt;
+　　　　・Midgardsormr&lt;br&gt;
+　　　　・Sargatanas&lt;br&gt;
+　　　　・Siren</content:encoded>
+    <pubDate>Wed, 18 May 2022 07:00:00 GMT</pubDate>
+  </item>
+  <item>
+    <title>[復旧]コンパニオンアプリ 復旧作業完了のお知らせ(5/16)</title>
+    <link>https://jp.finalfantasyxiv.com/lodestone/news/detail/f437feb97ac150f645242079526e00070cbb1ba8</link>
+    <content:encoded>下記日時に、日本データセンターワールドのキャラクターを使用してファイナルファンタジーXIV コンパニオンを利用した際に、クポの実の所持数が正しく表示されない場合がある障害が発生しておりました。&lt;br&gt;
+&lt;br&gt;
+現在は復旧しておりますが、お客様にはご迷惑をおかけいたしましたことをお詫びいたします。&lt;br&gt;
+&lt;br&gt;
+　　　　　　　　　　　　　記&lt;br&gt;
+&lt;br&gt;
+日　時：2022年5月16日(月) 6:46頃より19:00頃まで&lt;br&gt;
+&lt;br&gt;
+障害内容：日本データセンターワールドのキャラクターを使用してファイナルファンタジーXIV コンパニオンを利用した際に、クポの実の所持数が正しく表示されない場合がある&lt;br&gt;
+&lt;br&gt;
+原　因：サーバー機器の障害&lt;br&gt;
+&lt;br&gt;
+対　象：ファイナルファンタジーXIV コンパニオンをご利用のお客様</content:encoded>
+    <pubDate>Mon, 16 May 2022 10:10:00 GMT</pubDate>
+  </item>
+</rss>
