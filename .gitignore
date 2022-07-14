@@ -2,3 +2,4 @@ node_modules/
 dist/
 config/*
 !config/.gitkeep
+output/
