@@ -7,6 +7,50 @@
     <language>ja</language>
   </channel>
   <item>
+    <title>[重要]スクウェア・エニックス アカウントをご利用の方への重要なお知らせ</title>
+    <link>https://jp.finalfantasyxiv.com/lodestone/news/detail/af9047de32d450aa3456a86c0bff807e53a16c6b</link>
+    <content:encoded>2022年7月26日(火) 14:00頃より、セキュリティ強化のため、スクウェア・エニックス アカウントを利用した通信において、TLS 1.0、TLS 1.1方式による通信を許可しなくなります。&lt;br&gt;
+&lt;br&gt;
+この変更に伴い、TLS 1.2方式以降による通信のみが許可される状態になりますので、ご利用のブラウザの設定等によっては、スクウェア・エニックス アカウントを利用したサービスをご利用いただけなくなる可能性がございます。&lt;br&gt;
+&lt;br&gt;
+そのため、お手数ではございますが、ブラウザの設定をご確認いただき、TLS 1.2方式以降による通信を許可する設定に変更してくださいますようお願いいたします。&lt;br&gt;
+&lt;br&gt;
+【 代表的なブラウザでの設定方法 】&lt;br&gt;
+&lt;br&gt;
+■Windows&lt;br&gt;
+▽Microsoft Edge&lt;br&gt;
+　最新バージョンにアップデートしてください。&lt;br&gt;
+　※セキュリティ設定を個別に変更されている場合は、TLS 1.0、TLS 1.1を無効にし、TLS 1.2を有効にしてください。&lt;br&gt;
+&lt;br&gt;
+▽Firefox&lt;br&gt;
+　最新バージョンにアップデートしてください。&lt;br&gt;
+　※configで個別に設定を変更されている場合は、TLS 1.2を有効にしてください。&lt;br&gt;
+&lt;br&gt;
+▽Google Chrome&lt;br&gt;
+　最新バージョンにアップデートしてください。&lt;br&gt;
+　※セキュリティ設定を個別に変更されている場合は、TLS 1.0、TLS 1.1を無効にし、TLS 1.2を有効にしてください。&lt;br&gt;
+&lt;br&gt;
+■macOS&lt;br&gt;
+▽Safari&lt;br&gt;
+　正常にアクセスできなかった場合は、ソフトウェアアップデートで、macOSを最新バージョンにアップデートしてください。&lt;br&gt;
+&lt;br&gt;
+▽Google Chrome&lt;br&gt;
+　正常にアクセスできなかった場合は、最新バージョンにアップデートしてください。&lt;br&gt;
+&lt;br&gt;
+■スマートフォン&lt;br&gt;
+▽iOS Safari&lt;br&gt;
+　正常にアクセスできなかった場合は、ソフトウェアアップデートで、iOSを最新バージョンにアップデートしてください。&lt;br&gt;
+&lt;br&gt;
+▽Android 各種ブラウザ&lt;br&gt;
+　正常にアクセスできなかった場合は、端末ソフトウェアを最新バージョンにアップデートしてください。&lt;br&gt;
+&lt;br&gt;
+■ゲーム機&lt;br&gt;
+　正常にアクセスできなかった場合は、ゲーム機本体のソフトウェアを最新バージョンにアップデートしてください。&lt;br&gt;
+　　任天堂社製品：本体の更新&lt;br&gt;
+　　ソニー・インタラクティブエンタテインメント社製品：システムソフトウェア アップデート</content:encoded>
+    <pubDate>Fri, 15 Jul 2022 21:00:00 GMT</pubDate>
+  </item>
+  <item>
     <title>エターナルセレモニーの予約／実施ができない時間について</title>
     <link>https://jp.finalfantasyxiv.com/lodestone/news/detail/f5b6b0d6f2bd9efdeb4dbd6b2ba90383b136673f</link>
     <content:encoded>メンテナンス作業による、エターナルセレモニーへの影響をこちらでお知らせいたします。&lt;br&gt;
