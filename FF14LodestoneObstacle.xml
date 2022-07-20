@@ -7,6 +7,54 @@
     <language>ja</language>
   </channel>
   <item>
+    <title>[復旧]ホームワールド変更サービス 障害復旧作業完了のお知らせ(7/19)</title>
+    <link>https://jp.finalfantasyxiv.com/lodestone/news/detail/318e817e578edee4f319c2ee6cb657a1bdddd255</link>
+    <content:encoded>下記日時におきまして、ホームワールド変更サービスが利用できない障害が発生しておりました。&lt;br&gt;
+&lt;br&gt;
+現在は復旧しておりますが、お客様にはご迷惑をおかけいたしましたことをお詫びいたします。&lt;br&gt;
+&lt;br&gt;
+　　　　　　　　　　　　　記&lt;br&gt;
+&lt;br&gt;
+日　時：2022年7月19日(火) 16:00頃より17:15頃まで&lt;br&gt;
+&lt;br&gt;
+障害内容：ホームワールド変更サービスが利用できない&lt;br&gt;
+&lt;br&gt;
+原　因：サーバー設定の不具合&lt;br&gt;
+&lt;br&gt;
+対　象：ホームワールド変更サービスをご利用のお客様</content:encoded>
+    <pubDate>Tue, 19 Jul 2022 08:27:03 GMT</pubDate>
+  </item>
+  <item>
+    <title>ホームワールド変更サービス 障害発生のお知らせ(7/19)</title>
+    <link>https://jp.finalfantasyxiv.com/lodestone/news/detail/8541ef53be8923eb2e7dda17408703cea2bc545f</link>
+    <content:encoded>現在、ホームワールド変更サービスを利用できない障害が発生しております。&lt;br&gt;
+&lt;br&gt;
+調査・復旧作業を実施しておりますので、いましばらくお待ちくださいますようお願いいたします。&lt;br&gt;
+&lt;br&gt;
+お客様にはご迷惑をおかけしておりますことをお詫びいたします。&lt;br&gt;
+&lt;br&gt;
+　　　　　　　　　　　　　記&lt;br&gt;
+&lt;br&gt;
+日　時：2022年7月19日(火) 16:00頃より&lt;br&gt;
+&lt;br&gt;
+障害内容：ホームワールド変更サービスを利用できない&lt;br&gt;
+&lt;br&gt;
+原　因：調査中&lt;br&gt;
+&lt;br&gt;
+対　象：ホームワールド変更サービスをご利用のお客様</content:encoded>
+    <pubDate>Tue, 19 Jul 2022 07:20:00 GMT</pubDate>
+  </item>
+  <item>
+    <title>[続報]データセンタートラベルの状況ならびにホームワールド変更サービスのオープンについて(7/19)</title>
+    <link>https://jp.finalfantasyxiv.com/lodestone/news/detail/77e668c7948393795f2cd77dfd5873997a526209</link>
+    <content:encoded>データセンタートラベルの状況につきまして、週末の状況を確認させていただき、週末を越えても安定して稼働できていることが確認できました。&lt;br&gt;
+&lt;br&gt;
+そのため、一時停止していたホームワールド変更サービスにつきましては、2022年7月19日(火) 16:00にオープンいたします。&lt;br&gt;
+&lt;br&gt;
+お客様にはご迷惑をおかけいたしましたことをお詫びいたします。</content:encoded>
+    <pubDate>Tue, 19 Jul 2022 05:15:00 GMT</pubDate>
+  </item>
+  <item>
     <title>[続報]データセンタートラベルの状況ならびにホームワールド変更サービスのオープン時期について(7/14)</title>
     <link>https://jp.finalfantasyxiv.com/lodestone/news/detail/6d78c03553d99843430ea340abaad2144a1d181f</link>
     <content:encoded>データセンタートラベルの状況ならびに、一時停止しておりますホームワールド変更サービスのオープン時期についてご案内いたします。&lt;br&gt;
@@ -381,84 +429,5 @@
 &lt;br&gt;
 対　象：Materiaデータセンターをご利用のお客様</content:encoded>
     <pubDate>Wed, 18 May 2022 13:00:10 GMT</pubDate>
-  </item>
-  <item>
-    <title>[Materia] ログイン障害発生のお知らせ(5/18)</title>
-    <link>https://jp.finalfantasyxiv.com/lodestone/news/detail/bc7c9f014f2d22beacb866d8fcd0995199da8d59</link>
-    <content:encoded>現在、ファイナルファンタジーXIVにおきまして、Materiaデータセンター配下のワールドにログインできない障害が発生しております。調査・復旧作業を実施しておりますので、いましばらくお待ちくださいますようお願いいたします。&lt;br&gt;
-&lt;br&gt;
-お客様にはご迷惑をおかけしておりますことをお詫びいたします。&lt;br&gt;
-&lt;br&gt;
-　　　　　　　　　　　　　記&lt;br&gt;
-&lt;br&gt;
-日　時：2022年5月18日(水) 19:07頃より&lt;br&gt;
-&lt;br&gt;
-障害内容：Materiaデータセンター配下のワールドにログインできない&lt;br&gt;
-&lt;br&gt;
-原　因：サーバー機器の障害&lt;br&gt;
-&lt;br&gt;
-対　象：Materiaデータセンターをご利用のお客様</content:encoded>
-    <pubDate>Wed, 18 May 2022 12:30:00 GMT</pubDate>
-  </item>
-  <item>
-    <title>[復旧][Aether] クロスワールド機能 復旧作業完了のお知らせ(5/18)</title>
-    <link>https://jp.finalfantasyxiv.com/lodestone/news/detail/aec7eb323353575aa02e961ba1271e1de17c515e</link>
-    <content:encoded>下記日時におきまして、Aetherデータセンターのクロスワールド機能に障害が発生し、以下の機能が利用できない状況でした。&lt;br&gt;
-&lt;br&gt;
-・パーティ募集／チャット&lt;br&gt;
-・クロスワールドパーティ／チャット&lt;br&gt;
-・パーティ募集用アライアンス／チャット&lt;br&gt;
-・クロスワールドリンクシェル／チャット&lt;br&gt;
-・PvPチームの結成／解散／メンバーリストのオンライン情報／チャット&lt;br&gt;
-・別ワールド所属キャラクターのフレンド登録／オンライン情報／チャット&lt;br&gt;
-&lt;br&gt;
-現在は復旧しており正常にご利用いただけますが、本障害の影響により、障害前に登録されていたパーティ募集および、パーティ募集で作成されたクロスワールドパーティ／パーティ募集用アライアンスは、終了／解散されています。そのため、誠に申し訳ございませんがあらためて登録／参加してくださいますようお願いいたします。&lt;br&gt;
-&lt;br&gt;
-※障害発生時に、クロスワールドパーティ／パーティ募集用アライアンスを組んだ状態でコンテンツに移動していた場合は、コンテンツから戻った際にクロスワールドパーティ／パーティ募集用アライアンスが解散されます。&lt;br&gt;
-&lt;br&gt;
-お客様にはご迷惑をおかけいたしましたことをお詫びいたします。&lt;br&gt;
-&lt;br&gt;
-　　　　　　　　　　　　　記&lt;br&gt;
-&lt;br&gt;
-日　時：2022年5月18日(水) 15:41頃より15:45頃まで&lt;br&gt;
-&lt;br&gt;
-障害内容：以下の機能が利用できない&lt;br&gt;
-　　　　・パーティ募集／チャット&lt;br&gt;
-　　　　・クロスワールドパーティ／チャット&lt;br&gt;
-　　　　・パーティ募集用アライアンス／チャット&lt;br&gt;
-　　　　・クロスワールドリンクシェル／チャット&lt;br&gt;
-　　　　・PvPチームの結成／解散／メンバーリストのオンライン情報／チャット&lt;br&gt;
-　　　　・別ワールド所属キャラクターのフレンド登録／オンライン情報／チャット&lt;br&gt;
-&lt;br&gt;
-原　因：サーバープログラムの不具合&lt;br&gt;
-&lt;br&gt;
-対　象：Aetherデータセンター配下のワールドをご利用のお客様&lt;br&gt;
-　　　　・Adamantoise&lt;br&gt;
-　　　　・Cactuar&lt;br&gt;
-　　　　・Faerie&lt;br&gt;
-　　　　・Gilgamesh&lt;br&gt;
-　　　　・Jenova&lt;br&gt;
-　　　　・Midgardsormr&lt;br&gt;
-　　　　・Sargatanas&lt;br&gt;
-　　　　・Siren</content:encoded>
-    <pubDate>Wed, 18 May 2022 07:00:00 GMT</pubDate>
-  </item>
-  <item>
-    <title>[復旧]コンパニオンアプリ 復旧作業完了のお知らせ(5/16)</title>
-    <link>https://jp.finalfantasyxiv.com/lodestone/news/detail/f437feb97ac150f645242079526e00070cbb1ba8</link>
-    <content:encoded>下記日時に、日本データセンターワールドのキャラクターを使用してファイナルファンタジーXIV コンパニオンを利用した際に、クポの実の所持数が正しく表示されない場合がある障害が発生しておりました。&lt;br&gt;
-&lt;br&gt;
-現在は復旧しておりますが、お客様にはご迷惑をおかけいたしましたことをお詫びいたします。&lt;br&gt;
-&lt;br&gt;
-　　　　　　　　　　　　　記&lt;br&gt;
-&lt;br&gt;
-日　時：2022年5月16日(月) 6:46頃より19:00頃まで&lt;br&gt;
-&lt;br&gt;
-障害内容：日本データセンターワールドのキャラクターを使用してファイナルファンタジーXIV コンパニオンを利用した際に、クポの実の所持数が正しく表示されない場合がある&lt;br&gt;
-&lt;br&gt;
-原　因：サーバー機器の障害&lt;br&gt;
-&lt;br&gt;
-対　象：ファイナルファンタジーXIV コンパニオンをご利用のお客様</content:encoded>
-    <pubDate>Mon, 16 May 2022 10:10:00 GMT</pubDate>
   </item>
 </rss>
