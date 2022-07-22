@@ -7,6 +7,51 @@
     <language>ja</language>
   </channel>
   <item>
+    <title>[復旧][Primal] クロスワールド機能 復旧作業完了のお知らせ(7/21)</title>
+    <link>https://jp.finalfantasyxiv.com/lodestone/news/detail/3b4ef984768d29551dc9e1bdac105b5191d3a9a0</link>
+    <content:encoded>下記日時におきまして、Primalデータセンターのクロスワールド機能に障害が発生し、以下の機能が利用できない状況でした。&lt;br&gt;
+&lt;br&gt;
+・パーティ募集／チャット&lt;br&gt;
+・クロスワールドパーティ／チャット&lt;br&gt;
+・パーティ募集用アライアンス／チャット&lt;br&gt;
+・クロスワールドリンクシェル／チャット&lt;br&gt;
+・PvPチームの結成／解散／メンバーリストのオンライン情報／チャット&lt;br&gt;
+・別ワールド所属キャラクターのフレンド登録／オンライン情報／チャット&lt;br&gt;
+・アドベンチャラープレートの閲覧&lt;br&gt;
+&lt;br&gt;
+現在は復旧しており正常にご利用いただけますが、本障害の影響により、障害前に登録されていたパーティ募集および、パーティ募集で作成されたクロスワールドパーティ／パーティ募集用アライアンスは、終了／解散されています。そのため、誠に申し訳ございませんがあらためて登録／参加してくださいますようお願いいたします。&lt;br&gt;
+&lt;br&gt;
+※障害発生時に、クロスワールドパーティ／パーティ募集用アライアンスを組んだ状態でコンテンツに移動していた場合は、コンテンツから戻った際にクロスワールドパーティ／パーティ募集用アライアンスが解散されます。&lt;br&gt;
+&lt;br&gt;
+お客様にはご迷惑をおかけいたしましたことをお詫びいたします。&lt;br&gt;
+&lt;br&gt;
+　　　　　　　　　　　　　記&lt;br&gt;
+&lt;br&gt;
+日　時：2022年7月21日(木) 12:43頃より12:54頃まで&lt;br&gt;
+&lt;br&gt;
+障害内容：以下の機能が利用できない&lt;br&gt;
+　　　　・パーティ募集／チャット&lt;br&gt;
+　　　　・クロスワールドパーティ／チャット&lt;br&gt;
+　　　　・パーティ募集用アライアンス／チャット&lt;br&gt;
+　　　　・クロスワールドリンクシェル／チャット&lt;br&gt;
+　　　　・PvPチームの結成／解散／メンバーリストのオンライン情報／チャット&lt;br&gt;
+　　　　・別ワールド所属キャラクターのフレンド登録／オンライン情報／チャット&lt;br&gt;
+　　　　・アドベンチャラープレートの閲覧&lt;br&gt;
+&lt;br&gt;
+原　因：サーバープログラムの不具合&lt;br&gt;
+&lt;br&gt;
+対　象：Primalデータセンター配下のワールドをご利用のお客様&lt;br&gt;
+　　　　・Behemoth&lt;br&gt;
+　　　　・Excalibur&lt;br&gt;
+　　　　・Exodus&lt;br&gt;
+　　　　・Famfrit&lt;br&gt;
+　　　　・Hyperion&lt;br&gt;
+　　　　・Lamia&lt;br&gt;
+　　　　・Leviathan&lt;br&gt;
+　　　　・Ultros</content:encoded>
+    <pubDate>Thu, 21 Jul 2022 04:05:00 GMT</pubDate>
+  </item>
+  <item>
     <title>[復旧]ホームワールド変更サービス 障害復旧作業完了のお知らせ(7/19)</title>
     <link>https://jp.finalfantasyxiv.com/lodestone/news/detail/318e817e578edee4f319c2ee6cb657a1bdddd255</link>
     <content:encoded>下記日時におきまして、ホームワールド変更サービスが利用できない障害が発生しておりました。&lt;br&gt;
@@ -411,23 +456,5 @@
 　　　　ハート・オブ・アレキサンダー&lt;br&gt;
 　　　　フロンデール薬学院小児病棟</content:encoded>
     <pubDate>Thu, 02 Jun 2022 01:10:00 GMT</pubDate>
-  </item>
-  <item>
-    <title>[復旧][Materia] ログイン障害復旧のお知らせ(5/18)</title>
-    <link>https://jp.finalfantasyxiv.com/lodestone/news/detail/d57e3d8a5e15aa3f133d4104b47b447237116839</link>
-    <content:encoded>下記日時におきまして、Materiaデータセンター配下のワールドにログインできない場合がある障害が発生しておりました。&lt;br&gt;
-&lt;br&gt;
-現在は復旧しておりますが、お客様にはご迷惑をおかけいたしましたことをお詫びいたします。&lt;br&gt;
-&lt;br&gt;
-　　　　　　　　　　　　　記&lt;br&gt;
-&lt;br&gt;
-日　時：2022年5月18日(水) 19:07頃より21:45頃&lt;br&gt;
-&lt;br&gt;
-障害内容：Materiaデータセンター配下のワールドにログインできない&lt;br&gt;
-&lt;br&gt;
-原　因：サーバー機器の障害&lt;br&gt;
-&lt;br&gt;
-対　象：Materiaデータセンターをご利用のお客様</content:encoded>
-    <pubDate>Wed, 18 May 2022 13:00:10 GMT</pubDate>
   </item>
 </rss>
