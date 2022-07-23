@@ -7,6 +7,51 @@
     <language>ja</language>
   </channel>
   <item>
+    <title>[復旧][Crystal] クロスワールド機能 復旧作業完了のお知らせ(7/22)</title>
+    <link>https://jp.finalfantasyxiv.com/lodestone/news/detail/3024d9f1afa97b88efa09ef617770514a9eddf5e</link>
+    <content:encoded>下記日時におきまして、Crystalデータセンターのクロスワールド機能に障害が発生し、以下の機能が利用できない状況でした。&lt;br&gt;
+&lt;br&gt;
+・パーティ募集／チャット&lt;br&gt;
+・クロスワールドパーティ／チャット&lt;br&gt;
+・パーティ募集用アライアンス／チャット&lt;br&gt;
+・クロスワールドリンクシェル／チャット&lt;br&gt;
+・PvPチームの結成／解散／メンバーリストのオンライン情報／チャット&lt;br&gt;
+・別ワールド所属キャラクターのフレンド登録／オンライン情報／チャット&lt;br&gt;
+・アドベンチャラープレートの閲覧&lt;br&gt;
+&lt;br&gt;
+現在は復旧しており正常にご利用いただけますが、本障害の影響により、障害前に登録されていたパーティ募集および、パーティ募集で作成されたクロスワールドパーティ／パーティ募集用アライアンスは、終了／解散されています。そのため、誠に申し訳ございませんがあらためて登録／参加してくださいますようお願いいたします。&lt;br&gt;
+&lt;br&gt;
+※障害発生時に、クロスワールドパーティ／パーティ募集用アライアンスを組んだ状態でコンテンツに移動していた場合は、コンテンツから戻った際にクロスワールドパーティ／パーティ募集用アライアンスが解散されます。&lt;br&gt;
+&lt;br&gt;
+お客様にはご迷惑をおかけいたしましたことをお詫びいたします。&lt;br&gt;
+&lt;br&gt;
+　　　　　　　　　　　　　記&lt;br&gt;
+&lt;br&gt;
+日　時：2022年7月22日(金) 13:05頃より13:14頃まで&lt;br&gt;
+&lt;br&gt;
+障害内容：以下の機能が利用できない&lt;br&gt;
+　　　　・パーティ募集／チャット&lt;br&gt;
+　　　　・クロスワールドパーティ／チャット&lt;br&gt;
+　　　　・パーティ募集用アライアンス／チャット&lt;br&gt;
+　　　　・クロスワールドリンクシェル／チャット&lt;br&gt;
+　　　　・PvPチームの結成／解散／メンバーリストのオンライン情報／チャット&lt;br&gt;
+　　　　・別ワールド所属キャラクターのフレンド登録／オンライン情報／チャット&lt;br&gt;
+　　　　・アドベンチャラープレートの閲覧&lt;br&gt;
+&lt;br&gt;
+原　因：サーバープログラムの不具合&lt;br&gt;
+&lt;br&gt;
+対　象：Crystalデータセンター配下のワールドをご利用のお客様&lt;br&gt;
+　　　　・Balmung&lt;br&gt;
+　　　　・Brynhildr&lt;br&gt;
+　　　　・Coeurl&lt;br&gt;
+　　　　・Diabolos&lt;br&gt;
+　　　　・Goblin&lt;br&gt;
+　　　　・Malboro&lt;br&gt;
+　　　　・Mateus&lt;br&gt;
+　　　　・Zalera</content:encoded>
+    <pubDate>Fri, 22 Jul 2022 04:20:00 GMT</pubDate>
+  </item>
+  <item>
     <title>[復旧][Primal] クロスワールド機能 復旧作業完了のお知らせ(7/21)</title>
     <link>https://jp.finalfantasyxiv.com/lodestone/news/detail/3b4ef984768d29551dc9e1bdac105b5191d3a9a0</link>
     <content:encoded>下記日時におきまして、Primalデータセンターのクロスワールド機能に障害が発生し、以下の機能が利用できない状況でした。&lt;br&gt;
@@ -404,57 +449,5 @@
 　　　　ハート・オブ・アレキサンダー&lt;br&gt;
 　　　　フロンデール薬学院小児病棟</content:encoded>
     <pubDate>Thu, 02 Jun 2022 01:40:00 GMT</pubDate>
-  </item>
-  <item>
-    <title>[Mana] Beliasワールド 障害発生のお知らせ(6/2)</title>
-    <link>https://jp.finalfantasyxiv.com/lodestone/news/detail/82c4f05b7031155a754a70a797060588aea25432</link>
-    <content:encoded>現在、Beliasワールドの一部エリアが利用できない障害が発生しております。調査・復旧作業を実施しておりますので、いましばらくお待ちくださいますようお願いいたします。&lt;br&gt;
-&lt;br&gt;
-お客様にはご迷惑をおかけしておりますことをお詫びいたします。&lt;br&gt;
-&lt;br&gt;
-　　　　　　　　　　　　　記&lt;br&gt;
-&lt;br&gt;
-日　時：2022年6月2日(木) 9:05頃より&lt;br&gt;
-&lt;br&gt;
-障害内容：Beliasワールドの対象エリアが利用できない&lt;br&gt;
-&lt;br&gt;
-原　因：調査中&lt;br&gt;
-&lt;br&gt;
-対　象：エンピレアム第13区から第18区のハウス外&lt;br&gt;
-　　　　ミスト・ヴィレッジ第7区から第12区のハウス外&lt;br&gt;
-&lt;br&gt;
-なお、以下の一部エリアが利用できない障害も発生しておりましたが、現在は復旧しております。&lt;br&gt;
-&lt;br&gt;
-日　時：2022年6月2日(木) 9:05頃より9:25頃まで&lt;br&gt;
-&lt;br&gt;
-障害内容：Beliasワールドの対象エリアが利用できない&lt;br&gt;
-&lt;br&gt;
-原　因：サーバー機器の障害&lt;br&gt;
-&lt;br&gt;
-対　象：オールド・シャーレアン&lt;br&gt;
-　　　　ウルティマ・トゥーレ&lt;br&gt;
-　　　　リムサ・ロミンサ：上甲板層&lt;br&gt;
-　　　　クルザス西部高地&lt;br&gt;
-　　　　黒衣森：北部森林&lt;br&gt;
-　　　　中央ラノシア&lt;br&gt;
-　　　　レイクランド&lt;br&gt;
-　　　　アム・アレーン&lt;br&gt;
-　　　　ラケティカ大森林&lt;br&gt;
-　　　　聖アンダリム神学院&lt;br&gt;
-　　　　神殿騎士団総長室&lt;br&gt;
-　　　　フォルタン伯爵邸&lt;br&gt;
-　　　　ライトフェザー闘技場&lt;br&gt;
-　　　　決闘裁判場&lt;br&gt;
-　　　　供物穴&lt;br&gt;
-　　　　マトーヤの洞窟&lt;br&gt;
-　　　　機工城アレキサンダーの一部&lt;br&gt;
-　　　　魔大陸中枢&lt;br&gt;
-　　　　パロック繋留基地&lt;br&gt;
-　　　　レオファードの私室&lt;br&gt;
-　　　　雲廊&lt;br&gt;
-　　　　死者の宮殿の一部&lt;br&gt;
-　　　　ハート・オブ・アレキサンダー&lt;br&gt;
-　　　　フロンデール薬学院小児病棟</content:encoded>
-    <pubDate>Thu, 02 Jun 2022 01:10:00 GMT</pubDate>
   </item>
 </rss>
