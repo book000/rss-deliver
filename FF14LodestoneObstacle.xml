@@ -7,6 +7,24 @@
     <language>ja</language>
   </channel>
   <item>
+    <title>[復旧]ホームワールド変更サービス／データセンタートラベル 障害復旧作業完了のお知らせ(7/29)</title>
+    <link>https://jp.finalfantasyxiv.com/lodestone/news/detail/25a2f02dce9ab764752fcf09b87bec43717b13c8</link>
+    <content:encoded>下記日時におきまして、ホームワールド変更サービスおよびデータセンタートラベルを利用できない場合がある障害が発生しておりました。&lt;br&gt;
+&lt;br&gt;
+現在は復旧しておりますが、お客様にはご迷惑をおかけしましたことをお詫びいたします。&lt;br&gt;
+&lt;br&gt;
+　　　　　　　　　　　　　記&lt;br&gt;
+&lt;br&gt;
+日　時：2022年7月29日(金) 0:36頃より2:08頃まで&lt;br&gt;
+&lt;br&gt;
+障害内容：ホームワールド変更サービスおよびデータセンタートラベルが利用できない場合がある&lt;br&gt;
+&lt;br&gt;
+原　因：サーバー機器の障害&lt;br&gt;
+&lt;br&gt;
+対　象：ファイナルファンタジーXIVをご利用のお客様</content:encoded>
+    <pubDate>Thu, 28 Jul 2022 17:15:00 GMT</pubDate>
+  </item>
+  <item>
     <title>[復旧][Crystal] クロスワールド機能 復旧作業完了のお知らせ(7/22)</title>
     <link>https://jp.finalfantasyxiv.com/lodestone/news/detail/3024d9f1afa97b88efa09ef617770514a9eddf5e</link>
     <content:encoded>下記日時におきまして、Crystalデータセンターのクロスワールド機能に障害が発生し、以下の機能が利用できない状況でした。&lt;br&gt;
@@ -405,49 +423,5 @@
 　　　　・Ragnarok&lt;br&gt;
 　　　　・Spriggan</content:encoded>
     <pubDate>Fri, 10 Jun 2022 15:24:00 GMT</pubDate>
-  </item>
-  <item>
-    <title>[復旧][Mana] Beliasワールド 障害復旧作業完了のお知らせ(6/2)</title>
-    <link>https://jp.finalfantasyxiv.com/lodestone/news/detail/580c26b21f2f24064ccc68511554dfbd3b1087f4</link>
-    <content:encoded>下記日時におきまして、Beliasワールドの一部エリアが利用できない障害が発生しておりました。&lt;br&gt;
-&lt;br&gt;
-現在は復旧しておりますが、お客様にはご迷惑をおかけいたしましたことをお詫びいたします。&lt;br&gt;
-&lt;br&gt;
-　　　　　　　　　　　　　記&lt;br&gt;
-&lt;br&gt;
-障害内容：Beliasワールドの対象エリアが利用できない&lt;br&gt;
-&lt;br&gt;
-原　因：サーバー機器の障害&lt;br&gt;
-&lt;br&gt;
-日　時：2022年6月2日(木) 9:05頃より10:19頃まで&lt;br&gt;
-対　象：エンピレアム第13区から第18区のハウス外&lt;br&gt;
-　　　　ミスト・ヴィレッジ第7区から第12区のハウス外&lt;br&gt;
-&lt;br&gt;
-日　時：2022年6月2日(木) 9:05頃より9:25頃まで&lt;br&gt;
-対　象：オールド・シャーレアン&lt;br&gt;
-　　　　ウルティマ・トゥーレ&lt;br&gt;
-　　　　リムサ・ロミンサ：上甲板層&lt;br&gt;
-　　　　クルザス西部高地&lt;br&gt;
-　　　　黒衣森：北部森林&lt;br&gt;
-　　　　中央ラノシア&lt;br&gt;
-　　　　レイクランド&lt;br&gt;
-　　　　アム・アレーン&lt;br&gt;
-　　　　ラケティカ大森林&lt;br&gt;
-　　　　聖アンダリム神学院&lt;br&gt;
-　　　　神殿騎士団総長室&lt;br&gt;
-　　　　フォルタン伯爵邸&lt;br&gt;
-　　　　ライトフェザー闘技場&lt;br&gt;
-　　　　決闘裁判場&lt;br&gt;
-　　　　供物穴&lt;br&gt;
-　　　　マトーヤの洞窟&lt;br&gt;
-　　　　機工城アレキサンダーの一部&lt;br&gt;
-　　　　魔大陸中枢&lt;br&gt;
-　　　　パロック繋留基地&lt;br&gt;
-　　　　レオファードの私室&lt;br&gt;
-　　　　雲廊&lt;br&gt;
-　　　　死者の宮殿の一部&lt;br&gt;
-　　　　ハート・オブ・アレキサンダー&lt;br&gt;
-　　　　フロンデール薬学院小児病棟</content:encoded>
-    <pubDate>Thu, 02 Jun 2022 01:40:00 GMT</pubDate>
   </item>
 </rss>
