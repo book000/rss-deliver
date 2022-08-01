@@ -7,6 +7,34 @@
     <language>ja</language>
   </channel>
   <item>
+    <title>[復旧][Crystal] クロスワールド機能 復旧作業完了のお知らせ(7/31)</title>
+    <link>https://jp.finalfantasyxiv.com/lodestone/news/detail/889ab30f538ff9ed4ec24cb192d857e1a87a96ee</link>
+    <content:encoded>下記日時におきまして、Crystalデータセンターのクロスワールド機能に障害が発生し、PvPチーム機能およびクロスワールドリンクシェル機能が利用できない状況でした。&lt;br&gt;
+&lt;br&gt;
+現在は復旧しておりますが、再ログインまたはエリア移動時にサーバーへ再接続を行うため、お手数をおかけして申し訳ございませんが、障害発生前からログインされていた場合は、再ログインまたはエリア移動をお願いいたします。&lt;br&gt;
+&lt;br&gt;
+お客様にはご迷惑をおかけいたしましたことをお詫びいたします。&lt;br&gt;
+&lt;br&gt;
+　　　　　　　　　　　　　記&lt;br&gt;
+&lt;br&gt;
+日　時：2022年7月31日(日) 11:54頃より11:58頃まで&lt;br&gt;
+&lt;br&gt;
+障害内容：PvPチーム機能およびクロスワールドリンクシェル機能が利用できない&lt;br&gt;
+&lt;br&gt;
+原　因：サーバープログラムの不具合&lt;br&gt;
+&lt;br&gt;
+対　象：Crystalデータセンター配下のワールドをご利用のお客様&lt;br&gt;
+　　　　・Balmung&lt;br&gt;
+　　　　・Brynhildr&lt;br&gt;
+　　　　・Coeurl&lt;br&gt;
+　　　　・Diabolos&lt;br&gt;
+　　　　・Goblin&lt;br&gt;
+　　　　・Malboro&lt;br&gt;
+　　　　・Mateus&lt;br&gt;
+　　　　・Zalera</content:encoded>
+    <pubDate>Sun, 31 Jul 2022 03:20:00 GMT</pubDate>
+  </item>
+  <item>
     <title>[復旧]ホームワールド変更サービス／データセンタートラベル 障害復旧作業完了のお知らせ(7/29)</title>
     <link>https://jp.finalfantasyxiv.com/lodestone/news/detail/25a2f02dce9ab764752fcf09b87bec43717b13c8</link>
     <content:encoded>下記日時におきまして、ホームワールド変更サービスおよびデータセンタートラベルを利用できない場合がある障害が発生しておりました。&lt;br&gt;
@@ -399,29 +427,5 @@
 &lt;br&gt;
 対　象：ファイナルファンタジーXIVをご利用のお客様</content:encoded>
     <pubDate>Wed, 15 Jun 2022 17:55:00 GMT</pubDate>
-  </item>
-  <item>
-    <title>[復旧][Chaos] コンテンツワールド 障害復旧作業完了のお知らせ(6/11)</title>
-    <link>https://jp.finalfantasyxiv.com/lodestone/news/detail/77cdda89d9b278c4288a88ee5078c29c10a46157</link>
-    <content:encoded>下記日時におきまして、Chaosデータセンターの一部のコンテンツワールドに障害が発生し、この影響により、コンテンツでプレイ中の一部のお客様がサーバーから切断され、ログインできなくなっておりました。&lt;br&gt;
-&lt;br&gt;
-現在は復旧しておりますが、お客様にはご迷惑をおかけいたしましたことをお詫びいたします。&lt;br&gt;
-&lt;br&gt;
-　　　　　　　　　　　　　記&lt;br&gt;
-&lt;br&gt;
-日　時：2022年6月11日(土) 0:03頃より0:20頃まで&lt;br&gt;
-&lt;br&gt;
-障害内容：コンテンツでプレイ中の一部のお客様がサーバーから切断され、ログインできなくなる&lt;br&gt;
-&lt;br&gt;
-原　因：サーバープログラムの不具合&lt;br&gt;
-&lt;br&gt;
-対　象：Chaosデータセンター配下のワールドをご利用のお客様&lt;br&gt;
-　　　　・Cerberus&lt;br&gt;
-　　　　・Louisoix&lt;br&gt;
-　　　　・Moogle&lt;br&gt;
-　　　　・Omega&lt;br&gt;
-　　　　・Ragnarok&lt;br&gt;
-　　　　・Spriggan</content:encoded>
-    <pubDate>Fri, 10 Jun 2022 15:24:00 GMT</pubDate>
   </item>
 </rss>
