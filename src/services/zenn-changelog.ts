@@ -2,8 +2,8 @@ import { BaseService } from '@/BaseService'
 import CollectResult, { Item } from '@/model/collect-result'
 import ServiceInformation from '@/model/service-information'
 import axios from 'axios'
-import { XMLParser } from 'fast-xml-parser'
 import cheerio from 'cheerio'
+import { XMLParser } from 'fast-xml-parser'
 
 export default class ZennChangelog extends BaseService {
   information(): ServiceInformation {
@@ -32,14 +32,15 @@ export default class ZennChangelog extends BaseService {
     for (const item of oldFeed.rss.channel.item) {
       const link: string = item.link
 
-      const itemId = new URL(link).hash.substring(1)
-      const changelog = await ZennChangelogItem.of(itemId)
+      const itemId = link.split('/').pop()
+      const changelog =
+        itemId !== undefined ? await ZennChangelogItem.of(itemId) : null
 
       const contents = []
-      if (changelog.itemText) {
+      if (changelog && changelog.itemText) {
         contents.push(changelog.itemText)
       }
-      if (changelog.itemUrl) {
+      if (changelog && changelog.itemUrl) {
         contents.push(
           '\n\n<a href="' +
             changelog.itemUrl +
@@ -64,30 +65,31 @@ export default class ZennChangelog extends BaseService {
 
 class ZennChangelogItem {
   readonly itemId: string
-  readonly html: string
 
   readonly itemText: string | null
   readonly itemUrl: string | null
+  static cacheInfo: string | null = null
 
   private constructor(
     itemId: string,
-    html: string,
     itemText: string | null,
     itemUrl: string | null
   ) {
     this.itemId = itemId
-    this.html = html
     this.itemText = itemText
     this.itemUrl = itemUrl
   }
 
   public static async of(itemId: string) {
-    const response = await axios.get('https://zenn.dev/changelog')
-    if (response.status !== 200) {
-      throw new Error('Failed to get changelog (' + response.status + ')')
+    console.log('ZennChangelogItem.of', itemId)
+    if (this.cacheInfo === null) {
+      const response = await axios.get<string>('https://info.zenn.dev')
+      if (response.status !== 200) {
+        throw new Error('Failed to get changelog (' + response.status + ')')
+      }
+      this.cacheInfo = response.data
     }
-    const html = response.data
-    const $ = cheerio.load(html)
+    const $ = cheerio.load(this.cacheInfo)
     const item = $(`#${itemId}`)
 
     // Get item text
@@ -101,6 +103,6 @@ class ZennChangelogItem {
     const itemUrlElement = item.find('[class^="ChangelogItem_itemDetailUrl"] a')
     const itemUrl = itemUrlElement ? itemUrlElement.attr('href') ?? null : null
 
-    return new ZennChangelogItem(itemId, html, itemText, itemUrl)
+    return new ZennChangelogItem(itemId, itemText, itemUrl)
   }
 }
