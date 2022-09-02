@@ -34,7 +34,7 @@ export default class FF14LodestoneUpdate extends BaseService {
     const update = $(
       '#toptabchanger_newsarea > div.toptabchanger_newsbox:nth-child(4) li.news__list a'
     )
-    for (const i of update) {
+    for (const i of update.slice(0, 10)) {
       const item = $(i)
       const title = item.find('p').text()
       const link = 'https://jp.finalfantasyxiv.com' + (item.attr('href') ?? '')

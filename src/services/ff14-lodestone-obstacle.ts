@@ -34,7 +34,7 @@ export default class FF14LodestoneObstacle extends BaseService {
     const obstacle = $(
       '#toptabchanger_newsarea > div.toptabchanger_newsbox:nth-child(5) li.news__list a'
     )
-    for (const i of obstacle) {
+    for (const i of obstacle.slice(0, 10)) {
       const item = $(i)
       const title = item.find('p').text()
       const link = 'https://jp.finalfantasyxiv.com' + (item.attr('href') ?? '')

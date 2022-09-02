@@ -9,13 +9,13 @@ export default class ZennChangelog extends BaseService {
   information(): ServiceInformation {
     return {
       title: 'Zenn Changelog',
-      link: 'https://zenn.dev/changelog/',
+      link: 'https://info.zenn.dev',
       description: "What's new on zenn.dev",
 
       image: {
         url: 'https://zenn.dev/images/logo-only-dark.png',
         title: 'Zenn Changelog',
-        link: 'https://zenn.dev/changelog/',
+        link: 'https://info.zenn.dev',
       },
       generator: 'book000/rss-deliver',
       language: 'ja',
@@ -26,10 +26,11 @@ export default class ZennChangelog extends BaseService {
     const parser = new XMLParser({
       ignoreAttributes: false,
     })
-    const response = await axios.get('https://zenn.dev/changelog/feed/')
+    const response = await axios.get('https://info.zenn.dev/rss/feed.xml')
     const oldFeed = parser.parse(response.data)
     const items: Item[] = []
-    for (const item of oldFeed.rss.channel.item) {
+    for (const item of oldFeed.rss.channel.item.slice(0, 10)) {
+      // 直近の10件を取得
       const link: string = item.link
 
       const itemId = link.split('/').pop()
@@ -82,26 +83,20 @@ class ZennChangelogItem {
 
   public static async of(itemId: string) {
     console.log('ZennChangelogItem.of', itemId)
-    if (this.cacheInfo === null) {
-      const response = await axios.get<string>('https://info.zenn.dev')
-      if (response.status !== 200) {
-        throw new Error('Failed to get changelog (' + response.status + ')')
-      }
-      this.cacheInfo = response.data
+    const itemUrl = `https://info.zenn.dev/${itemId}`
+    const response = await axios.get<string>(itemUrl, {
+      validateStatus: () => true,
+    })
+    if (response.status !== 200) {
+      console.warn('Failed to get changelog (' + response.status + ')')
+      return null
     }
-    const $ = cheerio.load(this.cacheInfo)
+    const $ = cheerio.load(response.data)
     const item = $(`#${itemId}`)
 
     // Get item text
-    const itemTextElement = item.find('[class^="ChangelogItem_itemDetailHtml"]')
-    const itemText =
-      itemTextElement && itemTextElement.text() !== ''
-        ? itemTextElement.text()
-        : null
-
-    // Get item details url
-    const itemUrlElement = item.find('[class^="ChangelogItem_itemDetailUrl"] a')
-    const itemUrl = itemUrlElement ? itemUrlElement.attr('href') ?? null : null
+    const itemTextElement = item.find('[class^="SlugPage_blogBody"]')
+    const itemText = itemTextElement ? itemTextElement.html() : null
 
     return new ZennChangelogItem(itemId, itemText, itemUrl)
   }
