@@ -1,22 +1,19 @@
 import { XMLBuilder, XMLParser } from 'fast-xml-parser'
 import fs from 'fs'
 import { BaseService } from './BaseService'
-import FF14LodestoneMaintenance from './services/ff14-lodestone-maintenance'
-import FF14LodestoneNews from './services/ff14-lodestone-news'
-import FF14LodestoneObstacle from './services/ff14-lodestone-obstacle'
-import FF14LodestoneUpdate from './services/ff14-lodestone-update'
-import SekanekoBlog from './services/sekaneko-blog'
-import ZennChangelog from './services/zenn-changelog'
+import PhysicalUpLettuceClub from './services/physical-up-lettuce-club'
 
 async function generateRSS() {
   console.log('Generating RSS...')
   const services: BaseService[] = [
+    /*
     new ZennChangelog(),
     new FF14LodestoneNews(),
     new FF14LodestoneMaintenance(),
     new FF14LodestoneUpdate(),
     new FF14LodestoneObstacle(),
-    new SekanekoBlog(),
+    new SekanekoBlog(), */
+    new PhysicalUpLettuceClub(),
   ]
   for (const service of services) {
     const filename = service.constructor.name
