@@ -6,6 +6,7 @@ import FF14LodestoneNews from './services/ff14-lodestone-news'
 import FF14LodestoneObstacle from './services/ff14-lodestone-obstacle'
 import FF14LodestoneUpdate from './services/ff14-lodestone-update'
 import PhysicalUpLettuceClub from './services/physical-up-lettuce-club'
+import PopTeamEpic7 from './services/pop-team-epic7'
 import SekanekoBlog from './services/sekaneko-blog'
 import ZennChangelog from './services/zenn-changelog'
 
@@ -19,6 +20,7 @@ async function generateRSS() {
     new FF14LodestoneObstacle(),
     new SekanekoBlog(),
     new PhysicalUpLettuceClub(),
+    new PopTeamEpic7(),
   ]
   for (const service of services) {
     const filename = service.constructor.name
