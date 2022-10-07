@@ -50,6 +50,9 @@ export default class ZennChangelog extends BaseService {
             '</a>'
         )
       }
+      if (contents.length === 0) {
+        contents.push(item.description)
+      }
 
       items.push({
         title: item.title,
@@ -92,10 +95,9 @@ class ZennChangelogItem {
       return null
     }
     const $ = cheerio.load(response.data)
-    const item = $(`#${itemId}`)
 
     // Get item text
-    const itemTextElement = item.find('[class^="SlugPage_blogBody"]')
+    const itemTextElement = $('[class^="SlugPage_blogBody"]')
     const itemText = itemTextElement ? itemTextElement.html() : null
 
     return new ZennChangelogItem(itemId, itemText, itemUrl)
