@@ -40,6 +40,9 @@ export default class PhysicalUpLettuceClub extends BaseService {
       }
 
       const content = await this.getContent(link)
+      if (!content) {
+        continue
+      }
       const images = content.images
       const pubDate = content.pubDate
 
@@ -61,8 +64,13 @@ export default class PhysicalUpLettuceClub extends BaseService {
   async getContent(url: string): Promise<{
     images: string[]
     pubDate: string
-  }> {
-    const response = await axios.get(url)
+  } | null> {
+    const response = await axios.get(url, {
+      validateStatus: () => true,
+    })
+    if (response.status !== 200) {
+      return null
+    }
     const $ = cheerio.load(response.data)
 
     const images: string[] = []
