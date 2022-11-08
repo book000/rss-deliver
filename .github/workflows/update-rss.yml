@@ -39,7 +39,23 @@ jobs:
         run: yarn
 
       - name: Update RSS
+        id: update-rss
+        continue-on-error: true
         run: yarn build
+
+      - name: Error handling
+        if: ${{ steps.update-rss.outcome == 'failure' }}
+        uses: Ilshidur/action-discord@0.3.2
+        env:
+          DISCORD_WEBHOOK: ${{ secrets.c }}
+          DISCORD_EMBEDS: |
+            [
+              {
+                "title": "RSS Update Failed",
+                "url": "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}",
+                "color": 16711680
+              }
+            ]
 
       - name: Upload Pages-artifact
         uses: actions/upload-pages-artifact@v1
