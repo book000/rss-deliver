@@ -40,11 +40,10 @@ jobs:
 
       - name: Update RSS
         id: update-rss
-        continue-on-error: true
         run: yarn build
 
       - name: Error handling
-        if: ${{ steps.update-rss.outcome == 'failure' }}
+        if: failure()
         uses: Ilshidur/action-discord@0.3.2
         env:
           DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
