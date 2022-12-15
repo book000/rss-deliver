@@ -48,5 +48,8 @@ jobs:
       - name: Run linter 👀
         run: yarn lint
 
-      - name: Run compile 🏗️
+      - name: Run compile 🏃
         run: yarn compile
+
+      - name: Run build 🏗️
+        run: yarn build
