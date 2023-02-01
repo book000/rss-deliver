@@ -1,6 +1,7 @@
 import { XMLBuilder, XMLParser } from 'fast-xml-parser'
 import fs from 'fs'
 import { BaseService } from './BaseService'
+import { Logger } from './logger'
 import FF14LodestoneMaintenance from './services/ff14-lodestone-maintenance'
 import FF14LodestoneNews from './services/ff14-lodestone-news'
 import FF14LodestoneObstacle from './services/ff14-lodestone-obstacle'
@@ -12,7 +13,8 @@ import SekanekoBlog from './services/sekaneko-blog'
 import ZennChangelog from './services/zenn-changelog'
 
 async function generateRSS() {
-  console.log('Generating RSS...')
+  const logger = Logger.configure('main.generateRSS')
+  logger.info('✨ Generating RSS...')
   const services: BaseService[] = [
     new ZennChangelog(),
     new FF14LodestoneNews(),
@@ -26,8 +28,7 @@ async function generateRSS() {
   ]
   for (const service of services) {
     const filename = service.constructor.name
-    console.time(service.information().title)
-    console.info('filename: ', filename)
+    logger.info(`📝 Generating ${filename}...`)
     const builder = new XMLBuilder({
       ignoreAttributes: false,
       format: true,
@@ -52,12 +53,13 @@ async function generateRSS() {
     const feed = builder.build(obj)
 
     fs.writeFileSync('output/' + filename + '.xml', feed.toString())
-    console.timeEnd(service.information().title)
+    logger.info(`✅ Generated ${filename}`)
   }
 }
 
 async function generateList() {
-  console.log('Generating list...')
+  const logger = Logger.configure('main.generateList')
+  logger.info('✨ Generating list...')
   const files = fs.readdirSync('output')
   const template = fs.readFileSync('template.html', 'utf8')
   const list = files

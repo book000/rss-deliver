@@ -1,4 +1,5 @@
 import { BaseService } from '@/BaseService'
+import { Logger } from '@/logger'
 import CollectResult, { Item } from '@/model/collect-result'
 import ServiceInformation from '@/model/service-information'
 import axios from 'axios'
@@ -23,6 +24,7 @@ export default class PopTeamEpic7 extends BaseService {
   }
 
   async collect(): Promise<CollectResult> {
+    const logger = Logger.configure('PopTeamEpic7::collect')
     const response = await axios.get(
       'https://mangalifewin.takeshobo.co.jp/rensai/popute7/'
     )
@@ -41,7 +43,7 @@ export default class PopTeamEpic7 extends BaseService {
       const title = item.itemTitle
       const images = item.itemImages
 
-      console.log(title, url)
+      logger.info(`📃 ${title} ${url}`)
 
       // saving images
       if (!fs.existsSync('output/popute7/')) {
@@ -83,12 +85,13 @@ class PopTeamEpic7Item {
   }
 
   public static async of(url: string) {
-    console.log('PopTeamEpic7Item.of', url)
+    const logger = Logger.configure('PopTeamEpic7Item::of')
+    logger.info(`📃 ${url}`)
     const response = await axios.get<string>(url, {
       validateStatus: () => true,
     })
     if (response.status !== 200) {
-      console.warn('Failed to get item details (' + response.status + ')')
+      logger.warn(`❗ Failed to get item details (${response.status})`)
       return null
     }
     const $ = cheerio.load(response.data)
