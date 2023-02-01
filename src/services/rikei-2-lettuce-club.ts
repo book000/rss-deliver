@@ -1,4 +1,5 @@
 import { BaseService } from '@/BaseService'
+import { Logger } from '@/logger'
 import CollectResult, { Item } from '@/model/collect-result'
 import ServiceInformation from '@/model/service-information'
 import axios from 'axios'
@@ -22,6 +23,7 @@ export default class Rikei2LettuceClub extends BaseService {
   }
 
   async collect(): Promise<CollectResult> {
+    const logger = Logger.configure('Rikei2LettuceClub::collect')
     const response = await axios.get(
       'https://www.lettuceclub.net/news/serial/12004/'
     )
@@ -46,7 +48,9 @@ export default class Rikei2LettuceClub extends BaseService {
       const images = content.images
       const pubDate = content.pubDate
 
-      console.log(title, link, images)
+      logger.info(`📃 ${title} ${link}`)
+      logger.info(`📅 ${pubDate}`)
+      logger.info(`🎨 ${images}`)
 
       items.push({
         title,

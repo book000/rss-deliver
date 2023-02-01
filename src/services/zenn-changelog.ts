@@ -1,4 +1,5 @@
 import { BaseService } from '@/BaseService'
+import { Logger } from '@/logger'
 import CollectResult, { Item } from '@/model/collect-result'
 import ServiceInformation from '@/model/service-information'
 import axios from 'axios'
@@ -85,13 +86,14 @@ class ZennChangelogItem {
   }
 
   public static async of(itemId: string) {
-    console.log('ZennChangelogItem.of', itemId)
+    const logger = Logger.configure('ZennChangelogItem.of')
+    logger.info(`📄 Loading ${itemId}`)
     const itemUrl = `https://info.zenn.dev/${itemId}`
     const response = await axios.get<string>(itemUrl, {
       validateStatus: () => true,
     })
     if (response.status !== 200) {
-      console.warn('Failed to get changelog (' + response.status + ')')
+      logger.warn(`❗ Failed to get changelog (${response.status})`)
       return null
     }
     const $ = cheerio.load(response.data)
