@@ -97,7 +97,7 @@ class PopTeamEpic7Item {
     const $ = cheerio.load(response.data)
     const item = $(`#extMdlSeriesMngrArticle78`)
 
-    const title = item.find('h3.articleTitle').text()
+    const title = item.find('h3').text()
     const images: string[] = item
       .find('img')
       .map((_, e) => $(e).attr('src'))
