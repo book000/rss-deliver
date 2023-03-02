@@ -88,7 +88,8 @@ export default class Rikei2LettuceClub extends BaseService {
     const rawPubDate = $('main time.c-date').attr('datetime') ?? '' // 2021.04.28
     const pubDate = new Date(rawPubDate.replaceAll('.', '/')).toUTCString()
     return {
-      images,
+      // 1つ目はサムネイルなので除外
+      images: images.slice(1),
       pubDate,
     }
   }
