@@ -5,6 +5,7 @@ import ServiceInformation from '@/model/service-information'
 import axios from 'axios'
 import cheerio from 'cheerio'
 import fs from 'fs'
+import crypto from 'crypto'
 
 export default class PopTeamEpic7 extends BaseService {
   information(): ServiceInformation {
@@ -55,8 +56,9 @@ export default class PopTeamEpic7 extends BaseService {
         const base64 = image.replace(/^data:image\/\w+;base64,/, '')
         const buffer = Buffer.from(base64, 'base64')
         fs.writeFileSync(`output/popute7/${i}-${v}.jpg`, buffer)
+        const hash = await this.hash(buffer)
         imageUrls.push(
-          `https://book000.github.io/rss-deliver/popute7/${i}-${v}.jpg`
+          `https://book000.github.io/rss-deliver/popute7/${hash}.jpg`
         )
       }
 
@@ -72,6 +74,12 @@ export default class PopTeamEpic7 extends BaseService {
       status: true,
       items,
     }
+  }
+
+  async hash(buffer: Buffer): Promise<string> {
+    const hash = crypto.createHash('md5')
+    hash.update(buffer)
+    return hash.digest('hex')
   }
 }
 
