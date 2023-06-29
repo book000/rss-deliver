@@ -11,6 +11,7 @@ import PopTeamEpic7 from './services/pop-team-epic7'
 import Rikei2LettuceClub from './services/rikei-2-lettuce-club'
 import SekanekoBlog from './services/sekaneko-blog'
 import ZennChangelog from './services/zenn-changelog'
+import Dev1and from './services/dev1and'
 
 async function generateRSS() {
   const logger = Logger.configure('main.generateRSS')
@@ -25,6 +26,7 @@ async function generateRSS() {
     new PhysicalUpLettuceClub(),
     new PopTeamEpic7(),
     new Rikei2LettuceClub(),
+    new Dev1and(),
   ]
   const promises = []
   for (const service of services) {
