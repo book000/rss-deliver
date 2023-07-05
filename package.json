@@ -23,6 +23,7 @@
   },
   "devDependencies": {
     "@types/cheerio": "0.22.31",
+    "@types/marked": "5.0.0",
     "@types/node": "18.16.19",
     "@typescript-eslint/eslint-plugin": "5.61.0",
     "@typescript-eslint/parser": "5.61.0",
@@ -36,7 +37,9 @@
     "eslint-plugin-node": "11.1.0",
     "eslint-plugin-promise": "6.1.1",
     "fast-xml-parser": "4.2.5",
+    "gray-matter": "4.0.3",
     "logform": "2.5.1",
+    "marked": "5.1.0",
     "prettier": "2.8.8",
     "ts-node": "10.9.1",
     "ts-node-dev": "2.0.0",
