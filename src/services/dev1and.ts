@@ -25,14 +25,11 @@ export default class Dev1and extends BaseService {
     )
     const lastUpdatedAtRaw = response.data.last_updated_at
     const lastUpdatedAt = new Date(lastUpdatedAtRaw.replaceAll('/', '-'))
-    const lastUpdatedDate = lastUpdatedAt
-      .toLocaleDateString('ja-JP', {
-        year: 'numeric',
-        month: '2-digit',
-        day: '2-digit',
-      })
-      .split('/')
-      .join('-')
+    const lastUpdatedDateText = this.getYearMonthWeek(lastUpdatedAt)
+    const lastUpdatedDate = lastUpdatedDateText
+      .replaceAll('/', '-')
+      .replaceAll('#', '-')
+      .replaceAll(' ', '-')
 
     const weeklyArticle = response.data.data.weekly_hit.items.map(
       (item: {
@@ -70,7 +67,7 @@ export default class Dev1and extends BaseService {
       status: true,
       items: [
         {
-          title: `週間ブログ・記事・はてなブックマーク (${lastUpdatedDate})`,
+          title: `週間ブログ・記事・はてなブックマーク (${lastUpdatedDateText})`,
           link: `https://dev1and.com/?${lastUpdatedDate}`,
           'content:encoded': [
             '<p>Last updated: ' + lastUpdatedAtRaw + '</p>',
@@ -92,5 +89,13 @@ export default class Dev1and extends BaseService {
         },
       ],
     }
+  }
+
+  getYearMonthWeek(date: Date): string {
+    // yyyy-mm (week)
+    const year = date.getFullYear()
+    const month = ('00' + (date.getMonth() + 1)).slice(-2)
+    const week = Math.floor((date.getDate() - 1) / 7) + 1
+    return `${year}/${month} #${week}`
   }
 }
