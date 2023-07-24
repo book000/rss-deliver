@@ -24,9 +24,7 @@ export default class TdrUpdates extends BaseService {
     )
     const $ = cheerio.load(response.data)
     const items: Item[] = []
-    let i = 0
     for (const element of $('div.listUpdate ul li a')) {
-      i++
       const anchor = $(element)
       const url = anchor.attr('href') ?? ''
       const title = anchor.find('p.txt').text()
