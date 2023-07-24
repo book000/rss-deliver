@@ -13,6 +13,7 @@ import SekanekoBlog from './services/sekaneko-blog'
 import ZennChangelog from './services/zenn-changelog'
 import Dev1and from './services/dev1and'
 import HiratakeWeb from './services/hiratakedev'
+import TdrUpdates from './services/tdr-updates'
 
 async function generateRSS() {
   const logger = Logger.configure('main.generateRSS')
@@ -29,6 +30,7 @@ async function generateRSS() {
     new Rikei2LettuceClub(),
     new Dev1and(),
     new HiratakeWeb(),
+    new TdrUpdates(),
   ]
   const promises = []
   for (const service of services) {
