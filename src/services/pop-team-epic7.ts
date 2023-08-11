@@ -31,9 +31,7 @@ export default class PopTeamEpic7 extends BaseService {
     )
     const $ = cheerio.load(response.data)
     const items: Item[] = []
-    let i = 0
     for (const element of $('div.bookR li a')) {
-      i++
       const anchor = $(element)
       const url = anchor.attr('href') ?? ''
 
