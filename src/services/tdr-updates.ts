@@ -79,7 +79,7 @@ export default class TdrUpdates extends BaseService {
 
       const image = canvas.toBuffer('image/png')
       const hash = await this.hash(image)
-      fs.writeFileSync(`output/tdr-updates/${hash}.jpg`, new Uint8Array(image))
+      fs.writeFileSync(`output/tdr-updates/${hash}.png`, new Uint8Array(image))
       imageUrls.push(
         `https://book000.github.io/rss-deliver/tdr-updates/${hash}.png`
       )
