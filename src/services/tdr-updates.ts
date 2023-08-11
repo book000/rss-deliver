@@ -5,6 +5,9 @@ import ServiceInformation from '@/model/service-information'
 import axios from 'axios'
 import cheerio from 'cheerio'
 import crypto from 'crypto'
+import fs from 'fs'
+import * as pdfjs from 'pdfjs-dist/legacy/build/pdf'
+import { createCanvas } from 'canvas'
 
 export default class TdrUpdates extends BaseService {
   information(): ServiceInformation {
@@ -36,16 +39,52 @@ export default class TdrUpdates extends BaseService {
 
       logger.info(`📃 ${title} ${url} (${year}/${month}/${day}`)
 
+      let content
+      if (url.endsWith('.pdf')) {
+        const pdfUrls = await this.pdf2png(url)
+        content = pdfUrls.map((url) => `<img src="${url}">`).join('<br>')
+      }
+
       items.push({
         title,
         link: url,
         pubDate: date.toUTCString(),
+        'content:encoded': content,
       })
     }
     return {
       status: true,
       items,
     }
+  }
+
+  async pdf2png(url: string): Promise<string[]> {
+    const response = await axios.get(url, {
+      responseType: 'arraybuffer',
+    })
+    const pdfData = new Uint8Array(response.data)
+    const pdfDoc = await pdfjs.getDocument({ data: pdfData }).promise
+
+    if (!fs.existsSync('output/tdr-updates/')) {
+      fs.mkdirSync('output/tdr-updates/', { recursive: true })
+    }
+    const imageUrls = []
+    for (let i = 1; i <= pdfDoc.numPages; i++) {
+      const page = await pdfDoc.getPage(i)
+      const viewport = page.getViewport({ scale: 1.0 })
+      const canvas = createCanvas(viewport.width, viewport.height)
+      const ctx = canvas.getContext('2d')
+
+      await page.render({ canvasContext: ctx as never, viewport }).promise
+
+      const image = canvas.toBuffer('image/png')
+      const hash = await this.hash(image)
+      fs.writeFileSync(`output/tdr-updates/${hash}.jpg`, new Uint8Array(image))
+      imageUrls.push(
+        `https://book000.github.io/rss-deliver/tdr-updates/${hash}.png`
+      )
+    }
+    return imageUrls
   }
 
   async hash(buffer: Buffer): Promise<string> {

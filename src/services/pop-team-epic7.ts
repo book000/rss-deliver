@@ -31,9 +31,7 @@ export default class PopTeamEpic7 extends BaseService {
     )
     const $ = cheerio.load(response.data)
     const items: Item[] = []
-    let i = 0
     for (const element of $('div.bookR li a')) {
-      i++
       const anchor = $(element)
       const url = anchor.attr('href') ?? ''
 
@@ -55,8 +53,8 @@ export default class PopTeamEpic7 extends BaseService {
         const image = images[v]
         const base64 = image.replace(/^data:image\/\w+;base64,/, '')
         const buffer = Buffer.from(base64, 'base64')
-        fs.writeFileSync(`output/popute7/${i}-${v}.jpg`, buffer)
         const hash = await this.hash(buffer)
+        fs.writeFileSync(`output/popute7/${hash}.jpg`, buffer)
         imageUrls.push(
           `https://book000.github.io/rss-deliver/popute7/${hash}.jpg`
         )
