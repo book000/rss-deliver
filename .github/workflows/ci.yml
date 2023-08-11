@@ -42,11 +42,11 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-yarn-
 
-      - name: Install dependencies 👨🏻‍💻
-        run: yarn
-
       - name: Install apt dependencies
         run: sudo apt install build-essensial libcairo2-dev libpango1.0-dev libjpeg-dev libgif-dev librsvg2-dev
+
+      - name: Install dependencies 👨🏻‍💻
+        run: yarn
 
       - name: Run linter 👀
         run: yarn lint
