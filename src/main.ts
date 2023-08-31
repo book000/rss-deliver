@@ -12,7 +12,6 @@ import Rikei2LettuceClub from './services/rikei-2-lettuce-club'
 import SekanekoBlog from './services/sekaneko-blog'
 import ZennChangelog from './services/zenn-changelog'
 import Dev1and from './services/dev1and'
-import HiratakeWeb from './services/hiratakedev'
 import TdrUpdates from './services/tdr-updates'
 
 async function generateRSS() {
@@ -29,7 +28,6 @@ async function generateRSS() {
     new PopTeamEpic7(),
     new Rikei2LettuceClub(),
     new Dev1and(),
-    new HiratakeWeb(),
     new TdrUpdates(),
   ]
   const promises = []
