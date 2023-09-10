@@ -13,6 +13,7 @@ import SekanekoBlog from './services/sekaneko-blog'
 import ZennChangelog from './services/zenn-changelog'
 import Dev1and from './services/dev1and'
 import TdrUpdates from './services/tdr-updates'
+import PopTeamEpic8 from './services/pop-team-epic8'
 
 async function generateRSS() {
   const logger = Logger.configure('main.generateRSS')
@@ -29,6 +30,7 @@ async function generateRSS() {
     new Rikei2LettuceClub(),
     new Dev1and(),
     new TdrUpdates(),
+    new PopTeamEpic8(),
   ]
   const promises = []
   for (const service of services) {
