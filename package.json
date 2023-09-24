@@ -36,7 +36,7 @@
     "eslint-plugin-n": "16.1.0",
     "eslint-plugin-node": "11.1.0",
     "eslint-plugin-promise": "6.1.1",
-    "fast-xml-parser": "4.2.7",
+    "fast-xml-parser": "4.3.1",
     "gray-matter": "4.0.3",
     "logform": "2.5.1",
     "marked": "9.0.3",
