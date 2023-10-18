@@ -22,7 +22,7 @@
     "fix:prettier": "prettier --write src"
   },
   "devDependencies": {
-    "@types/cheerio": "0.22.32",
+    "@types/cheerio": "0.22.33",
     "@types/marked": "5.0.2",
     "@types/node": "18.18.5",
     "@typescript-eslint/eslint-plugin": "6.8.0",
