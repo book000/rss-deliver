@@ -41,7 +41,7 @@
     "logform": "2.6.0",
     "marked": "9.1.5",
     "node-canvas": "^2.9.0",
-    "pdfjs-dist": "^3.9.179",
+    "pdfjs-dist": "^4.0.0",
     "prettier": "2.8.8",
     "ts-node": "10.9.1",
     "ts-node-dev": "2.0.0",
