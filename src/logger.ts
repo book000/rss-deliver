@@ -119,10 +119,14 @@ export class Logger {
 }
 
 process.on('unhandledRejection', (reason) => {
-  const logger = Logger.configure('main')
-  logger.error('unhandledRejection', reason as Error)
+  // const logger = Logger.configure('main')
+  // logger.error('unhandledRejection', reason as Error)
+  // eslint-disable-next-line no-console
+  console.error(reason)
 })
 process.on('uncaughtException', (error) => {
-  const logger = Logger.configure('main')
-  logger.error('uncaughtException', error)
+  // const logger = Logger.configure('main')
+  // logger.error('uncaughtException', error)
+  // eslint-disable-next-line no-console
+  console.error(error)
 })
