@@ -61,7 +61,9 @@ async function generateRSS() {
     new TdrUpdates(),
     new PopTeamEpic(),
   ]
-  const promises: Promise<void>[] = services.map((service) => generateRSSService(service))
+  const promises: Promise<void>[] = services.map((service) =>
+    generateRSSService(service)
+  )
 
   await Promise.all(promises)
 }
