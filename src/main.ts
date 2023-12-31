@@ -7,13 +7,12 @@ import FF14LodestoneNews from './services/ff14-lodestone-news'
 import FF14LodestoneObstacle from './services/ff14-lodestone-obstacle'
 import FF14LodestoneUpdate from './services/ff14-lodestone-update'
 import PhysicalUpLettuceClub from './services/physical-up-lettuce-club'
-import PopTeamEpic7 from './services/pop-team-epic7'
 import Rikei2LettuceClub from './services/rikei-2-lettuce-club'
 import SekanekoBlog from './services/sekaneko-blog'
 import ZennChangelog from './services/zenn-changelog'
 import Dev1and from './services/dev1and'
 import TdrUpdates from './services/tdr-updates'
-import PopTeamEpic8 from './services/pop-team-epic8'
+import PopTeamEpic from './services/pop-team-epic'
 
 async function generateRSS() {
   const logger = Logger.configure('main.generateRSS')
@@ -26,11 +25,10 @@ async function generateRSS() {
     new FF14LodestoneObstacle(),
     new SekanekoBlog(),
     new PhysicalUpLettuceClub(),
-    new PopTeamEpic7(),
     new Rikei2LettuceClub(),
     new Dev1and(),
     new TdrUpdates(),
-    new PopTeamEpic8(),
+    new PopTeamEpic(),
   ]
   const promises = []
   for (const service of services) {
