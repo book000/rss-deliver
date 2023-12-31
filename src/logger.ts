@@ -117,12 +117,3 @@ export class Logger {
     return new Logger(logger)
   }
 }
-
-process.on('unhandledRejection', (reason) => {
-  const logger = Logger.configure('main')
-  logger.error('unhandledRejection', reason as Error)
-})
-process.on('uncaughtException', (error) => {
-  const logger = Logger.configure('main')
-  logger.error('uncaughtException', error)
-})

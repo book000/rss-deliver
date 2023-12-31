@@ -14,6 +14,37 @@ import Dev1and from './services/dev1and'
 import TdrUpdates from './services/tdr-updates'
 import PopTeamEpic from './services/pop-team-epic'
 
+async function generateRSSService(service: BaseService) {
+  const filename = service.constructor.name
+  const logger = Logger.configure(`main.generateRSSService#${filename}`)
+  logger.info(`📝 Generating ${filename}...`)
+  const builder = new XMLBuilder({
+    ignoreAttributes: false,
+    format: true,
+  })
+
+  const collect = await service.collect()
+  const obj = {
+    '?xml': {
+      '@_version': '1.0',
+      '@_encoding': 'UTF-8',
+    },
+    rss: {
+      '@_version': '2.0',
+      '@_xmlns:dc': 'http://purl.org/dc/elements/1.1/',
+      '@_xmlns:content': 'http://purl.org/rss/1.0/modules/content/',
+      '@_xmlns:atom': 'http://www.w3.org/2005/Atom',
+      channel: service.information(),
+      item: collect.items,
+    },
+  }
+
+  const feed = builder.build(obj)
+
+  fs.writeFileSync('output/' + filename + '.xml', feed.toString())
+  logger.info(`✅ Generated ${filename}`)
+}
+
 async function generateRSS() {
   const logger = Logger.configure('main.generateRSS')
   logger.info('✨ Generating RSS...')
@@ -30,40 +61,9 @@ async function generateRSS() {
     new TdrUpdates(),
     new PopTeamEpic(),
   ]
-  const promises = []
-  for (const service of services) {
-    promises.push(
-      (async () => {
-        const filename = service.constructor.name
-        logger.info(`📝 Generating ${filename}...`)
-        const builder = new XMLBuilder({
-          ignoreAttributes: false,
-          format: true,
-        })
-
-        const collect = await service.collect()
-        const obj = {
-          '?xml': {
-            '@_version': '1.0',
-            '@_encoding': 'UTF-8',
-          },
-          rss: {
-            '@_version': '2.0',
-            '@_xmlns:dc': 'http://purl.org/dc/elements/1.1/',
-            '@_xmlns:content': 'http://purl.org/rss/1.0/modules/content/',
-            '@_xmlns:atom': 'http://www.w3.org/2005/Atom',
-            channel: service.information(),
-            item: collect.items,
-          },
-        }
-
-        const feed = builder.build(obj)
-
-        fs.writeFileSync('output/' + filename + '.xml', feed.toString())
-        logger.info(`✅ Generated ${filename}`)
-      })()
-    )
-  }
+  const promises: Promise<void>[] = services.map((service) =>
+    generateRSSService(service)
+  )
 
   await Promise.all(promises)
 }
