@@ -40,7 +40,7 @@
     "fast-xml-parser": "4.3.3",
     "gray-matter": "4.0.3",
     "logform": "2.6.0",
-    "marked": "11.1.1",
+    "marked": "11.2.0",
     "pdfjs-dist": "3.11.174",
     "prettier": "2.8.8",
     "sharp": "0.33.2",
