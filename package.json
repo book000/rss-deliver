@@ -24,7 +24,7 @@
   "devDependencies": {
     "@types/cheerio": "0.22.35",
     "@types/marked": "5.0.2",
-    "@types/node": "20.11.7",
+    "@types/node": "20.11.8",
     "@typescript-eslint/eslint-plugin": "6.19.1",
     "@typescript-eslint/parser": "6.19.1",
     "axios": "1.6.7",
