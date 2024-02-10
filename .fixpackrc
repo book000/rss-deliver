@@ -11,6 +11,7 @@
     "private",
     "files",
     "main",
+    "type",
     "types",
     "bin",
     "man",

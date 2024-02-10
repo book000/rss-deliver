@@ -1,7 +1,7 @@
 {
   "name": "book000/rss-deliver",
   "build": {
-    "context": "../.devcontainer",
+    "context": "..",
     "dockerfile": "Dockerfile"
   },
   "postCreateCommand": "pnpm install",

@@ -1,6 +1,7 @@
-FROM mcr.microsoft.com/devcontainers/typescript-node:0-18
+FROM mcr.microsoft.com/devcontainers/typescript-node:0-20
 
 # Install additional packages
+# hadolint ignore=DL3008
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
     build-essential \
@@ -12,7 +13,7 @@ RUN apt-get update \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
-# Activate corepack
-RUN corepack enable
+COPY .node-version /work/.node-version
+RUN su node -c "source /usr/local/share/nvm/nvm.sh && nvm install $(cat /work/.node-version) && nvm use $(cat /work/.node-version)"
 
 WORKDIR /work
