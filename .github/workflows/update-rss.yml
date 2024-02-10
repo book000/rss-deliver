@@ -47,7 +47,7 @@ jobs:
 
       - name: 👨🏻‍💻 Install dependencies
         run: |
-          pnpm install --frozen-lockfile --prefer-frozen-lockfile && npm install --force @img/sharp-linux-x64
+          pnpm install --frozen-lockfile --prefer-frozen-lockfile
 
       - name: Update RSS
         id: update-rss
