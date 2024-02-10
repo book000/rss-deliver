@@ -1,5 +1,9 @@
 {
-  "image": "mcr.microsoft.com/devcontainers/typescript-node:0-18",
+  "name": "book000/rss-deliver",
+  "build": {
+    "context": "../.devcontainer",
+    "dockerfile": "Dockerfile"
+  },
   "postCreateCommand": "pnpm install",
   "waitFor": "postCreateCommand",
   "customizations": {
@@ -11,14 +15,9 @@
         }
       },
       "editor.formatOnSave": true,
-      "git.branchProtection": [
-        "main",
-        "master"
-      ]
+      "git.branchProtection": ["main", "master"]
     },
-    "extensions": [
-      "esbenp.prettier-vscode"
-    ],
+    "extensions": ["esbenp.prettier-vscode"],
     "vscode": {
       "settings": {
         "[typescript]": {
@@ -28,17 +27,11 @@
           }
         },
         "editor.formatOnSave": true,
-        "git.branchProtection": [
-          "main",
-          "master"
-        ]
+        "git.branchProtection": ["main", "master"]
       },
-      "extensions": [
-        "esbenp.prettier-vscode"
-      ]
+      "extensions": ["esbenp.prettier-vscode"]
     }
   },
-  "name": null,
   "otherPortAttributes": {
     "onAutoForward": "silent"
   }
