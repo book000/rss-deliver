@@ -1,11 +1,11 @@
-import { BaseService } from '@/BaseService'
-import { Logger } from '@/logger'
+import { BaseService } from '@/base-service'
+import { Logger } from '@book000/node-utils'
 import CollectResult, { Item } from '@/model/collect-result'
 import ServiceInformation from '@/model/service-information'
 import axios from 'axios'
 import cheerio from 'cheerio'
-import fs from 'fs'
-import crypto from 'crypto'
+import fs from 'node:fs'
+import crypto from 'node:crypto'
 import sharp from 'sharp'
 
 export default class PopTeamEpic extends BaseService {
@@ -98,7 +98,7 @@ export default class PopTeamEpic extends BaseService {
         title,
         link: url,
         'content:encoded': imageUrls
-          .map((i) => `<img src="${i}">`)
+          .map((index) => `<img src="${index}">`)
           .join('<br>'),
       })
     }

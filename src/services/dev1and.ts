@@ -1,9 +1,9 @@
-import { BaseService } from '@/BaseService'
+import { BaseService } from '@/base-service'
 import CollectResult from '@/model/collect-result'
 import ServiceInformation from '@/model/service-information'
 import axios from 'axios'
 
-export default class Dev1and extends BaseService {
+export default class Development1and extends BaseService {
   information(): ServiceInformation {
     return {
       title: 'Devland',

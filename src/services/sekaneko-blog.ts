@@ -1,4 +1,4 @@
-import { BaseService } from '@/BaseService'
+import { BaseService } from '@/base-service'
 import CollectResult, { Item } from '@/model/collect-result'
 import ServiceInformation from '@/model/service-information'
 import axios from 'axios'

@@ -1,7 +1,7 @@
 import { XMLBuilder, XMLParser } from 'fast-xml-parser'
-import fs from 'fs'
-import { BaseService } from './BaseService'
-import { Logger } from './logger'
+import fs from 'node:fs'
+import { BaseService } from './base-service'
+import { Logger } from '@book000/node-utils'
 import FF14LodestoneMaintenance from './services/ff14-lodestone-maintenance'
 import FF14LodestoneNews from './services/ff14-lodestone-news'
 import FF14LodestoneObstacle from './services/ff14-lodestone-obstacle'
@@ -10,7 +10,7 @@ import PhysicalUpLettuceClub from './services/physical-up-lettuce-club'
 import Rikei2LettuceClub from './services/rikei-2-lettuce-club'
 import SekanekoBlog from './services/sekaneko-blog'
 import ZennChangelog from './services/zenn-changelog'
-import Dev1and from './services/dev1and'
+import Development1and from './services/dev1and'
 import TdrUpdates from './services/tdr-updates'
 import PopTeamEpic from './services/pop-team-epic'
 
@@ -24,9 +24,14 @@ async function generateRSSService(service: BaseService) {
   })
 
   const collect = await service.collect()
-  const obj = {
+  if (!collect.status) {
+    logger.warn(`❌ ${filename} is not available`)
+    return
+  }
+  const object = {
     '?xml': {
       '@_version': '1.0',
+      // eslint-disable-next-line unicorn/text-encoding-identifier-case
       '@_encoding': 'UTF-8',
     },
     rss: {
@@ -39,7 +44,7 @@ async function generateRSSService(service: BaseService) {
     },
   }
 
-  const feed = builder.build(obj)
+  const feed = builder.build(object)
 
   fs.writeFileSync('output/' + filename + '.xml', feed.toString())
   logger.info(`✅ Generated ${filename}`)
@@ -57,7 +62,7 @@ async function generateRSS() {
     new SekanekoBlog(),
     new PhysicalUpLettuceClub(),
     new Rikei2LettuceClub(),
-    new Dev1and(),
+    new Development1and(),
     new TdrUpdates(),
     new PopTeamEpic(),
   ]

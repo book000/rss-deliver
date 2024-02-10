@@ -1,32 +1,37 @@
 {
   "name": "rss-deliver",
-  "version": "1.0.1",
+  "version": "2.0.0",
   "description": "RSS collector & deliver for myself",
-  "main": "dist/main.js",
-  "repository": "git@github.com:book000/rss-deliver.git",
-  "author": "Tomachi",
-  "license": "MIT",
   "private": true,
+  "homepage": "https://github.com/book000/rss-deliver",
+  "bugs": {
+    "url": "https://github.com/book000/rss-deliver/issues"
+  },
+  "license": "MIT",
+  "author": "Tomachi",
+  "main": "dist/main.js",
+  "repository": {
+    "type": "git",
+    "url": null
+  },
   "scripts": {
-    "build": "ts-node -r tsconfig-paths/register ./src/main.ts",
-    "dev": "ts-node-dev -r tsconfig-paths/register ./src/main.ts",
-    "start": "node ./dist/main.js",
-    "compile": "tsc -p .",
-    "compile:test": "tsc -p . --noEmit",
-    "lint": "run-p -c lint:prettier lint:eslint lint:tsc",
-    "lint:prettier": "prettier --check src",
-    "lint:eslint": "eslint . --ext ts,tsx",
-    "lint:tsc": "tsc",
-    "fix": "run-s fix:prettier fix:eslint",
+    "start": "tsx ./src/main.ts",
+    "dev": "tsx watch ./src/main.ts",
+    "fix": "run-z fix:prettier,fix:eslint",
     "fix:eslint": "eslint . --ext ts,tsx --fix",
-    "fix:prettier": "prettier --write src"
+    "fix:prettier": "prettier --write src",
+    "lint": "run-z lint:prettier,lint:eslint,lint:tsc",
+    "lint:eslint": "eslint . --ext ts,tsx",
+    "lint:prettier": "prettier --check src",
+    "lint:tsc": "tsc",
+    "preinstall": "npx only-allow pnpm"
   },
   "devDependencies": {
+    "@book000/node-utils": "1.12.58",
     "@types/cheerio": "0.22.35",
-    "@types/marked": "5.0.2",
     "@types/node": "20.11.16",
-    "@typescript-eslint/eslint-plugin": "6.20.0",
-    "@typescript-eslint/parser": "6.20.0",
+    "@typescript-eslint/eslint-plugin": "6.21.0",
+    "@typescript-eslint/parser": "6.21.0",
     "axios": "1.6.7",
     "canvas": "2.11.2",
     "cheerio": "1.0.0-rc.12",
@@ -37,18 +42,16 @@
     "eslint-plugin-n": "16.6.2",
     "eslint-plugin-node": "11.1.0",
     "eslint-plugin-promise": "6.1.1",
+    "eslint-plugin-unicorn": "51.0.1",
     "fast-xml-parser": "4.3.4",
     "gray-matter": "4.0.3",
-    "logform": "2.6.0",
     "marked": "12.0.0",
-    "pdfjs-dist": "3.11.174",
-    "prettier": "2.8.8",
+    "pdfjs-dist": "4.0.379",
+    "prettier": "3.2.5",
+    "run-z": "2.0.0",
     "sharp": "0.33.2",
-    "ts-node": "10.9.2",
-    "ts-node-dev": "2.0.0",
-    "typescript": "5.3.3",
-    "winston": "3.11.0",
-    "winston-daily-rotate-file": "4.7.1",
-    "yarn-run-all": "3.1.1"
-  }
+    "tsx": "4.7.0",
+    "typescript": "5.3.3"
+  },
+  "packageManager": "pnpm@8.15.1"
 }

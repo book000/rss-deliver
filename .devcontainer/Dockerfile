@@ -1,21 +1,18 @@
-FROM mcr.microsoft.com/devcontainers/base:alpine-3.18
+FROM mcr.microsoft.com/devcontainers/typescript-node:0-18
 
-# hadolint ignore=DL3018
-RUN apk update && apk add --no-cache \
-    python3 \
-    nodejs \
-    npm \
-    yarn \
-    git \
-    openssh-client \
-    python3-dev \
-    py3-pip \
-    build-base \
-    cairo-dev \
-    pango-dev \
-    libjpeg-turbo-dev \
-    giflib-dev \
-    librsvg-dev \
-    && rm -rf /var/cache/apk/*
+# Install additional packages
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends \
+    build-essential \
+    libcairo2-dev \
+    libpango1.0-dev \
+    libjpeg-dev \
+    libgif-dev \
+    librsvg2-dev \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
+
+# Activate corepack
+RUN corepack enable
 
 WORKDIR /work

@@ -1,5 +1,5 @@
-import { BaseService } from '@/BaseService'
-import { Logger } from '@/logger'
+import { BaseService } from '@/base-service'
+import { Logger } from '@book000/node-utils'
 import CollectResult, { Item } from '@/model/collect-result'
 import ServiceInformation from '@/model/service-information'
 import axios from 'axios'
@@ -36,7 +36,7 @@ export default class ZennChangelog extends BaseService {
 
       const itemId = link.split('/').pop()
       const changelog =
-        itemId !== undefined ? await ZennChangelogItem.of(itemId) : null
+        itemId === undefined ? null : await ZennChangelogItem.of(itemId)
 
       const contents = []
       if (changelog && changelog.itemText) {
