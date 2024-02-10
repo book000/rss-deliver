@@ -1,4 +1,4 @@
-FROM mcr.microsoft.com/devcontainers/typescript-node:0-20
+FROM mcr.microsoft.com/devcontainers/typescript-node:1-20
 
 # Install additional packages
 # hadolint ignore=DL3008
