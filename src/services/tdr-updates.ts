@@ -1,12 +1,12 @@
-import { BaseService } from '@/BaseService'
-import { Logger } from '@/logger'
+import { BaseService } from '@/base-service'
+import { Logger } from '@book000/node-utils'
 import CollectResult, { Item } from '@/model/collect-result'
 import ServiceInformation from '@/model/service-information'
 import axios from 'axios'
 import cheerio from 'cheerio'
-import crypto from 'crypto'
-import fs from 'fs'
-import * as pdfjs from 'pdfjs-dist/legacy/build/pdf'
+import crypto from 'node:crypto'
+import fs from 'node:fs'
+import * as pdfjs from 'pdfjs-dist/legacy/build/pdf.mjs'
 import { createCanvas } from 'canvas'
 
 export default class TdrUpdates extends BaseService {
@@ -78,23 +78,23 @@ export default class TdrUpdates extends BaseService {
       responseType: 'arraybuffer',
     })
     const pdfData = new Uint8Array(response.data)
-    const pdfDoc = await pdfjs.getDocument({ data: pdfData }).promise
+    const pdfDocument = await pdfjs.getDocument({ data: pdfData }).promise
 
     if (!fs.existsSync('output/tdr-updates/')) {
       fs.mkdirSync('output/tdr-updates/', { recursive: true })
     }
     const imageUrls = []
-    for (let i = 1; i <= pdfDoc.numPages; i++) {
-      const page = await pdfDoc.getPage(i)
-      const viewport = page.getViewport({ scale: 1.0 })
+    for (let index = 1; index <= pdfDocument.numPages; index++) {
+      const page = await pdfDocument.getPage(index)
+      const viewport = page.getViewport({ scale: 1 })
       const canvas = createCanvas(viewport.width, viewport.height)
-      const ctx = canvas.getContext('2d')
+      const context = canvas.getContext('2d')
 
-      if (!ctx || !ctx.canvas) {
+      if (!context || !context.canvas) {
         continue
       }
 
-      await page.render({ canvasContext: ctx as never, viewport }).promise
+      await page.render({ canvasContext: context as never, viewport }).promise
 
       const image = canvas.toBuffer('image/png')
       const hash = await this.hash(image)

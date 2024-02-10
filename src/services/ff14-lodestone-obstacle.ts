@@ -1,6 +1,7 @@
-import { BaseService } from '@/BaseService'
+import { BaseService } from '@/base-service'
 import CollectResult, { Item } from '@/model/collect-result'
 import ServiceInformation from '@/model/service-information'
+import { Logger } from '@book000/node-utils'
 import axios from 'axios'
 import cheerio from 'cheerio'
 
@@ -17,9 +18,23 @@ export default class FF14LodestoneObstacle extends BaseService {
   }
 
   async collect(): Promise<CollectResult> {
+    const logger = Logger.configure('FF14LodestoneObstacle::collect')
     const response = await axios.get(
-      'https://jp.finalfantasyxiv.com/lodestone/'
+      'https://jp.finalfantasyxiv.com/lodestone/',
+      {
+        validateStatus: () => true,
+      }
     )
+    if (response.status !== 200 && response.data.includes('メンテナンス中')) {
+      logger.info('🚧 FF14 Lodestone is under maintenance')
+      return {
+        status: false,
+        items: [],
+      }
+    }
+    if (response.status !== 200) {
+      throw new Error(`Failed to fetch: ${response.status}`)
+    }
 
     const $ = cheerio.load(response.data)
     const items: Item[] = []
@@ -34,8 +49,8 @@ export default class FF14LodestoneObstacle extends BaseService {
     const obstacle = $(
       '#toptabchanger_newsarea > div.toptabchanger_newsbox:nth-child(5) li.news__list a'
     )
-    for (const i of obstacle.slice(0, 10)) {
-      const item = $(i)
+    for (const index of obstacle.slice(0, 10)) {
+      const item = $(index)
       const title = item.find('p').text()
       const link = 'https://jp.finalfantasyxiv.com' + (item.attr('href') ?? '')
 

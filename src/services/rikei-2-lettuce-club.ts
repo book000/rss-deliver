@@ -1,5 +1,5 @@
-import { BaseService } from '@/BaseService'
-import { Logger } from '@/logger'
+import { BaseService } from '@/base-service'
+import { Logger } from '@book000/node-utils'
 import CollectResult, { Item } from '@/model/collect-result'
 import ServiceInformation from '@/model/service-information'
 import axios from 'axios'
@@ -29,8 +29,8 @@ export default class Rikei2LettuceClub extends BaseService {
     )
     const $ = cheerio.load(response.data)
     const items: Item[] = []
-    for (const i of $('div.l-contents ol.p-items__list li.p-items__item')) {
-      const item = $(i)
+    for (const index of $('div.l-contents ol.p-items__list li.p-items__item')) {
+      const item = $(index)
       const title = item.find('p.c-item__title').text()
       let link =
         'https://www.lettuceclub.net' + (item.find('a').attr('href') ?? '')
@@ -55,7 +55,9 @@ export default class Rikei2LettuceClub extends BaseService {
       items.push({
         title,
         link,
-        'content:encoded': images.map((i) => `<img src="${i}">`).join('<br>'),
+        'content:encoded': images
+          .map((index) => `<img src="${index}">`)
+          .join('<br>'),
         pubDate,
       })
     }
@@ -78,8 +80,8 @@ export default class Rikei2LettuceClub extends BaseService {
     const $ = cheerio.load(response.data)
 
     const images: string[] = []
-    for (const i of $('div.l-contents figure img')) {
-      const url = $(i).attr('src') ?? ''
+    for (const index of $('div.l-contents figure img')) {
+      const url = $(index).attr('src') ?? ''
       if (!url.startsWith('https')) {
         continue
       }

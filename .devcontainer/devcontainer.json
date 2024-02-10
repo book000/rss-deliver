@@ -1,19 +1,38 @@
 {
   "name": "book000/rss-deliver",
   "build": {
-    "context": "../.devcontainer",
+    "context": "..",
     "dockerfile": "Dockerfile"
   },
-  "image": "mcr.microsoft.com/devcontainers/typescript-node:0-18",
-  "postCreateCommand": "yarn install",
+  "postCreateCommand": "pnpm install",
   "waitFor": "postCreateCommand",
   "customizations": {
+    "settings": {
+      "[typescript]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode",
+        "editor.codeActionsOnSave": {
+          "source.organizeImports": false
+        }
+      },
+      "editor.formatOnSave": true,
+      "git.branchProtection": ["main", "master"]
+    },
+    "extensions": ["esbenp.prettier-vscode"],
     "vscode": {
-      "extensions": [
-        "esbenp.prettier-vscode",
-        "GitHub.vscode-pull-request-github",
-        "donjayamanne.githistory"
-      ]
+      "settings": {
+        "[typescript]": {
+          "editor.defaultFormatter": "esbenp.prettier-vscode",
+          "editor.codeActionsOnSave": {
+            "source.organizeImports": false
+          }
+        },
+        "editor.formatOnSave": true,
+        "git.branchProtection": ["main", "master"]
+      },
+      "extensions": ["esbenp.prettier-vscode"]
     }
+  },
+  "otherPortAttributes": {
+    "onAutoForward": "silent"
   }
 }
