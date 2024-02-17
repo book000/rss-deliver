@@ -21,8 +21,18 @@ export default class Development1and extends BaseService {
 
   async collect(): Promise<CollectResult> {
     const response = await axios.get(
-      'https://feed.dev1and.com/api/v1/dashboard'
+      'https://feed.dev1and.com/api/v1/dashboard',
+      {
+        validateStatus: () => true,
+      }
     )
+    if (response.status !== 200) {
+      return {
+        status: false,
+        items: [],
+      }
+    }
+
     const lastUpdatedAtRaw = response.data.last_updated_at
     const lastUpdatedAt = new Date(lastUpdatedAtRaw.replaceAll('/', '-'))
     const lastUpdatedDateText = this.getYearMonthWeek(lastUpdatedAt)

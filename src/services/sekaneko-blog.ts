@@ -26,7 +26,15 @@ export default class SekanekoBlog extends BaseService {
     const parser = new XMLParser({
       ignoreAttributes: false,
     })
-    const response = await axios.get('https://sekaneko13.biz/feed/')
+    const response = await axios.get('https://sekaneko13.biz/feed/', {
+      validateStatus: () => true,
+    })
+    if (response.status !== 200) {
+      return {
+        status: false,
+        items: [],
+      }
+    }
     const oldFeed = parser.parse(response.data)
     const items: Item[] = []
     for (const item of oldFeed.rss.channel.item) {
@@ -45,7 +53,12 @@ export default class SekanekoBlog extends BaseService {
   }
 
   async getContent(url: string): Promise<string> {
-    const response = await axios.get(url)
+    const response = await axios.get(url, {
+      validateStatus: () => true,
+    })
+    if (response.status !== 200) {
+      return ''
+    }
     const $ = cheerio.load(response.data)
     return $('section.content').html() || ''
   }

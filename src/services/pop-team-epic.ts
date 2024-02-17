@@ -50,7 +50,12 @@ export default class PopTeamEpic extends BaseService {
     this.link = activeSeason.url
     this.image = activeSeason.image
 
-    const response = await axios.get(activeSeason.url)
+    const response = await axios.get(activeSeason.url, {
+      validateStatus: () => true,
+    })
+    if (response.status !== 200) {
+      throw new Error(`Failed to fetch: ${response.status}`)
+    }
     const $ = cheerio.load(response.data)
     const items: Item[] = []
     for (const element of $('div.bookR li a')) {
@@ -114,7 +119,10 @@ export default class PopTeamEpic extends BaseService {
     image: string
   } | null> {
     const response = await axios.get(
-      'https://mangalifewin.takeshobo.co.jp/rensai/'
+      'https://mangalifewin.takeshobo.co.jp/rensai/',
+      {
+        validateStatus: () => true,
+      }
     )
 
     const $ = cheerio.load(response.data)

@@ -75,7 +75,12 @@ export default class FF14LodestoneObstacle extends BaseService {
   private async getContent(
     url: string
   ): Promise<{ pubDate: string; text: string }> {
-    const response = await axios.get(url)
+    const response = await axios.get(url, {
+      validateStatus: () => true,
+    })
+    if (response.status !== 200) {
+      throw new Error(`Failed to fetch content: ${response.status}`)
+    }
     const $ = cheerio.load(response.data)
     const text = $('div.news__detail__wrapper').html() ?? ''
     const timeScript =

@@ -25,8 +25,14 @@ export default class PhysicalUpLettuceClub extends BaseService {
   async collect(): Promise<CollectResult> {
     const logger = Logger.configure('PhysicalUpLettuceClub::collect')
     const response = await axios.get(
-      'https://www.lettuceclub.net/news/serial/11656/'
+      'https://www.lettuceclub.net/news/serial/11656/',
+      {
+        validateStatus: () => true,
+      }
     )
+    if (response.status !== 200) {
+      throw new Error(`Failed to fetch: ${response.status}`)
+    }
     const $ = cheerio.load(response.data)
     const items: Item[] = []
     for (const index of $('div.l-contents ol.p-items__list li.p-items__item')) {
