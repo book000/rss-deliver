@@ -25,7 +25,10 @@ export default class Rikei2LettuceClub extends BaseService {
   async collect(): Promise<CollectResult> {
     const logger = Logger.configure('Rikei2LettuceClub::collect')
     const response = await axios.get(
-      'https://www.lettuceclub.net/news/serial/12004/'
+      'https://www.lettuceclub.net/news/serial/12004/',
+      {
+        validateStatus: () => true,
+      }
     )
     const $ = cheerio.load(response.data)
     const items: Item[] = []

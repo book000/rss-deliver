@@ -27,7 +27,15 @@ export default class ZennChangelog extends BaseService {
     const parser = new XMLParser({
       ignoreAttributes: false,
     })
-    const response = await axios.get('https://info.zenn.dev/rss/feed.xml')
+    const response = await axios.get('https://info.zenn.dev/rss/feed.xml', {
+      validateStatus: () => true,
+    })
+    if (response.status !== 200) {
+      return {
+        status: false,
+        items: [],
+      }
+    }
     const oldFeed = parser.parse(response.data)
     const items: Item[] = []
     for (const item of oldFeed.rss.channel.item.slice(0, 10)) {

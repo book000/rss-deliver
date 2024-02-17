@@ -67,7 +67,12 @@ async function generateRSS() {
     new PopTeamEpic(),
   ]
   const promises: Promise<void>[] = services.map((service) =>
-    generateRSSService(service)
+    generateRSSService(service).catch((error) => {
+      logger.error(
+        `❌ Error occurred while generating RSS: ${service.constructor.name}`,
+        error as Error
+      )
+    })
   )
 
   await Promise.all(promises)
@@ -96,6 +101,7 @@ async function generateList() {
     'output/index.html',
     template.replace('{{ RSS-FILES }}', '<ul>' + list.join('\n') + '</ul>')
   )
+  logger.info('✅ Generated list')
 }
 
 async function main() {

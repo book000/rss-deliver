@@ -38,8 +38,12 @@ export default class TdrUpdates extends BaseService {
           'Cache-Control': 'no-cache',
           DNT: '1',
         },
+        validateStatus: () => true,
       }
     )
+    if (response.status !== 200) {
+      throw new Error(`Failed to fetch: ${response.status}`)
+    }
     const $ = cheerio.load(response.data)
     const items: Item[] = []
     for (const element of $('div.listUpdate ul li a')) {
@@ -76,7 +80,11 @@ export default class TdrUpdates extends BaseService {
   async pdf2png(url: string): Promise<string[]> {
     const response = await axios.get(url, {
       responseType: 'arraybuffer',
+      validateStatus: () => true,
     })
+    if (response.status !== 200) {
+      throw new Error(`Failed to fetch pdf: ${response.status}`)
+    }
     const pdfData = new Uint8Array(response.data)
     const pdfDocument = await pdfjs.getDocument({ data: pdfData }).promise
 
