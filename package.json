@@ -28,7 +28,7 @@
     "preinstall": "npx only-allow pnpm"
   },
   "devDependencies": {
-    "@book000/node-utils": "1.12.88",
+    "@book000/node-utils": "1.12.89",
     "@types/cheerio": "0.22.35",
     "@types/node": "20.11.26",
     "@typescript-eslint/eslint-plugin": "7.2.0",
