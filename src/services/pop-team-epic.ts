@@ -57,56 +57,67 @@ export default class PopTeamEpic extends BaseService {
       throw new Error(`Failed to fetch: ${response.status}`)
     }
     const $ = cheerio.load(response.data)
+
     const items: Item[] = []
-    for (const element of $('div.bookR li a')) {
-      const anchor = $(element)
-      const url = anchor.attr('href') ?? ''
+    // 月ごとに取得
+    for (const monthlyElement of $(
+      'div.extMdlSeriesMngrBook > div.extMdlSeriesMngrBookInner > ul.bookul > li.bookli:not(.btnMoreLi)'
+    )) {
+      const monthlyName = $(monthlyElement).find('div.bTtl h3').text().trim()
 
-      const item = await PopTeamEpicItem.of(url)
-      if (!item) {
-        continue
+      const itemElements = $(monthlyElement).find('div.bookR li a')
+      for (const element of itemElements) {
+        const anchor = $(element)
+        const url = anchor.attr('href') ?? ''
+
+        const item = await PopTeamEpicItem.of(url)
+        if (!item) {
+          continue
+        }
+        const title = item.itemTitle
+        const images = item.itemImages
+
+        logger.info(`📃 ${monthlyName} ${title} ${url}`)
+
+        // saving images
+        if (!fs.existsSync('output/popute/')) {
+          fs.mkdirSync('output/popute/', { recursive: true })
+        }
+        const imageUrls = []
+        for (const v in images) {
+          const image = images[v]
+          const base64 = image.replace(/^data:image\/\w+;base64,/, '')
+          const buffer = Buffer.from(base64, 'base64')
+
+          const trimmedBuffer = await sharp(buffer)
+            .trim()
+            .extend({
+              top: 10,
+              bottom: 10,
+              left: 10,
+              right: 10,
+              background: { r: 255, g: 255, b: 255, alpha: 1 },
+            })
+            .toBuffer()
+
+          const hash = await this.hash(trimmedBuffer)
+          fs.writeFileSync(`output/popute/${hash}.jpg`, trimmedBuffer)
+          imageUrls.push(
+            `https://book000.github.io/rss-deliver/popute/${hash}.jpg`
+          )
+        }
+
+        const itemTitle = `${monthlyName} ${title}`
+        items.push({
+          title: itemTitle,
+          link: url,
+          'content:encoded': imageUrls
+            .map((index) => `<img src="${index}">`)
+            .join('<br>'),
+        })
       }
-      const title = item.itemTitle
-      const images = item.itemImages
-
-      logger.info(`📃 ${title} ${url}`)
-
-      // saving images
-      if (!fs.existsSync('output/popute/')) {
-        fs.mkdirSync('output/popute/', { recursive: true })
-      }
-      const imageUrls = []
-      for (const v in images) {
-        const image = images[v]
-        const base64 = image.replace(/^data:image\/\w+;base64,/, '')
-        const buffer = Buffer.from(base64, 'base64')
-
-        const trimmedBuffer = await sharp(buffer)
-          .trim()
-          .extend({
-            top: 10,
-            bottom: 10,
-            left: 10,
-            right: 10,
-            background: { r: 255, g: 255, b: 255, alpha: 1 },
-          })
-          .toBuffer()
-
-        const hash = await this.hash(trimmedBuffer)
-        fs.writeFileSync(`output/popute/${hash}.jpg`, trimmedBuffer)
-        imageUrls.push(
-          `https://book000.github.io/rss-deliver/popute/${hash}.jpg`
-        )
-      }
-
-      items.push({
-        title,
-        link: url,
-        'content:encoded': imageUrls
-          .map((index) => `<img src="${index}">`)
-          .join('<br>'),
-      })
     }
+
     return {
       status: true,
       items,
