@@ -48,8 +48,8 @@ devDependencies:
     specifier: 6.1.1
     version: 6.1.1(eslint@8.57.0)
   eslint-plugin-unicorn:
-    specifier: 51.0.1
-    version: 51.0.1(eslint@8.57.0)
+    specifier: 52.0.0
+    version: 52.0.0(eslint@8.57.0)
   fast-xml-parser:
     specifier: 4.3.6
     version: 4.3.6
@@ -1709,8 +1709,8 @@ packages:
       eslint: 8.57.0
     dev: true
 
-  /eslint-plugin-unicorn@51.0.1(eslint@8.57.0):
-    resolution: {integrity: sha512-MuR/+9VuB0fydoI0nIn2RDA5WISRn4AsJyNSaNKLVwie9/ONvQhxOBbkfSICBPnzKrB77Fh6CZZXjgTt/4Latw==}
+  /eslint-plugin-unicorn@52.0.0(eslint@8.57.0):
+    resolution: {integrity: sha512-1Yzm7/m+0R4djH0tjDjfVei/ju2w3AzUGjG6q8JnuNIL5xIwsflyCooW5sfBvQp2pMYQFSWWCFONsjCax1EHng==}
     engines: {node: '>=16'}
     peerDependencies:
       eslint: '>=8.56.0'
@@ -2824,6 +2824,7 @@ packages:
   /path2d-polyfill@2.1.1:
     resolution: {integrity: sha512-4Rka5lN+rY/p0CdD8+E+BFv51lFaFvJOrlOhyQ+zjzyQrzyh3ozmxd1vVGGDdIbUFSBtIZLSnspxTgPT0iJhvA==}
     engines: {node: '>=18'}
+    deprecated: this package has been deprecated
     requiresBuild: true
     dependencies:
       path2d: 0.1.1
