@@ -54,8 +54,8 @@ devDependencies:
     specifier: 4.3.6
     version: 4.3.6
   pdfjs-dist:
-    specifier: 4.0.379
-    version: 4.0.379
+    specifier: 4.1.392
+    version: 4.1.392
   prettier:
     specifier: 3.2.5
     version: 3.2.5
@@ -2829,19 +2829,19 @@ packages:
     engines: {node: '>=8'}
     dev: true
 
-  /path2d-polyfill@2.0.1:
-    resolution: {integrity: sha512-ad/3bsalbbWhmBo0D6FZ4RNMwsLsPpL6gnvhuSaU5Vm7b06Kr5ubSltQQ0T7YKsiJQO+g22zJ4dJKNTXIyOXtA==}
-    engines: {node: '>=8'}
+  /path2d@0.1.2:
+    resolution: {integrity: sha512-LW++2uxgHNL/FANhgGTPo/yDDQcgsVbKotwIVbpTgTBgRlKUpjOpjp3s3+KjG4OWCQ/r6z+WLDljH1/fC03PWw==}
+    engines: {node: '>=6'}
     requiresBuild: true
     dev: true
     optional: true
 
-  /pdfjs-dist@4.0.379:
-    resolution: {integrity: sha512-6H0Gv1nna+wmrr3CakaKlZ4rbrL8hvGIFAgg4YcoFuGC0HC4B2DVjXEGTFjJEjLlf8nYi3C3/MYRcM5bNx0elA==}
+  /pdfjs-dist@4.1.392:
+    resolution: {integrity: sha512-fUV14+CG81uDLjgZ2Nmy35GvJsLIekotJb2VhXAoUfMCrWHhQtPJbqryUuevAdSHyEiAdr675ULikoD087+lMg==}
     engines: {node: '>=18'}
     optionalDependencies:
       canvas: 2.11.2
-      path2d-polyfill: 2.0.1
+      path2d: 0.1.2
     transitivePeerDependencies:
       - encoding
       - supports-color
