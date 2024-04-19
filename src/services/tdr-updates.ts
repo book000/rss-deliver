@@ -98,14 +98,10 @@ export default class TdrUpdates extends BaseService {
       const canvas = createCanvas(viewport.width, viewport.height)
       const context = canvas.getContext('2d')
 
-      if (!context || !context.canvas) {
-        continue
-      }
-
       await page.render({ canvasContext: context as never, viewport }).promise
 
       const image = canvas.toBuffer('image/png')
-      const hash = await this.hash(image)
+      const hash = this.hash(image)
       fs.writeFileSync(`output/tdr-updates/${hash}.png`, new Uint8Array(image))
       imageUrls.push(
         `https://book000.github.io/rss-deliver/tdr-updates/${hash}.png`
@@ -114,7 +110,7 @@ export default class TdrUpdates extends BaseService {
     return imageUrls
   }
 
-  async hash(buffer: Buffer): Promise<string> {
+  hash(buffer: Buffer): string {
     const hash = crypto.createHash('md5')
     hash.update(buffer)
     return hash.digest('hex')

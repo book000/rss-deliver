@@ -6,6 +6,68 @@ import axios from 'axios'
 import cheerio from 'cheerio'
 import { XMLParser } from 'fast-xml-parser'
 
+interface LinkClass {
+  _href: string
+  _rel: string
+  _type: string
+  __prefix: string
+}
+
+interface GUID {
+  _isPermaLink: string
+  __text: string
+}
+
+interface Enclosure {
+  _url: string
+  _length: string
+  _type: string
+}
+
+interface Creator {
+  __prefix: 'dc'
+  __text: 'Zenn Team'
+}
+
+interface ChannelItem {
+  title: string
+  link: string
+  guid: GUID
+  pubDate: string
+  creator: Creator
+  description?: string
+  enclosure?: Enclosure
+}
+
+interface Image {
+  url: string
+  title: string
+  link: string
+}
+
+interface Channel {
+  title: string
+  description: string
+  link: (LinkClass | string)[]
+  image: Image
+  generator: string
+  lastBuildDate: string
+  language: string
+  item: ChannelItem[]
+}
+
+interface RSS {
+  channel: Channel
+  '_xmlns:dc': string
+  '_xmlns:content': string
+  '_xmlns:atom': string
+  _version: string
+}
+
+interface ZeenChangelogResponse {
+  rss: RSS
+}
+
 export default class ZennChangelog extends BaseService {
   information(): ServiceInformation {
     return {
@@ -36,7 +98,7 @@ export default class ZennChangelog extends BaseService {
         items: [],
       }
     }
-    const oldFeed = parser.parse(response.data)
+    const oldFeed: ZeenChangelogResponse = parser.parse(response.data)
     const items: Item[] = []
     for (const item of oldFeed.rss.channel.item.slice(0, 10)) {
       // 直近の10件を取得
@@ -47,10 +109,10 @@ export default class ZennChangelog extends BaseService {
         itemId === undefined ? null : await ZennChangelogItem.of(itemId)
 
       const contents = []
-      if (changelog && changelog.itemText) {
+      if (changelog?.itemText) {
         contents.push(changelog.itemText)
       }
-      if (changelog && changelog.itemUrl) {
+      if (changelog?.itemUrl) {
         contents.push(
           '\n\n<a href="' +
             changelog.itemUrl +
@@ -66,7 +128,7 @@ export default class ZennChangelog extends BaseService {
       items.push({
         title: item.title,
         link,
-        'content:encoded': contents.map((s) => s && s?.trim()).join('\n\n'),
+        'content:encoded': contents.map((s) => s?.trim()).join('\n\n'),
       })
     }
     return {
@@ -108,7 +170,7 @@ class ZennChangelogItem {
 
     // Get item text
     const itemTextElement = $('[class^="SlugPage_blogBody"]')
-    const itemText = itemTextElement ? itemTextElement.html() : null
+    const itemText = itemTextElement.html()
 
     return new ZennChangelogItem(itemId, itemText, itemUrl)
   }
