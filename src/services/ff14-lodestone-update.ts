@@ -19,7 +19,7 @@ export default class FF14LodestoneUpdate extends BaseService {
 
   async collect(): Promise<CollectResult> {
     const logger = Logger.configure('FF14LodestoneUpdate::collect')
-    const response = await axios.get(
+    const response = await axios.get<string>(
       'https://jp.finalfantasyxiv.com/lodestone/',
       {
         validateStatus: () => true,

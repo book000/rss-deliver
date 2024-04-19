@@ -53,7 +53,7 @@ export default class Rikei2LettuceClub extends BaseService {
 
       logger.info(`📃 ${title} ${link}`)
       logger.info(`📅 ${pubDate}`)
-      logger.info(`🎨 ${images}`)
+      logger.info(`🎨 ${images.toString()}`)
 
       items.push({
         title,

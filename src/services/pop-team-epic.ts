@@ -84,8 +84,7 @@ export default class PopTeamEpic extends BaseService {
           fs.mkdirSync('output/popute/', { recursive: true })
         }
         const imageUrls = []
-        for (const v in images) {
-          const image = images[v]
+        for (const image of images) {
           const base64 = image.replace(/^data:image\/\w+;base64,/, '')
           const buffer = Buffer.from(base64, 'base64')
 
@@ -100,7 +99,7 @@ export default class PopTeamEpic extends BaseService {
             })
             .toBuffer()
 
-          const hash = await this.hash(trimmedBuffer)
+          const hash = this.hash(trimmedBuffer)
           fs.writeFileSync(`output/popute/${hash}.jpg`, trimmedBuffer)
           imageUrls.push(
             `https://book000.github.io/rss-deliver/popute/${hash}.jpg`
@@ -161,7 +160,7 @@ export default class PopTeamEpic extends BaseService {
     return popute
   }
 
-  async hash(buffer: Buffer): Promise<string> {
+  hash(buffer: Buffer): string {
     const hash = crypto.createHash('md5')
     hash.update(buffer)
     return hash.digest('hex')

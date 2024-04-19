@@ -8,9 +8,8 @@ import FF14LodestoneObstacle from './services/ff14-lodestone-obstacle'
 import FF14LodestoneUpdate from './services/ff14-lodestone-update'
 import PhysicalUpLettuceClub from './services/physical-up-lettuce-club'
 import Rikei2LettuceClub from './services/rikei-2-lettuce-club'
-import SekanekoBlog from './services/sekaneko-blog'
 import ZennChangelog from './services/zenn-changelog'
-import Development1and from './services/dev1and'
+import Dev1and from './services/dev1and'
 import TdrUpdates from './services/tdr-updates'
 import PopTeamEpic from './services/pop-team-epic'
 
@@ -44,7 +43,9 @@ async function generateRSSService(service: BaseService) {
     },
   }
 
-  const feed = builder.build(object)
+  const feed: {
+    toString: () => string
+  } = builder.build(object)
 
   fs.writeFileSync('output/' + filename + '.xml', feed.toString())
   logger.info(`✅ Generated ${filename}`)
@@ -59,15 +60,14 @@ async function generateRSS() {
     new FF14LodestoneMaintenance(),
     new FF14LodestoneUpdate(),
     new FF14LodestoneObstacle(),
-    new SekanekoBlog(),
     new PhysicalUpLettuceClub(),
     new Rikei2LettuceClub(),
-    new Development1and(),
+    new Dev1and(),
     new TdrUpdates(),
     new PopTeamEpic(),
   ]
   const promises: Promise<void>[] = services.map((service) =>
-    generateRSSService(service).catch((error) => {
+    generateRSSService(service).catch((error: unknown) => {
       logger.error(
         `❌ Error occurred while generating RSS: ${service.constructor.name}`,
         error as Error
@@ -78,7 +78,7 @@ async function generateRSS() {
   await Promise.all(promises)
 }
 
-async function generateList() {
+function generateList() {
   const logger = Logger.configure('main.generateList')
   logger.info('✨ Generating list...')
   const files = fs.readdirSync('output')
@@ -92,7 +92,13 @@ async function generateList() {
         ignoreAttributes: false,
       })
 
-      const feed = parser.parse(fs.readFileSync('output/' + file, 'utf8'))
+      const feed: {
+        rss: {
+          channel: {
+            title: string
+          }
+        }
+      } = parser.parse(fs.readFileSync('output/' + file, 'utf8'))
       const title = feed.rss.channel.title
       return "<li><a href='" + file + "'>" + title + '</a></li>'
     })
@@ -110,7 +116,7 @@ async function main() {
   }
 
   await generateRSS()
-  await generateList()
+  generateList()
 }
 
 ;(async () => {
