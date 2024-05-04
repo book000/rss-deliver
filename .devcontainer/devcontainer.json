@@ -4,7 +4,11 @@
     "context": "..",
     "dockerfile": "Dockerfile"
   },
-  "postCreateCommand": "pnpm install",
+  "otherPortsAttributes": {
+    "onAutoForward": "silent"
+  },
+  "postCreateCommand": "corepack enable",
+  "postStartCommand": "pnpm install",
   "waitFor": "postCreateCommand",
   "customizations": {
     "settings": {
@@ -15,9 +19,14 @@
         }
       },
       "editor.formatOnSave": true,
-      "git.branchProtection": ["main", "master"]
+      "git.branchProtection": [
+        "main",
+        "master"
+      ]
     },
-    "extensions": ["esbenp.prettier-vscode"],
+    "extensions": [
+      "esbenp.prettier-vscode"
+    ],
     "vscode": {
       "settings": {
         "[typescript]": {
@@ -27,12 +36,14 @@
           }
         },
         "editor.formatOnSave": true,
-        "git.branchProtection": ["main", "master"]
+        "git.branchProtection": [
+          "main",
+          "master"
+        ]
       },
-      "extensions": ["esbenp.prettier-vscode"]
+      "extensions": [
+        "esbenp.prettier-vscode"
+      ]
     }
-  },
-  "otherPortAttributes": {
-    "onAutoForward": "silent"
   }
 }
