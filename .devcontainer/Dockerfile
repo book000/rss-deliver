@@ -12,8 +12,3 @@ RUN apt-get update \
     librsvg2-dev \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
-
-COPY .node-version /work/.node-version
-RUN su node -c "source /usr/local/share/nvm/nvm.sh && nvm install $(cat /work/.node-version) && nvm use $(cat /work/.node-version)"
-
-WORKDIR /work
