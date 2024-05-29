@@ -31,7 +31,7 @@
     "@book000/eslint-config": "1.6.25",
     "@book000/node-utils": "1.13.79",
     "@types/cheerio": "0.22.35",
-    "@types/node": "20.12.12",
+    "@types/node": "20.12.13",
     "axios": "1.7.2",
     "canvas": "2.11.2",
     "cheerio": "1.0.0-rc.12",
