@@ -46,7 +46,7 @@
     "run-z": "2.0.0",
     "sharp": "0.33.4",
     "tsx": "4.15.7",
-    "typescript": "5.4.5"
+    "typescript": "5.5.2"
   },
   "packageManager": "pnpm@9.4.0",
   "pnpm": {
