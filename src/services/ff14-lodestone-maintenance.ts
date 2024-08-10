@@ -3,7 +3,7 @@ import CollectResult, { Item } from '@/model/collect-result'
 import ServiceInformation from '@/model/service-information'
 import { Logger } from '@book000/node-utils'
 import axios from 'axios'
-import cheerio from 'cheerio'
+import * as cheerio from 'cheerio'
 
 export default class FF14LodestoneMaintenance extends BaseService {
   information(): ServiceInformation {
@@ -36,7 +36,7 @@ export default class FF14LodestoneMaintenance extends BaseService {
       throw new Error(`Failed to fetch: ${response.status}`)
     }
 
-    const $ = cheerio.load(response.data)
+    const $ = load(response.data)
     const items: Item[] = []
     /*
       -: 最新

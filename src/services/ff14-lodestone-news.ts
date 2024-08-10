@@ -3,7 +3,7 @@ import CollectResult, { Item } from '@/model/collect-result'
 import ServiceInformation from '@/model/service-information'
 import { Logger } from '@book000/node-utils'
 import axios from 'axios'
-import cheerio from 'cheerio'
+import * as cheerio from 'cheerio'
 
 export default class FF14LodestoneNews extends BaseService {
   information(): ServiceInformation {
