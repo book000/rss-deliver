@@ -36,7 +36,7 @@ export default class FF14LodestoneMaintenance extends BaseService {
       throw new Error(`Failed to fetch: ${response.status}`)
     }
 
-    const $ = load(response.data)
+    const $ = cheerio.load(response.data)
     const items: Item[] = []
     /*
       -: 最新
