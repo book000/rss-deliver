@@ -85,7 +85,7 @@ export default class FF14LodestoneNews extends BaseService {
     const text = $('div.news__detail__wrapper').html() ?? ''
     const timeScript =
       $('header.news__header > time[class^=news__ic] > script').html() ?? ''
-    const pubDate = timeScript.match(/ldst_strftime\((\d+),.*?\)/)?.[1] ?? ''
+    const pubDate = (/ldst_strftime\((\d+),.*?\)/.exec(timeScript))?.[1] ?? ''
     return {
       pubDate: new Date(Number(pubDate) * 1000).toUTCString(),
       text,
