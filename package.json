@@ -44,7 +44,7 @@
     "pdfjs-dist": "4.5.136",
     "prettier": "3.3.3",
     "run-z": "2.0.0",
-    "sharp": "0.33.4",
+    "sharp": "0.33.5",
     "tsx": "4.17.0",
     "typescript": "5.5.4"
   },
