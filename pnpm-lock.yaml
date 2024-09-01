@@ -48,8 +48,8 @@ importers:
         specifier: 4.4.1
         version: 4.4.1
       pdfjs-dist:
-        specifier: 4.5.136
-        version: 4.5.136
+        specifier: 4.6.82
+        version: 4.6.82
       prettier:
         specifier: 3.3.3
         version: 3.3.3
@@ -1563,8 +1563,8 @@ packages:
     resolution: {integrity: sha512-Fl2z/BHvkTNvkuBzYTpTuirHZg6wW9z8+4SND/3mDTEcYbbNKWAy21dz9D3ePNNwrrK8pqZO5vLPZ1hLF6T7XA==}
     engines: {node: '>=6'}
 
-  pdfjs-dist@4.5.136:
-    resolution: {integrity: sha512-V1BALcAN/FmxBEShLxoP73PlQZAZtzlaNfRbRhJrKvXzjLC5VaIlBAQUJuWP8iaYUmIdmdLHmt3E2TBglxOm3w==}
+  pdfjs-dist@4.6.82:
+    resolution: {integrity: sha512-BUOryeRFwvbLe0lOU6NhkJNuVQUp06WxlJVVCsxdmJ4y5cU3O3s3/0DunVdK1PMm7v2MUw52qKYaidhDH1Z9+w==}
     engines: {node: '>=18'}
 
   picocolors@1.0.1:
@@ -3560,7 +3560,7 @@ snapshots:
   path2d@0.2.1:
     optional: true
 
-  pdfjs-dist@4.5.136:
+  pdfjs-dist@4.6.82:
     optionalDependencies:
       canvas: 2.11.2
       path2d: 0.2.1
