@@ -41,7 +41,7 @@
     "eslint-plugin-n": "17.12.0",
     "eslint-plugin-promise": "7.1.0",
     "fast-xml-parser": "4.5.0",
-    "pdfjs-dist": "4.7.76",
+    "pdfjs-dist": "4.8.69",
     "prettier": "3.3.3",
     "run-z": "2.1.0",
     "sharp": "0.33.5",
