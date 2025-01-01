@@ -24,8 +24,8 @@ importers:
         specifier: 1.7.9
         version: 1.7.9
       canvas:
-        specifier: 3.0.0
-        version: 3.0.0
+        specifier: 3.0.1
+        version: 3.0.1
       cheerio:
         specifier: 1.0.0
         version: 1.0.0
@@ -667,8 +667,8 @@ packages:
   caniuse-lite@1.0.30001690:
     resolution: {integrity: sha512-5ExiE3qQN6oF8Clf8ifIDcMRCRE/dMGcETG/XGMD8/XiXm6HXQgQTh1yZYLXXpSOsEUlJm1Xr7kGULZTuGtP/w==}
 
-  canvas@3.0.0:
-    resolution: {integrity: sha512-NtcIBY88FjymQy+g2g5qnuP5IslrbWCQ3A6rSr1PeuYxVRapRZ3BZCrDyAakvI6CuDYidgZaf55ygulFVwROdg==}
+  canvas@3.0.1:
+    resolution: {integrity: sha512-PcpVF4f8RubAeN/jCQQ/UymDKzOiLmRPph8fOTzDnlsUihkO/AUlxuhaa7wGRc3vMcCbV1fzuvyu5cWZlIcn1w==}
     engines: {node: ^18.12.0 || >= 20.9.0}
 
   chalk@4.1.2:
@@ -2586,7 +2586,7 @@ snapshots:
 
   caniuse-lite@1.0.30001690: {}
 
-  canvas@3.0.0:
+  canvas@3.0.1:
     dependencies:
       node-addon-api: 7.1.1
       prebuild-install: 7.1.2
