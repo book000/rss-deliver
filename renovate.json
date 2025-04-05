@@ -10,7 +10,7 @@
         ".github/apt-packages.txt"
       ],
       "matchStrings": [
-        "^(?<depName>.*?)=(?<currentValue>.*?)"
+        "(?<depName>.*?)=(?<currentValue>.*?)"
       ],
       "registryUrlTemplate": "https://archive.ubuntu.com/ubuntu/?release=noble&components=main,contrib&binaryArch=amd64",
       "datasourceTemplate": "deb"
