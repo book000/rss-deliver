@@ -41,7 +41,9 @@ jobs:
             ${{ runner.os }}-pnpm-store-
 
       - name: Install apt dependencies
-        run: sudo apt-get install build-essential libcairo2-dev libpango1.0-dev libjpeg-dev libgif-dev librsvg2-dev
+        run: |
+          sudo apt-get update
+          xargs -a .github/apt-packages.txt sudo apt-get install -y
 
       - name: 👨🏻‍💻 Install dependencies
         run: |
