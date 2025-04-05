@@ -1,0 +1,6 @@
+build-essential=12.10ubuntu1
+libcairo2-dev=1.18.0-3build1
+libgif-dev=5.2.2-1ubuntu1
+libjpeg-dev=8c-2ubuntu11
+libpango1.0-dev=1.52.1+ds-1build1
+librsvg2-dev=2.58.0+dfsg-1build1
