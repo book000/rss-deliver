@@ -7,7 +7,7 @@
     {
       "customType": "regex",
       "fileMatch": [
-        ".github/apt-packages.txt"
+        "apt-packages.txt"
       ],
       "matchStrings": [
         "(?<depName>.*?)=(?<currentValue>.*?)"
