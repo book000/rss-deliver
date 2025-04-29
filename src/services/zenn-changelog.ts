@@ -68,6 +68,44 @@ interface ZeenChangelogResponse {
   rss: RSS
 }
 
+class ZennChangelogItem {
+  readonly itemId: string
+
+  readonly itemText: string | null
+  readonly itemUrl: string | null
+  static cacheInfo: string | null = null
+
+  private constructor(
+    itemId: string,
+    itemText: string | null,
+    itemUrl: string | null
+  ) {
+    this.itemId = itemId
+    this.itemText = itemText
+    this.itemUrl = itemUrl
+  }
+
+  public static async of(itemId: string) {
+    const logger = Logger.configure('ZennChangelogItem.of')
+    logger.info(`📄 Loading ${itemId}`)
+    const itemUrl = `https://info.zenn.dev/${itemId}`
+    const response = await axios.get<string>(itemUrl, {
+      validateStatus: () => true,
+    })
+    if (response.status !== 200) {
+      logger.warn(`❗ Failed to get changelog (${response.status})`)
+      return null
+    }
+    const $ = cheerio.load(response.data)
+
+    // Get item text
+    const itemTextElement = $('[class^="SlugPage_blogBody"]')
+    const itemText = itemTextElement.html()
+
+    return new ZennChangelogItem(itemId, itemText, itemUrl)
+  }
+}
+
 export default class ZennChangelog extends BaseService {
   information(): ServiceInformation {
     return {
@@ -135,43 +173,5 @@ export default class ZennChangelog extends BaseService {
       status: true,
       items,
     }
-  }
-}
-
-class ZennChangelogItem {
-  readonly itemId: string
-
-  readonly itemText: string | null
-  readonly itemUrl: string | null
-  static cacheInfo: string | null = null
-
-  private constructor(
-    itemId: string,
-    itemText: string | null,
-    itemUrl: string | null
-  ) {
-    this.itemId = itemId
-    this.itemText = itemText
-    this.itemUrl = itemUrl
-  }
-
-  public static async of(itemId: string) {
-    const logger = Logger.configure('ZennChangelogItem.of')
-    logger.info(`📄 Loading ${itemId}`)
-    const itemUrl = `https://info.zenn.dev/${itemId}`
-    const response = await axios.get<string>(itemUrl, {
-      validateStatus: () => true,
-    })
-    if (response.status !== 200) {
-      logger.warn(`❗ Failed to get changelog (${response.status})`)
-      return null
-    }
-    const $ = cheerio.load(response.data)
-
-    // Get item text
-    const itemTextElement = $('[class^="SlugPage_blogBody"]')
-    const itemText = itemTextElement.html()
-
-    return new ZennChangelogItem(itemId, itemText, itemUrl)
   }
 }

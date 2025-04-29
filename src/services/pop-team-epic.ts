@@ -8,6 +8,37 @@ import fs from 'node:fs'
 import crypto from 'node:crypto'
 import sharp from 'sharp'
 
+class PopTeamEpicItem {
+  readonly itemTitle: string
+  readonly itemImages: string[]
+
+  private constructor(title: string, images: string[]) {
+    this.itemTitle = title
+    this.itemImages = images
+  }
+
+  public static async of(url: string) {
+    const logger = Logger.configure('PopTeamEpicItem::of')
+    logger.info(`📃 ${url}`)
+    const response = await axios.get<string>(url, {
+      validateStatus: () => true,
+    })
+    if (response.status !== 200) {
+      logger.warn(`❗ Failed to get item details (${response.status})`)
+      return null
+    }
+    const $ = cheerio.load(response.data)
+    const item = $(`#extMdlSeriesMngrArticle78`)
+
+    const title = item.find('h3').text()
+    const images: string[] = item
+      .find('img')
+      .map((_, e) => $(e).attr('src'))
+      .get()
+    return new PopTeamEpicItem(title, images)
+  }
+}
+
 export default class PopTeamEpic extends BaseService {
   private title: string | null = null
   private link: string | null = null
@@ -164,36 +195,5 @@ export default class PopTeamEpic extends BaseService {
     const hash = crypto.createHash('md5')
     hash.update(buffer)
     return hash.digest('hex')
-  }
-}
-
-class PopTeamEpicItem {
-  readonly itemTitle: string
-  readonly itemImages: string[]
-
-  private constructor(title: string, images: string[]) {
-    this.itemTitle = title
-    this.itemImages = images
-  }
-
-  public static async of(url: string) {
-    const logger = Logger.configure('PopTeamEpicItem::of')
-    logger.info(`📃 ${url}`)
-    const response = await axios.get<string>(url, {
-      validateStatus: () => true,
-    })
-    if (response.status !== 200) {
-      logger.warn(`❗ Failed to get item details (${response.status})`)
-      return null
-    }
-    const $ = cheerio.load(response.data)
-    const item = $(`#extMdlSeriesMngrArticle78`)
-
-    const title = item.find('h3').text()
-    const images: string[] = item
-      .find('img')
-      .map((_, e) => $(e).attr('src'))
-      .get()
-    return new PopTeamEpicItem(title, images)
   }
 }
