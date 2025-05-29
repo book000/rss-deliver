@@ -27,6 +27,10 @@ async function generateRSSService(service: BaseService) {
     logger.warn(`❌ ${filename} is not available`)
     return
   }
+
+  // pubDateを処理
+  const processedItems = await service.processPubDates(collect.items)
+
   const object = {
     '?xml': {
       '@_version': '1.0',
@@ -39,7 +43,7 @@ async function generateRSSService(service: BaseService) {
       '@_xmlns:content': 'http://purl.org/rss/1.0/modules/content/',
       '@_xmlns:atom': 'http://www.w3.org/2005/Atom',
       channel: service.information(),
-      item: collect.items,
+      item: processedItems,
     },
   }
 
