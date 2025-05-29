@@ -22,10 +22,11 @@ interface RssItem {
 
 type PreviousFeedCache = Record<
   string,
-  {
-    lastFetched: Date
-    items: RssItem[]
-  } | undefined
+  | {
+      lastFetched: Date
+      items: RssItem[]
+    }
+  | undefined
 >
 
 // キャッシュを保持して、同じセッション内での重複取得を避ける
