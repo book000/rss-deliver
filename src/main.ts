@@ -12,6 +12,7 @@ import ZennChangelog from './services/zenn-changelog'
 import Dev1and from './services/dev1and'
 import TdrUpdates from './services/tdr-updates'
 import PopTeamEpic from './services/pop-team-epic'
+import Fish4Koma from './services/fish-4koma'
 
 async function generateRSSService(service: BaseService) {
   const filename = service.constructor.name
@@ -69,6 +70,7 @@ async function generateRSS() {
     new Dev1and(),
     new TdrUpdates(),
     new PopTeamEpic(),
+    new Fish4Koma(),
   ]
   const promises: Promise<void>[] = services.map((service) =>
     generateRSSService(service).catch((error: unknown) => {
