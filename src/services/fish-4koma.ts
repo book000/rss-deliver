@@ -114,12 +114,15 @@ export default class Fish4Koma extends BaseService {
         continue
       }
 
-      // 画像を保存
+      // 画像を保存（最大の画像のみ）
       if (!fs.existsSync('output/fish4koma/')) {
         fs.mkdirSync('output/fish4koma/', { recursive: true })
       }
 
-      const savedImageUrls: string[] = []
+      let largestImageUrl: string | null = null
+      let maxImageSize = 0
+
+      // 最大サイズの画像を特定
       for (const imageUrl of images) {
         try {
           const imageResponse = await axios.get(imageUrl, {
@@ -132,39 +135,61 @@ export default class Fish4Koma extends BaseService {
           }
 
           const buffer = Buffer.from(imageResponse.data)
+          const metadata = await sharp(buffer).metadata()
+          const imageSize = (metadata.width || 0) * (metadata.height || 0)
 
-          // 画像をトリミングして余白を追加
-          const processedBuffer = await sharp(buffer)
-            .trim()
-            .extend({
-              top: 10,
-              bottom: 10,
-              left: 10,
-              right: 10,
-              background: { r: 255, g: 255, b: 255, alpha: 1 },
-            })
-            .toBuffer()
-
-          const hash = this.hash(processedBuffer)
-          const outputPath = `output/fish4koma/${hash}.jpg`
-          fs.writeFileSync(outputPath, processedBuffer)
-
-          savedImageUrls.push(
-            `https://book000.github.io/rss-deliver/fish4koma/${hash}.jpg`
-          )
+          if (imageSize > maxImageSize) {
+            maxImageSize = imageSize
+            largestImageUrl = imageUrl
+          }
         } catch (error) {
-          logger.warn(`❗ Error processing image ${imageUrl}: ${String(error)}`)
+          logger.warn(
+            `❗ Error checking image size ${imageUrl}: ${String(error)}`
+          )
         }
       }
 
-      if (savedImageUrls.length > 0) {
+      let savedImageUrl: string | null = null
+      if (largestImageUrl) {
+        try {
+          const imageResponse = await axios.get(largestImageUrl, {
+            responseType: 'arraybuffer',
+            validateStatus: () => true,
+          })
+          if (imageResponse.status === 200) {
+            const buffer = Buffer.from(imageResponse.data)
+
+            // 画像をトリミングして余白を追加
+            const processedBuffer = await sharp(buffer)
+              .trim()
+              .extend({
+                top: 10,
+                bottom: 10,
+                left: 10,
+                right: 10,
+                background: { r: 255, g: 255, b: 255, alpha: 1 },
+              })
+              .toBuffer()
+
+            const hash = this.hash(processedBuffer)
+            const outputPath = `output/fish4koma/${hash}.jpg`
+            fs.writeFileSync(outputPath, processedBuffer)
+
+            savedImageUrl = `https://book000.github.io/rss-deliver/fish4koma/${hash}.jpg`
+          }
+        } catch (error) {
+          logger.warn(
+            `❗ Error processing largest image ${largestImageUrl}: ${String(error)}`
+          )
+        }
+      }
+
+      if (savedImageUrl) {
         items.push({
           title: rssItem.title,
           link: itemUrl,
           description: rssItem.description,
-          'content:encoded': savedImageUrls
-            .map((url) => `<img src="${url}">`)
-            .join('<br>'),
+          'content:encoded': `<img src="${savedImageUrl}">`,
           pubDate: rssItem['dc:date'],
         })
       }
