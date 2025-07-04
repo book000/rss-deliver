@@ -2,6 +2,8 @@ import axios from 'axios'
 import { XMLParser } from 'fast-xml-parser'
 import { Logger } from '@book000/node-utils'
 import { Item } from '@/model/collect-result'
+import { DeletedArticlesHistory } from '@/model/deleted-article'
+import { getPubDateFromDeletedHistory } from './deleted-articles-tracker'
 
 interface RssItem {
   title: string
@@ -101,11 +103,23 @@ export async function getPreviousFeed(serviceName: string): Promise<RssItem[]> {
 
 /**
  * 新しいアイテムと前回のアイテムを比較して、pubDateを引き継ぐ
+ * 削除記事履歴からもpubDateを復元する
  * @param newItem 新しいアイテム
  * @param previousItems 前回のアイテムリスト
+ * @param deletedHistory 削除記事履歴（オプション）
+ * @param serviceName サービス名（ログ用）
  * @returns pubDateが設定されたアイテム
  */
-export function inheritPubDate(newItem: Item, previousItems: RssItem[]): Item {
+export function inheritPubDate(
+  newItem: Item,
+  previousItems: RssItem[],
+  deletedHistory?: DeletedArticlesHistory | null,
+  serviceName?: string
+): Item {
+  const logger = Logger.configure(
+    `utils.inheritPubDate${serviceName ? `.${serviceName}` : ''}`
+  )
+
   // すでにpubDateがある場合はそのまま返す
   if (newItem.pubDate) {
     return newItem
@@ -120,9 +134,30 @@ export function inheritPubDate(newItem: Item, previousItems: RssItem[]): Item {
     return prevId === itemId
   })
 
-  // 前回のpubDateがある場合は引き継ぐ、ない場合は現在時刻を設定
-  return {
-    ...newItem,
-    pubDate: previousItem?.pubDate,
+  // 前回のpubDateがある場合は引き継ぐ
+  if (previousItem?.pubDate) {
+    return {
+      ...newItem,
+      pubDate: previousItem.pubDate,
+    }
   }
+
+  // 削除記事履歴からpubDateを復元
+  if (deletedHistory) {
+    const deletedPubDate = getPubDateFromDeletedHistory(itemId, deletedHistory)
+    if (deletedPubDate) {
+      if (serviceName) {
+        logger.info(
+          `[${serviceName}] Restored pubDate from deletion history: ${newItem.title}`
+        )
+      }
+      return {
+        ...newItem,
+        pubDate: deletedPubDate,
+      }
+    }
+  }
+
+  // どちらにもない場合は undefined のまま返す
+  return newItem
 }

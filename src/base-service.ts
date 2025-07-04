@@ -1,6 +1,7 @@
 import CollectResult, { Item } from './model/collect-result'
 import ServiceInformation from './model/service-information'
 import { getPreviousFeed, inheritPubDate } from './utils/previous-feed'
+import { fetchDeletedArticlesHistory } from './utils/deleted-articles-tracker'
 import { Logger } from '@book000/node-utils'
 
 export abstract class BaseService {
@@ -10,7 +11,7 @@ export abstract class BaseService {
 
   /**
    * RSSアイテムのpubDateを処理する
-   * pubDateが設定されていない場合、前回のフィードから引き継ぐか現在時刻を設定する
+   * pubDateが設定されていない場合、前回のフィードから引き継ぐか削除記事履歴から復元、最後に現在時刻を設定する
    * @param items 処理するアイテムリスト
    * @returns pubDateが設定されたアイテムリスト
    */
@@ -23,9 +24,12 @@ export abstract class BaseService {
     // 前回のフィードを取得
     const previousItems = await getPreviousFeed(this.constructor.name)
 
+    // 削除記事履歴を取得
+    const deletedHistory = await fetchDeletedArticlesHistory()
+
     // 各アイテムのpubDateを処理
     const processedItems = items.map((item) =>
-      inheritPubDate(item, previousItems)
+      inheritPubDate(item, previousItems, deletedHistory, this.constructor.name)
     )
 
     const countInheritedPubDate =
