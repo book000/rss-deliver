@@ -13,6 +13,14 @@ import Dev1and from './services/dev1and'
 import TdrUpdates from './services/tdr-updates'
 import PopTeamEpic from './services/pop-team-epic'
 import Fish4Koma from './services/fish-4koma'
+import {
+  fetchDeletedArticlesHistory,
+  detectDeletedArticles,
+  updateDeletedArticlesHistory,
+  saveDeletedArticlesHistory,
+} from './utils/deleted-articles-tracker'
+import { DeletedArticle } from './model/deleted-article'
+import { getPreviousFeed } from './utils/previous-feed'
 
 async function generateRSSService(service: BaseService) {
   const filename = service.constructor.name
@@ -59,6 +67,10 @@ async function generateRSSService(service: BaseService) {
 async function generateRSS() {
   const logger = Logger.configure('main.generateRSS')
   logger.info('✨ Generating RSS...')
+
+  // 削除記事履歴を取得
+  let deletedHistory = await fetchDeletedArticlesHistory()
+
   const services: BaseService[] = [
     new ZennChangelog(),
     new FF14LodestoneNews(),
@@ -72,16 +84,51 @@ async function generateRSS() {
     new PopTeamEpic(),
     new Fish4Koma(),
   ]
-  const promises: Promise<void>[] = services.map((service) =>
-    generateRSSService(service).catch((error: unknown) => {
+
+  // 各サービスの削除記事を検出してまとめる
+  const allDeletedArticles: DeletedArticle[] = []
+
+  const promises: Promise<void>[] = services.map(async (service) => {
+    try {
+      const serviceName = service.constructor.name
+
+      // 前回のフィードを取得
+      const previousItems = await getPreviousFeed(serviceName)
+
+      // 新しいフィードを生成
+      await generateRSSService(service)
+
+      // 削除記事を検出
+      const collect = await service.collect()
+      if (collect.status && previousItems.length > 0) {
+        const deletedArticles = detectDeletedArticles(
+          previousItems,
+          collect.items,
+          serviceName
+        )
+        allDeletedArticles.push(...deletedArticles)
+      }
+    } catch (error) {
       logger.error(
         `❌ Error occurred while generating RSS: ${service.constructor.name}`,
         error as Error
       )
-    })
-  )
+    }
+  })
 
   await Promise.all(promises)
+
+  // 削除記事履歴を更新
+  if (allDeletedArticles.length > 0) {
+    logger.info(
+      `🗑️ Detected ${allDeletedArticles.length} deleted articles across all services`
+    )
+    deletedHistory = updateDeletedArticlesHistory(
+      deletedHistory,
+      allDeletedArticles
+    )
+    saveDeletedArticlesHistory(deletedHistory)
+  }
 }
 
 function generateList() {
