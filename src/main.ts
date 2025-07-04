@@ -98,15 +98,28 @@ async function generateRSS() {
       // 新しいフィードを生成
       await generateRSSService(service)
 
-      // 削除記事を検出
+      // 削除記事を検出（前回フィードが存在する場合のみ）
       const collect = await service.collect()
-      if (collect.status && previousItems.length > 0) {
-        const deletedArticles = detectDeletedArticles(
-          previousItems,
-          collect.items,
-          serviceName
-        )
-        allDeletedArticles.push(...deletedArticles)
+      if (collect.status) {
+        if (previousItems.length > 0) {
+          const deletedArticles = detectDeletedArticles(
+            previousItems,
+            collect.items,
+            serviceName
+          )
+          if (deletedArticles.length > 0) {
+            logger.info(
+              `🗑️ [${serviceName}] Detected ${deletedArticles.length} deleted articles`
+            )
+            allDeletedArticles.push(...deletedArticles)
+          } else {
+            logger.info(`📋 [${serviceName}] No deleted articles detected`)
+          }
+        } else {
+          logger.info(
+            `📄 [${serviceName}] No previous feed found, skipping deletion detection`
+          )
+        }
       }
     } catch (error) {
       logger.error(
@@ -119,6 +132,10 @@ async function generateRSS() {
   await Promise.all(promises)
 
   // 削除記事履歴を更新
+  logger.info(
+    `📊 Total deleted articles detected: ${allDeletedArticles.length}`
+  )
+
   if (allDeletedArticles.length > 0) {
     logger.info(
       `🗑️ Detected ${allDeletedArticles.length} deleted articles across all services`
@@ -128,6 +145,18 @@ async function generateRSS() {
       allDeletedArticles
     )
     saveDeletedArticlesHistory(deletedHistory)
+  } else {
+    logger.info('📄 No deleted articles detected, creating empty history file')
+
+    // 削除記事がない場合でも、空の履歴ファイルを作成
+    if (!deletedHistory) {
+      deletedHistory = {
+        version: '1.0',
+        lastUpdated: new Date().toISOString(),
+        articles: [],
+      }
+      saveDeletedArticlesHistory(deletedHistory)
+    }
   }
 }
 
