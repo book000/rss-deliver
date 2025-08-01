@@ -48,8 +48,8 @@ importers:
         specifier: 5.2.5
         version: 5.2.5
       pdfjs-dist:
-        specifier: 5.3.93
-        version: 5.3.93
+        specifier: 5.4.54
+        version: 5.4.54
       prettier:
         specifier: 3.6.2
         version: 3.6.2
@@ -1634,8 +1634,8 @@ packages:
   path-parse@1.0.7:
     resolution: {integrity: sha512-LDJzPVEEEPR+y48z93A0Ed0yXb8pAByGWo/k5YYdYgpY2/2EsOsksJrq7lOHxryrVOn1ejG6oAp8ahvOIQD8sw==}
 
-  pdfjs-dist@5.3.93:
-    resolution: {integrity: sha512-w3fQKVL1oGn8FRyx5JUG5tnbblggDqyx2XzA5brsJ5hSuS+I0NdnJANhmeWKLjotdbPQucLBug5t0MeWr0AAdg==}
+  pdfjs-dist@5.4.54:
+    resolution: {integrity: sha512-TBAiTfQw89gU/Z4LW98Vahzd2/LoCFprVGvGbTgFt+QCB1F+woyOPmNNVgLa6djX9Z9GGTnj7qE1UzpOVJiINw==}
     engines: {node: '>=20.16.0 || >=22.3.0'}
 
   picocolors@1.1.1:
@@ -3697,7 +3697,7 @@ snapshots:
 
   path-parse@1.0.7: {}
 
-  pdfjs-dist@5.3.93:
+  pdfjs-dist@5.4.54:
     optionalDependencies:
       '@napi-rs/canvas': 0.1.74
 
