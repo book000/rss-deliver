@@ -33,8 +33,9 @@ class PopTeamEpicItem {
     const title = item.find('h3').text()
     const images: string[] = item
       .find('img')
-      .map((_, e) => $(e).attr('src'))
+      .map((_, e) => $(e).attr('src') ?? '')
       .get()
+      .filter((src) => src !== '')
     return new PopTeamEpicItem(title, images)
   }
 }
@@ -177,8 +178,8 @@ export default class PopTeamEpic extends BaseService {
       .map((_, e) => {
         const element = $(e)
         const title = element.find('p.itemSeriesTitle').text().trim()
-        const url = element.find('p.itemSeriesTitle a').attr('href')
-        const image = element.find('a.itemImage img').attr('src')
+        const url = element.find('p.itemSeriesTitle a').attr('href') ?? ''
+        const image = element.find('a.itemImage img').attr('src') ?? ''
         return { title, url, image }
       })
       .get()
