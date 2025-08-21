@@ -33,8 +33,9 @@ class PopTeamEpicItem {
     const title = item.find('h3').text()
     const images: string[] = item
       .find('img')
-      .map((_, e) => $(e).attr('src'))
+      .map((_, e) => $(e).attr('src') ?? '')
       .get()
+      .filter((src) => src !== '')
     return new PopTeamEpicItem(title, images)
   }
 }
