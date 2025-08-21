@@ -177,8 +177,8 @@ export default class PopTeamEpic extends BaseService {
       .map((_, e) => {
         const element = $(e)
         const title = element.find('p.itemSeriesTitle').text().trim()
-        const url = element.find('p.itemSeriesTitle a').attr('href')
-        const image = element.find('a.itemImage img').attr('src')
+        const url = element.find('p.itemSeriesTitle a').attr('href') ?? ''
+        const image = element.find('a.itemImage img').attr('src') ?? ''
         return { title, url, image }
       })
       .get()
