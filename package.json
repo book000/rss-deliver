@@ -32,7 +32,7 @@
     "@book000/node-utils": "1.18.113",
     "@types/node": "22.17.2",
     "axios": "1.11.0",
-    "canvas": "3.1.2",
+    "canvas": "3.2.0",
     "cheerio": "1.1.2",
     "eslint": "9.33.0",
     "eslint-config-standard": "17.1.0",
