@@ -98,7 +98,11 @@ export default class TdrUpdates extends BaseService {
       const canvas = createCanvas(viewport.width, viewport.height)
       const context = canvas.getContext('2d')
 
-      await page.render({ canvasContext: context as never, viewport }).promise
+      await page.render({
+        canvasContext: context as never,
+        viewport,
+        canvas,
+      } as never).promise
 
       const image = canvas.toBuffer('image/png')
       const hash = this.hash(image)
