@@ -18,8 +18,8 @@ importers:
         specifier: 24.9.2
         version: 24.9.2
       axios:
-        specifier: 1.13.0
-        version: 1.13.0
+        specifier: 1.13.1
+        version: 1.13.1
       canvas:
         specifier: 3.2.0
         version: 3.2.0
