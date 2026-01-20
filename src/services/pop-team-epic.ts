@@ -28,8 +28,9 @@ class PopTeamEpicItem {
       return null
     }
     const $ = cheerio.load(response.data)
-    const takecomicImages =
-      PopTeamEpicItem.extractTakecomicImages(response.data)
+    const takecomicImages = PopTeamEpicItem.extractTakecomicImages(
+      response.data
+    )
     if (takecomicImages.length > 0) {
       const title = PopTeamEpicItem.extractTakecomicTitle($)
       return new PopTeamEpicItem(title, takecomicImages)
@@ -304,7 +305,10 @@ export default class PopTeamEpic extends BaseService {
       }
       seen.add(url)
       const title = $(element).find('.series-eplist-item-h-text').text().trim()
-      const date = $(element).find('.series-eplist-item-meta-date').text().trim()
+      const date = $(element)
+        .find('.series-eplist-item-meta-date')
+        .text()
+        .trim()
       episodes.push({ title, url, date })
     }
     return episodes
@@ -388,9 +392,7 @@ export default class PopTeamEpic extends BaseService {
 
       const hash = this.hash(trimmedBuffer)
       fs.writeFileSync(`output/popute/${hash}.jpg`, trimmedBuffer)
-      imageUrls.push(
-        `https://book000.github.io/rss-deliver/popute/${hash}.jpg`
-      )
+      imageUrls.push(`https://book000.github.io/rss-deliver/popute/${hash}.jpg`)
     }
     return imageUrls
   }
@@ -410,7 +412,9 @@ export default class PopTeamEpic extends BaseService {
       validateStatus: () => true,
     })
     if (response.status !== 200) {
-      logger.warn(`❗ Failed to download image (${response.status}) ${imageUrl}`)
+      logger.warn(
+        `❗ Failed to download image (${response.status}) ${imageUrl}`
+      )
       return null
     }
     return Buffer.from(response.data)
