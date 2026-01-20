@@ -142,10 +142,7 @@ export default class PopTeamEpic extends BaseService {
     this.image = activeSeason.image
     this.siteName = activeSeason.siteName
 
-    const items =
-      activeSeason.source === 'takecomic'
-        ? await this.collectTakecomicItems(activeSeason.url)
-        : await this.collectMangalifeItems(activeSeason.url)
+    const items = await this.collectTakecomicItems(activeSeason.url)
 
     return {
       status: true,
@@ -158,14 +155,9 @@ export default class PopTeamEpic extends BaseService {
     url: string
     image: string
     siteName: string
-    source: 'takecomic' | 'mangalifewin'
+    source: 'takecomic'
   } | null> {
-    const takecomicSeason = await this.fetchTakecomicSeason()
-    if (takecomicSeason) {
-      return takecomicSeason
-    }
-
-    return this.fetchMangalifeSeason()
+    return this.fetchTakecomicSeason()
   }
 
   private async fetchTakecomicSeason(): Promise<{
@@ -197,49 +189,6 @@ export default class PopTeamEpic extends BaseService {
       image,
       siteName: '竹コミ！',
       source: 'takecomic',
-    }
-  }
-
-  private async fetchMangalifeSeason(): Promise<{
-    title: string
-    url: string
-    image: string
-    siteName: string
-    source: 'mangalifewin'
-  } | null> {
-    const response = await axios.get(
-      'https://mangalifewin.takeshobo.co.jp/rensai/',
-      {
-        validateStatus: () => true,
-      }
-    )
-
-    const $ = cheerio.load(response.data)
-
-    const seriesElement = $('ul[id*="extMdlSeriesMngrSeries"].line2 li')
-    const series: {
-      title: string
-      url: string
-      image: string
-    }[] = seriesElement
-      .map((_, e) => {
-        const element = $(e)
-        const title = element.find('p.itemSeriesTitle').text().trim()
-        const url = element.find('p.itemSeriesTitle a').attr('href') ?? ''
-        const image = element.find('a.itemImage img').attr('src') ?? ''
-        return { title, url, image }
-      })
-      .get()
-
-    const popute = series.find((s) => s.title.startsWith('ポプテピピック'))
-    if (!popute) {
-      return null
-    }
-
-    return {
-      ...popute,
-      siteName: 'まんがライフWIN',
-      source: 'mangalifewin',
     }
   }
 
@@ -312,55 +261,6 @@ export default class PopTeamEpic extends BaseService {
       episodes.push({ title, url, date })
     }
     return episodes
-  }
-
-  private async collectMangalifeItems(seriesUrl: string): Promise<Item[]> {
-    const logger = Logger.configure('PopTeamEpic::collectMangalifeItems')
-    const response = await axios.get(seriesUrl, {
-      validateStatus: () => true,
-    })
-    if (response.status !== 200) {
-      throw new Error(`Failed to fetch: ${response.status}`)
-    }
-    const $ = cheerio.load(response.data)
-
-    const items: Item[] = []
-    // 月ごとに取得
-    for (const monthlyElement of $(
-      'div.extMdlSeriesMngrBook > div.extMdlSeriesMngrBookInner > ul.bookul > li.bookli:not(.btnMoreLi)'
-    )) {
-      const monthlyName = $(monthlyElement).find('div.bTtl h3').text().trim()
-
-      const itemElements = $(monthlyElement).find('div.bookR li a')
-      for (const element of itemElements) {
-        const anchor = $(element)
-        const url = anchor.attr('href') ?? ''
-
-        const item = await PopTeamEpicItem.of(url)
-        if (!item) {
-          continue
-        }
-        const title = item.itemTitle
-        const images = item.itemImages
-
-        logger.info(`📃 ${monthlyName} ${title} ${url}`)
-
-        const imageUrls = await this.saveImages(images, logger)
-        if (imageUrls.length === 0) {
-          continue
-        }
-
-        const itemTitle = `${monthlyName} ${title}`
-        items.push({
-          title: itemTitle,
-          link: url,
-          'content:encoded': imageUrls
-            .map((index) => `<img src="${index}">`)
-            .join('<br>'),
-        })
-      }
-    }
-    return items
   }
 
   private async saveImages(
