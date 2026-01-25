@@ -1,217 +1,135 @@
-# GitHub Copilot インストラクション
+# GitHub Copilot Instructions
 
-このファイルは rss-deliver プロジェクトで GitHub Copilot を使用する際のガイドラインです。
+## プロジェクト概要
 
-## 必須要件
+- **目的**: RSS フィードを収集し配信する自分用のサービス
+- **主な機能**:
+  - 複数のサービスから RSS フィードを収集
+  - 削除された記事を追跡
+  - RSS XML を生成して配信
+- **対象ユーザー**: 開発者（個人用）
 
-### コミュニケーション言語
+## 共通ルール
 
-**すべてのコミュニケーションは日本語で行ってください。**
+- **会話言語**: 日本語
+- **コミット規約**: [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/) に従う
+  - 形式: `<type>(<scope>): <description>`
+  - `<description>` は日本語で記載
+  - 例: `feat(rss): 新しい RSS フィード取得機能を追加`
+- **日本語と英数字の間**: 半角スペースを挿入する
 
-- Issue タイトル・本文: 日本語で記述
-- PR タイトル・本文: 日本語で記述（Conventional Commits の仕様に従う）
-- コミットメッセージ: 日本語で記述（Conventional Commits の仕様に従う）
-- レビューコメント: 日本語で記述
-- コード内コメント: 日本語で記述
+## 技術スタック
 
-#### 記述ルール
-
-- 全ての Heading とその本文の間には、空白行を入れる
-- 英数字と日本語の間には、半角スペースを入れる
-
-### Conventional Commits 仕様
-
-コミットメッセージと PR タイトルは以下の形式に従ってください:
-
-```
-<type>[optional scope]: <description>
-
-[optional body]
-
-[optional footer(s)]
-```
-
-#### Type 一覧
-
-`<type>` は以下のいずれかを使用:
-
-- `feat`: 新機能追加
-- `fix`: バグ修正
-- `docs`: ドキュメント変更
-- `style`: コードフォーマット変更
-- `refactor`: リファクタリング
-- `test`: テスト追加・修正
-- `chore`: その他の変更
-
-#### 記述ルール
-
-- `<description>` は日本語で簡潔に記述してください
-- `[optional body]` は変更の詳細な説明を日本語で記述します
-
-#### コミットメッセージ例
-
-```
-feat(rss): 新しい RSS フィード取得機能を追加
-
-FF14 ロードストーンの新しいフィード形式に対応。
-パーサーロジックを改善し、エラーハンドリングを強化。
-
-Closes #123
-```
-
-## プロジェクト固有のガイドライン
-
-### 技術スタック
-
-- **言語**: TypeScript
+- **言語**: TypeScript (ESM)
 - **ランタイム**: Node.js
-- **パッケージマネージャー**: pnpm
+- **パッケージマネージャー**: pnpm (10.28.1)
 - **リンター**: ESLint
 - **フォーマッター**: Prettier
-- **ビルドツール**: TypeScript Compiler (tsc)
+- **主な依存関係**: axios, cheerio, fast-xml-parser, canvas, sharp, pdfjs-dist
 
-### 開発フロー
+## コーディング規約
 
-#### 依存関係管理
+- **フォーマット**: Prettier で自動整形
+- **命名規則**:
+  - クラス: PascalCase
+  - 関数・変数: camelCase
+  - 定数: UPPER_SNAKE_CASE
+- **Lint / Format ルール**:
+  - ESLint: eslint.config.mjs に従う
+  - Prettier: .prettierrc.yml に従う
+- **TypeScript**:
+  - 型定義は明示的に記述する
+  - `any` 型の使用は避ける
+  - `skipLibCheck` での回避は禁止
+- **ドキュメント**: 関数・インターフェースに JSDoc を日本語で記載
+
+## 開発コマンド
 
 ```bash
 # 依存関係のインストール
 pnpm install
 
-# 新しい依存関係の追加
-pnpm add <package-name>
-pnpm add -D <package-name>  # 開発依存関係
-```
-
-#### コード品質チェック
-
-```bash
-# リント実行
-pnpm lint
-
-# フォーマット修正
-pnpm fix
-
-# 型チェック
-pnpm lint:tsc
-```
-
-#### 実行
-
-```bash
 # 本番実行
 pnpm start
 
 # 開発モード（ファイル監視）
 pnpm dev
+
+# リント実行
+pnpm lint
+pnpm lint:eslint
+pnpm lint:prettier
+pnpm lint:tsc
+
+# フォーマット修正
+pnpm fix
+pnpm fix:eslint
+pnpm fix:prettier
 ```
 
-### コーディング規約
+## テスト方針
 
-#### TypeScript
+- **テストフレームワーク**: 現在テストフレームワークは未導入
+- **テスト追加の方針**: 将来的にテストを追加する場合は、Jest または Vitest を使用することを推奨
 
-- 型定義は明示的に記述する
-- `any` 型の使用は避ける
-- インターフェースとタイプエイリアスを適切に使い分ける
-- 非同期処理は `async/await` を使用する
+## セキュリティ / 機密情報
 
-#### ファイル構成
+- **認証情報**: API キーや認証情報を Git にコミットしない
+- **ログ出力**: ログに個人情報や認証情報を出力しない
+- **環境変数**: 機密情報は環境変数で管理する
 
-- `src/main.ts`: メインエントリーポイント
-- `src/services/`: RSS サービスの実装
-- `src/model/`: データモデル定義
-- `src/utils/`: ユーティリティ関数
-- `src/types.d.ts`: 型定義
+## ドキュメント更新
 
-#### コメント記述
+以下のファイルを変更した場合は、関連ドキュメントを更新する：
 
-```typescript
-/**
- * RSS フィードを取得する関数
- * @param url RSS フィードの URL
- * @returns RSS アイテムの配列
- */
-async function fetchRssFeed(url: string): Promise<RssItem[]> {
-  // RSS パーサーを初期化
-  const parser = new XMLParser()
-  
-  // HTTP リクエストを実行
-  const response = await axios.get(url)
-  
-  return parser.parse(response.data)
-}
-```
+- **package.json**: 開発コマンドの変更時
+- **プロンプトファイル**: 技術スタックやプロジェクト要件の変更時
+  - `.github/copilot-instructions.md`
+  - `CLAUDE.md`
+  - `AGENTS.md`
+  - `GEMINI.md`
 
-### Issue と PR の記述
+## リポジトリ固有
 
-#### Issue テンプレート
+### アーキテクチャ
 
-```markdown
-## 概要
+- **ファイル構成**:
+  - `src/main.ts`: メインエントリーポイント
+  - `src/base-service.ts`: サービスの基底クラス
+  - `src/services/`: 各 RSS サービスの実装
+  - `src/model/`: データモデル定義
+  - `src/utils/`: ユーティリティ関数
 
-新機能や修正内容の概要を日本語で記述
+### RSS サービス実装パターン
 
-## 詳細
+新しい RSS サービスを追加する場合：
 
-実装の詳細や技術的な検討事項
+1. `BaseService` クラスを継承する
+2. `information()` メソッドで ServiceInformation を返す
+3. `collect()` メソッドで CollectResult を返す
+4. エラーハンドリングは統一されたパターンを使用する
+5. ログ出力は `@book000/node-utils` の Logger を使用する
 
-## 受け入れ条件
+### pubDate 処理
 
-- [ ] 条件 1
-- [ ] 条件 2
-- [ ] 条件 3
-```
+- RSS アイテムの pubDate は自動的に処理される
+- pubDate が設定されていない場合:
+  1. 前回のフィードから引き継ぐ
+  2. 削除記事履歴から復元
+  3. 最後に現在時刻を設定
 
-#### PR テンプレート
+### 削除記事の追跡
 
-```markdown
-## 変更内容
-
-このPRでの変更内容を日本語で説明
-
-## 関連 Issue
-
-Closes #123
-
-## テスト
-
-- [ ] 既存テストがパスすることを確認
-- [ ] 新機能のテストを追加（該当する場合）
-- [ ] リント、フォーマットチェックがパスすることを確認
-```
-
-### レビューガイドライン
-
-#### レビューコメント例
-
-```markdown
-コードの品質について:
-- TypeScript の型定義をより具体的にしてください
-- エラーハンドリングを追加することを推奨します
-
-動作について:
-- この実装だと edge case で問題が発生する可能性があります
-- ログ出力を追加して debugging しやすくしてください
-```
-
-#### 承認基準
-
-- [ ] コードが動作要件を満たしている
-- [ ] TypeScript の型チェックがパスしている
-- [ ] ESLint と Prettier のチェックがパスしている
-- [ ] 適切な日本語コメントが記述されている
-- [ ] セキュリティリスクがない
-
-## その他の注意事項
-
-### RSS サービス実装
-
-- 新しい RSS サービスは `BaseService` クラスを継承する
-- エラーハンドリングは統一されたパターンを使用する
-- ログ出力は `@book000/node-utils` の Logger を使用する
+- 削除された記事は `deleted-articles-tracker` で追跡される
+- 履歴は永続化され、将来の参照に利用される
 
 ### CI/CD
 
-- GitHub Actions で自動テストとリントが実行されます
-- `main` ブランチへのマージ前に CI が成功する必要があります
-- Node.js のバージョンは `.node-version` ファイルで管理されています
+- GitHub Actions で自動リントとビルドチェックが実行される
+- `master` ブランチへのマージ前に CI が成功する必要がある
+- Node.js のバージョンは `.node-version` ファイルで管理される
+
+### 注意事項
+
+- pnpm 以外のパッケージマネージャーは使用しない（preinstall スクリプトで制限）
+- canvas と sharp はネイティブバイナリを含むため、特定のアーキテクチャでのみビルドされる
