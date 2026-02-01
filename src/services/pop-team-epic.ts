@@ -8,96 +8,11 @@ import fs from 'node:fs'
 import crypto from 'node:crypto'
 import sharp from 'sharp'
 
-class PopTeamEpicItem {
-  readonly itemTitle: string
-  readonly itemImages: string[]
-
-  private constructor(title: string, images: string[]) {
-    this.itemTitle = title
-    this.itemImages = images
-  }
-
-  public static async of(url: string) {
-    const logger = Logger.configure('PopTeamEpicItem::of')
-    logger.info(`📃 ${url}`)
-    const response = await axios.get<string>(url, {
-      validateStatus: () => true,
-    })
-    if (response.status !== 200) {
-      logger.warn(`❗ Failed to get item details (${response.status})`)
-      return null
-    }
-    const $ = cheerio.load(response.data)
-    const takecomicImages = PopTeamEpicItem.extractTakecomicImages(
-      response.data
-    )
-    if (takecomicImages.length > 0) {
-      const title = PopTeamEpicItem.extractTakecomicTitle($)
-      return new PopTeamEpicItem(title, takecomicImages)
-    }
-
-    const item = $(`#extMdlSeriesMngrArticle78`)
-    const title = item.find('h3').text().trim()
-    const images: string[] = item
-      .find('img')
-      .map((_, e) => $(e).attr('src') ?? '')
-      .get()
-      .filter((src) => src !== '')
-    if (!title && images.length === 0) {
-      logger.warn('❗ Failed to parse item details')
-      return null
-    }
-    return new PopTeamEpicItem(title, images)
-  }
-
-  private static extractTakecomicTitle($: cheerio.CheerioAPI): string {
-    const title = $('h1.ep-main-h-h').first().text().trim()
-    if (title) {
-      return title
-    }
-    const ogTitle = $('meta[property="og:title"]').attr('content') ?? ''
-    return ogTitle
-      .replace(/\s*\|\s*竹コミ！\s*$/, '')
-      .replace(/^ポプテピピック[・\s]*/, '')
-      .trim()
-  }
-
-  private static extractTakecomicImages(html: string): string[] {
-    const imageUrls: string[] = []
-    const lgRegex =
-      /(?:https?:)?\/\/cdn-public\.comici\.jp\/episode\/[^"'\s]+-lg\.(?:webp|png|jpe?g)/g
-    for (const match of html.matchAll(lgRegex)) {
-      const url = PopTeamEpicItem.normalizeUrl(match[0])
-      if (!imageUrls.includes(url)) {
-        imageUrls.push(url)
-      }
-    }
-
-    if (imageUrls.length > 0) {
-      return imageUrls
-    }
-
-    const smRegex =
-      /(?:https?:)?\/\/cdn-public\.comici\.jp\/episode\/[^"'\s]+-sm\.(?:webp|png|jpe?g)/g
-    for (const match of html.matchAll(smRegex)) {
-      const url = PopTeamEpicItem.normalizeUrl(
-        match[0].replace(/-sm\.(webp|png|jpe?g)$/i, '-lg.$1')
-      )
-      if (!imageUrls.includes(url)) {
-        imageUrls.push(url)
-      }
-    }
-    return imageUrls
-  }
-
-  private static normalizeUrl(url: string): string {
-    if (url.startsWith('//')) {
-      return `https:${url}`
-    }
-    return url
-  }
-}
-
+/**
+ * ポプテピピック RSS サービス
+ *
+ * 竹コミ！からポプテピピックの漫画情報を収集し、RSS フィードを生成する
+ */
 export default class PopTeamEpic extends BaseService {
   private title: string | null = null
   private link: string | null = null
@@ -192,6 +107,12 @@ export default class PopTeamEpic extends BaseService {
     }
   }
 
+  /**
+   * シリーズページからエピソードアイテムを収集する
+   *
+   * @param seriesUrl シリーズページの URL
+   * @returns RSS アイテムの配列
+   */
   private async collectTakecomicItems(seriesUrl: string): Promise<Item[]> {
     const logger = Logger.configure('PopTeamEpic::collectTakecomicItems')
     const response = await axios.get(seriesUrl, {
@@ -205,18 +126,22 @@ export default class PopTeamEpic extends BaseService {
     const items: Item[] = []
     const episodes = this.extractTakecomicEpisodes($)
     for (const episode of episodes) {
-      const item = await PopTeamEpicItem.of(episode.url)
-      if (!item) {
+      // サムネイル画像がない場合はスキップ
+      if (!episode.thumbnailUrl) {
+        logger.warn(`❗ No thumbnail for ${episode.title}`)
         continue
       }
-      const title = item.itemTitle || episode.title
+
       const date = this.parseJstDate(episode.date)
-      const imageUrls = await this.saveImages(item.itemImages, logger)
+      // シリーズページから取得したサムネイル画像を使用
+      const imageUrls = await this.saveImages([episode.thumbnailUrl], logger)
       if (imageUrls.length === 0) {
         continue
       }
 
-      const itemTitle = episode.date ? `${episode.date} ${title}` : title
+      const itemTitle = episode.date
+        ? `${episode.date} ${episode.title}`
+        : episode.title
       logger.info(`📃 ${itemTitle} ${episode.url}`)
       items.push({
         title: itemTitle,
@@ -230,15 +155,23 @@ export default class PopTeamEpic extends BaseService {
     return items
   }
 
+  /**
+   * シリーズページからエピソードリストを抽出する
+   *
+   * @param $ cheerio オブジェクト
+   * @returns エピソード情報の配列（タイトル、URL、日付、サムネイル画像URL）
+   */
   private extractTakecomicEpisodes($: cheerio.CheerioAPI): {
     title: string
     url: string
     date: string
+    thumbnailUrl: string
   }[] {
     const episodes: {
       title: string
       url: string
       date: string
+      thumbnailUrl: string
     }[] = []
     const seen = new Set<string>()
 
@@ -258,7 +191,14 @@ export default class PopTeamEpic extends BaseService {
         .find('.series-eplist-item-meta-date')
         .text()
         .trim()
-      episodes.push({ title, url, date })
+      // サムネイル画像URLを取得（-sm を -lg に変換）
+      const thumbnailSrc = $(element).find('img').first().attr('src') ?? ''
+      const thumbnailUrl = thumbnailSrc
+        ? PopTeamEpic.normalizeUrl(
+            thumbnailSrc.replace(/-sm\.(webp|png|jpe?g)$/i, '-lg.$1')
+          )
+        : ''
+      episodes.push({ title, url, date, thumbnailUrl })
     }
     return episodes
   }
