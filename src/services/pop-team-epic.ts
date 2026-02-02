@@ -395,7 +395,13 @@ export default class PopTeamEpic extends BaseService {
       const scrambledBuffer = Buffer.from(response.data)
 
       // スクランブル配列をパース
-      const scramble: number[] = JSON.parse(pageData.scramble)
+      let scramble: number[]
+      try {
+        scramble = JSON.parse(pageData.scramble)
+      } catch {
+        logger.warn('❗ Invalid scramble JSON, using original image')
+        return await this.saveUnscrambledImage(scrambledBuffer)
+      }
 
       // 画像を復元
       const unscrambledBuffer = await this.unscrambleImage(
@@ -433,6 +439,11 @@ export default class PopTeamEpic extends BaseService {
     const image = sharp(buffer)
     const metadata = await image.metadata()
 
+    // メタデータが取得できない場合は元の画像を返す
+    if (!metadata.width || !metadata.height) {
+      return buffer
+    }
+
     // 実際の画像サイズを使用
     const actualTileWidth = Math.floor(metadata.width / gridSize)
     const actualTileHeight = Math.floor(metadata.height / gridSize)
@@ -461,6 +472,11 @@ export default class PopTeamEpic extends BaseService {
     // scramble[i] = j は、出力位置 i に入力位置 j のタイルを配置する
     const compositeOperations: sharp.OverlayOptions[] = []
     for (const [i, sourceIndex] of scramble.entries()) {
+      // 不正なインデックスの場合は元の画像を返す
+      if (sourceIndex < 0 || sourceIndex >= tiles.length) {
+        return buffer
+      }
+
       const targetRow = Math.floor(i / gridSize)
       const targetCol = i % gridSize
 
