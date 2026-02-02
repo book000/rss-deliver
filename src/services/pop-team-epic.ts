@@ -9,6 +9,38 @@ import crypto from 'node:crypto'
 import sharp from 'sharp'
 
 /**
+ * contentsInfo API のページデータ
+ */
+interface PageContentInfo {
+  /** 画像URL（署名付き） */
+  imageUrl: string
+  /** スクランブル配列（JSON文字列） */
+  scramble: string
+  /** ソート順 */
+  sort: number
+  /** 画像の幅 */
+  width: number
+  /** 画像の高さ */
+  height: number
+  /** 有効期限 */
+  expiresOn: number
+}
+
+/**
+ * contentsInfo API のレスポンス
+ */
+interface ContentsInfoResponse {
+  /** 総ページ数 */
+  totalPages: number
+  /** スクロール方向 */
+  scrollDirection: string
+  /** 見開き指定 */
+  spreadDesignation: number
+  /** ページデータ（キーはページ番号の文字列） */
+  result: Record<string, PageContentInfo | undefined>
+}
+
+/**
  * ポプテピピック RSS サービス
  *
  * 竹コミ！からポプテピピックの漫画情報を収集し、RSS フィードを生成する
@@ -126,33 +158,362 @@ export default class PopTeamEpic extends BaseService {
     const items: Item[] = []
     const episodes = this.extractTakecomicEpisodes($)
     for (const episode of episodes) {
-      // サムネイル画像がない場合はスキップ
-      if (!episode.thumbnailUrl) {
-        logger.warn(`❗ No thumbnail for ${episode.title}`)
-        continue
+      const date = this.parseJstDate(episode.date)
+
+      // エピソードページから全画像を取得
+      const imageUrls = await this.fetchEpisodeImages(episode.url, logger)
+
+      // 画像が取得できなかった場合はサムネイルにフォールバック
+      if (imageUrls.length === 0 && episode.thumbnailUrl) {
+        logger.warn(`⚠️ Falling back to thumbnail for ${episode.title}`)
+        const thumbnailUrls = await this.saveImages(
+          [episode.thumbnailUrl],
+          logger
+        )
+        if (thumbnailUrls.length > 0) {
+          imageUrls.push(...thumbnailUrls)
+        }
       }
 
-      const date = this.parseJstDate(episode.date)
-      // シリーズページから取得したサムネイル画像を使用
-      const imageUrls = await this.saveImages([episode.thumbnailUrl], logger)
       if (imageUrls.length === 0) {
+        logger.warn(`❗ No images for ${episode.title}`)
         continue
       }
 
       const itemTitle = episode.date
         ? `${episode.date} ${episode.title}`
         : episode.title
-      logger.info(`📃 ${itemTitle} ${episode.url}`)
+      logger.info(`📃 ${itemTitle} ${episode.url} (${imageUrls.length} images)`)
       items.push({
         title: itemTitle,
         link: episode.url,
         'content:encoded': imageUrls
-          .map((index) => `<img src="${index}">`)
+          .map((url) => `<img src="${url}">`)
           .join('<br>'),
         ...(date ? { pubDate: date.toUTCString() } : {}),
       })
     }
     return items
+  }
+
+  /**
+   * エピソードページから全画像を取得する
+   *
+   * @param episodeUrl エピソードページの URL
+   * @param logger ロガー
+   * @returns 画像 URL の配列
+   */
+  private async fetchEpisodeImages(
+    episodeUrl: string,
+    logger: Logger
+  ): Promise<string[]> {
+    try {
+      // エピソードページを取得
+      const response = await axios.get(episodeUrl, {
+        validateStatus: () => true,
+      })
+      if (response.status !== 200) {
+        logger.warn(`❗ Failed to fetch episode page (${response.status})`)
+        return []
+      }
+
+      // viewerId を抽出
+      const viewerId = this.extractViewerId(response.data)
+      if (!viewerId) {
+        logger.warn('❗ viewerId not found in episode page')
+        return []
+      }
+
+      // contentsInfo API を呼び出し
+      const contentsInfo = await this.fetchContentsInfo(viewerId, episodeUrl)
+      if (!contentsInfo || contentsInfo.totalPages === 0) {
+        logger.warn('❗ No pages found in contentsInfo')
+        return []
+      }
+
+      logger.info(`📖 Found ${contentsInfo.totalPages} pages`)
+
+      // 各ページの画像を取得・復元
+      const imageUrls: string[] = []
+      for (let i = 0; i < contentsInfo.totalPages; i++) {
+        const pageData = contentsInfo.result[String(i)]
+        if (!pageData) {
+          continue
+        }
+
+        const imageUrl = await this.fetchAndUnscrambleImage(
+          pageData,
+          episodeUrl,
+          logger
+        )
+        if (imageUrl) {
+          imageUrls.push(imageUrl)
+        }
+      }
+
+      return imageUrls
+    } catch (error) {
+      logger.warn(`❗ Failed to fetch episode images: ${String(error)}`)
+      return []
+    }
+  }
+
+  /**
+   * HTML から viewerId を抽出する
+   *
+   * @param html HTML 文字列
+   * @returns viewerId または null
+   */
+  private extractViewerId(html: string): string | null {
+    // data-comici-viewer-id 属性から viewerId を探す
+    const dataAttrRegex = /data-comici-viewer-id="([a-f0-9]{32})"/i
+    const dataAttrMatch = dataAttrRegex.exec(html)
+    if (dataAttrMatch?.[1]) {
+      return dataAttrMatch[1]
+    }
+
+    // __next_f (React Server Components) から viewerId を探す（フォールバック）
+    const jsonRegex = /"viewerId":"([a-f0-9]{32})"/i
+    const jsonMatch = jsonRegex.exec(html)
+    return jsonMatch?.[1] ?? null
+  }
+
+  /**
+   * contentsInfo API を呼び出す
+   *
+   * API は page-to が実際のページ数を超えると 400 エラーを返すため、
+   * まず page-to=1 で totalPages を取得し、その後全ページを取得する
+   *
+   * @param viewerId ビューアー ID
+   * @param episodeUrl エピソード URL（Referer ヘッダーに使用）
+   * @returns API レスポンス
+   */
+  private async fetchContentsInfo(
+    viewerId: string,
+    episodeUrl: string
+  ): Promise<ContentsInfoResponse | null> {
+    const logger = Logger.configure('PopTeamEpic::fetchContentsInfo')
+
+    const headers = {
+      Origin: 'https://takecomic.jp',
+      Referer: episodeUrl,
+      'User-Agent':
+        'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36',
+      Accept: 'application/json, text/plain, */*',
+      'Accept-Language': 'ja,en-US;q=0.9,en;q=0.8',
+    }
+
+    // ステップ1: page-to=1 で totalPages を取得
+    const initialParams = new URLSearchParams({
+      'user-id': '',
+      'comici-viewer-id': viewerId,
+      'page-from': '0',
+      'page-to': '1',
+    })
+    const initialUrl = `https://takecomic.jp/api/book/contentsInfo?${initialParams.toString()}`
+
+    logger.info(`📡 Fetching totalPages: viewerId=${viewerId}`)
+
+    const initialResponse = await axios.get<ContentsInfoResponse>(initialUrl, {
+      validateStatus: () => true,
+      headers,
+    })
+
+    if (initialResponse.status !== 200) {
+      logger.warn(
+        `❌ API error (initial): status=${initialResponse.status}, data=${JSON.stringify(initialResponse.data)}`
+      )
+      return null
+    }
+
+    const totalPages = initialResponse.data.totalPages
+    logger.info(`📖 totalPages=${totalPages}`)
+
+    if (totalPages <= 1) {
+      // 1 ページのみの場合は初回レスポンスをそのまま返す
+      return initialResponse.data
+    }
+
+    // ステップ2: 全ページを取得
+    const fullParams = new URLSearchParams({
+      'user-id': '',
+      'comici-viewer-id': viewerId,
+      'page-from': '0',
+      'page-to': String(totalPages),
+    })
+    const fullUrl = `https://takecomic.jp/api/book/contentsInfo?${fullParams.toString()}`
+
+    const fullResponse = await axios.get<ContentsInfoResponse>(fullUrl, {
+      validateStatus: () => true,
+      headers,
+    })
+
+    if (fullResponse.status !== 200) {
+      logger.warn(
+        `❌ API error (full): status=${fullResponse.status}, data=${JSON.stringify(fullResponse.data)}`
+      )
+      return null
+    }
+
+    logger.info(`✅ Fetched ${totalPages} pages successfully`)
+
+    return fullResponse.data
+  }
+
+  /**
+   * スクランブルされた画像を取得し、復元して保存する
+   *
+   * @param pageData ページデータ
+   * @param episodeUrl エピソード URL（Referer ヘッダーに使用）
+   * @param logger ロガー
+   * @returns 保存した画像の URL
+   */
+  private async fetchAndUnscrambleImage(
+    pageData: PageContentInfo,
+    episodeUrl: string,
+    logger: Logger
+  ): Promise<string | null> {
+    try {
+      // 画像をダウンロード（CloudFront 署名付き URL には適切なヘッダーが必要）
+      const response = await axios.get(pageData.imageUrl, {
+        responseType: 'arraybuffer',
+        validateStatus: () => true,
+        headers: {
+          Referer: episodeUrl,
+          'User-Agent':
+            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36',
+          Accept:
+            'image/avif,image/webp,image/apng,image/svg+xml,image/*,*/*;q=0.8',
+        },
+      })
+
+      if (response.status !== 200) {
+        logger.warn(`❗ Failed to download image (${response.status})`)
+        return null
+      }
+
+      const scrambledBuffer = Buffer.from(response.data)
+
+      // スクランブル配列をパース
+      const scramble: number[] = JSON.parse(pageData.scramble)
+
+      // 画像を復元
+      const unscrambledBuffer = await this.unscrambleImage(
+        scrambledBuffer,
+        scramble
+      )
+
+      // 画像を保存
+      return await this.saveUnscrambledImage(unscrambledBuffer)
+    } catch (error) {
+      logger.warn(`❗ Failed to unscramble image: ${String(error)}`)
+      return null
+    }
+  }
+
+  /**
+   * スクランブルされた画像を復元する
+   *
+   * @param buffer スクランブルされた画像バッファ
+   * @param scramble スクランブル配列
+   * @returns 復元された画像バッファ
+   */
+  private async unscrambleImage(
+    buffer: Buffer,
+    scramble: number[]
+  ): Promise<Buffer> {
+    // グリッドサイズを計算（通常は 4x4 = 16 タイル）
+    const gridSize = Math.sqrt(scramble.length)
+    if (!Number.isInteger(gridSize)) {
+      // スクランブルなしとして元の画像を返す
+      return buffer
+    }
+
+    // 元画像をロード
+    const image = sharp(buffer)
+    const metadata = await image.metadata()
+
+    // 実際の画像サイズを使用
+    const actualTileWidth = Math.floor(metadata.width / gridSize)
+    const actualTileHeight = Math.floor(metadata.height / gridSize)
+
+    // 各タイルを抽出
+    const tiles: Buffer[] = []
+    for (let i = 0; i < scramble.length; i++) {
+      const row = Math.floor(i / gridSize)
+      const col = i % gridSize
+      const left = col * actualTileWidth
+      const top = row * actualTileHeight
+
+      const tile = await sharp(buffer)
+        .extract({
+          left,
+          top,
+          width: actualTileWidth,
+          height: actualTileHeight,
+        })
+        .toBuffer()
+
+      tiles.push(tile)
+    }
+
+    // スクランブル配列に従ってタイルを再配置
+    // scramble[i] = j は、出力位置 i に入力位置 j のタイルを配置する
+    const compositeOperations: sharp.OverlayOptions[] = []
+    for (const [i, sourceIndex] of scramble.entries()) {
+      const targetRow = Math.floor(i / gridSize)
+      const targetCol = i % gridSize
+
+      compositeOperations.push({
+        input: tiles[sourceIndex],
+        left: targetCol * actualTileWidth,
+        top: targetRow * actualTileHeight,
+      })
+    }
+
+    // 復元画像を作成
+    const unscrambled = await sharp({
+      create: {
+        width: actualTileWidth * gridSize,
+        height: actualTileHeight * gridSize,
+        channels: 3,
+        background: { r: 255, g: 255, b: 255 },
+      },
+    })
+      .composite(compositeOperations)
+      .jpeg({ quality: 90 })
+      .toBuffer()
+
+    return unscrambled
+  }
+
+  /**
+   * 復元した画像を保存する
+   *
+   * @param buffer 画像バッファ
+   * @returns 保存した画像の URL
+   */
+  private async saveUnscrambledImage(buffer: Buffer): Promise<string> {
+    if (!fs.existsSync('output/popute/')) {
+      fs.mkdirSync('output/popute/', { recursive: true })
+    }
+
+    // トリミングとパディングを追加
+    const processedBuffer = await sharp(buffer)
+      .trim()
+      .extend({
+        top: 10,
+        bottom: 10,
+        left: 10,
+        right: 10,
+        background: { r: 255, g: 255, b: 255, alpha: 1 },
+      })
+      .jpeg({ quality: 90 })
+      .toBuffer()
+
+    const hash = this.hash(processedBuffer)
+    fs.writeFileSync(`output/popute/${hash}.jpg`, processedBuffer)
+    return `https://book000.github.io/rss-deliver/popute/${hash}.jpg`
   }
 
   /**
