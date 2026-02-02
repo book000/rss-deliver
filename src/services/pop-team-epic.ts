@@ -321,7 +321,7 @@ export default class PopTeamEpic extends BaseService {
 
     if (initialResponse.status !== 200) {
       logger.warn(
-        `❌ API error (initial): status=${initialResponse.status}, data=${JSON.stringify(initialResponse.data)}`
+        `❌ API error (initial): status=${initialResponse.status}, viewerId=${viewerId}`
       )
       return null
     }
@@ -350,7 +350,7 @@ export default class PopTeamEpic extends BaseService {
 
     if (fullResponse.status !== 200) {
       logger.warn(
-        `❌ API error (full): status=${fullResponse.status}, data=${JSON.stringify(fullResponse.data)}`
+        `❌ API error (full): status=${fullResponse.status}, viewerId=${viewerId}`
       )
       return null
     }
@@ -448,7 +448,7 @@ export default class PopTeamEpic extends BaseService {
     const actualTileWidth = Math.floor(metadata.width / gridSize)
     const actualTileHeight = Math.floor(metadata.height / gridSize)
 
-    // 各タイルを抽出
+    // 各タイルを抽出（clone() を使用して再デコードを避ける）
     const tiles: Buffer[] = []
     for (let i = 0; i < scramble.length; i++) {
       const row = Math.floor(i / gridSize)
@@ -456,7 +456,8 @@ export default class PopTeamEpic extends BaseService {
       const left = col * actualTileWidth
       const top = row * actualTileHeight
 
-      const tile = await sharp(buffer)
+      const tile = await image
+        .clone()
         .extract({
           left,
           top,
