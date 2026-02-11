@@ -4,6 +4,7 @@ import CollectResult, { Item } from '@/model/collect-result'
 import ServiceInformation from '@/model/service-information'
 import axios from 'axios'
 import * as cheerio from 'cheerio'
+import { XMLParser } from 'fast-xml-parser'
 import fs from 'node:fs'
 import crypto from 'node:crypto'
 import sharp from 'sharp'
@@ -38,6 +39,61 @@ interface ContentsInfoResponse {
   spreadDesignation: number
   /** ページデータ（ページ順に格納された配列） */
   result: PageContentInfo[]
+}
+
+/**
+ * 竹コミ！公式 RSS のサムネイル情報
+ */
+interface TakecomicRssMediaThumbnail {
+  /** サムネイル画像 URL */
+  '@_url'?: string
+}
+
+/**
+ * 竹コミ！公式 RSS の item 情報
+ */
+interface TakecomicRssItem {
+  /** エピソードタイトル */
+  title?: string
+  /** エピソード URL */
+  link?: string
+  /** 公開日時 */
+  pubDate?: string
+  /** サムネイル情報 */
+  'media:thumbnail'?: TakecomicRssMediaThumbnail
+}
+
+/**
+ * 竹コミ！公式 RSS の channel 情報
+ */
+interface TakecomicRssChannel {
+  /** エピソード一覧 */
+  item?: TakecomicRssItem | TakecomicRssItem[]
+}
+
+/**
+ * 竹コミ！公式 RSS のレスポンス
+ */
+interface TakecomicRssResponse {
+  /** RSS 本体 */
+  rss?: {
+    /** チャンネル情報 */
+    channel?: TakecomicRssChannel
+  }
+}
+
+/**
+ * ポプテピピックのエピソード情報
+ */
+interface TakecomicEpisode {
+  /** タイトル */
+  title: string
+  /** エピソード URL */
+  url: string
+  /** 公開日（YYYY/MM/DD） */
+  date: string
+  /** サムネイル画像 URL */
+  thumbnailUrl: string
 }
 
 /**
@@ -155,28 +211,16 @@ export default class PopTeamEpic extends BaseService {
   }
 
   /**
-   * シリーズページからエピソードアイテムを収集する
+   * エピソード一覧を収集して RSS アイテムを生成する
    *
    * @param seriesUrl シリーズページの URL
    * @returns RSS アイテムの配列
    */
   private async collectTakecomicItems(seriesUrl: string): Promise<Item[]> {
     const logger = Logger.configure('PopTeamEpic::collectTakecomicItems')
-    const response = await axios.get(seriesUrl, {
-      validateStatus: () => true,
-      headers: {
-        ...PopTeamEpic.COMMON_HEADERS,
-        Accept:
-          'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
-      },
-    })
-    if (response.status !== 200) {
-      throw new Error(`Failed to fetch: ${response.status}`)
-    }
-    const $ = cheerio.load(response.data)
-
     const items: Item[] = []
-    const episodes = this.extractTakecomicEpisodes($)
+    const episodes = await this.fetchTakecomicEpisodesFromRss(seriesUrl, logger)
+
     for (const episode of episodes) {
       const date = this.parseJstDate(episode.date)
 
@@ -214,6 +258,72 @@ export default class PopTeamEpic extends BaseService {
       })
     }
     return items
+  }
+
+  /**
+   * 公式 RSS からエピソード一覧を取得する
+   *
+   * @param seriesUrl シリーズページの URL
+   * @param logger ロガー
+   * @returns エピソード情報の配列
+   */
+  private async fetchTakecomicEpisodesFromRss(
+    seriesUrl: string,
+    logger: Logger
+  ): Promise<TakecomicEpisode[]> {
+    const rssUrl = `${seriesUrl.replace(/\/$/, '')}/rss`
+    const response = await axios.get<string>(rssUrl, {
+      validateStatus: () => true,
+    })
+    if (response.status !== 200) {
+      logger.warn(
+        `❗ Failed to fetch official RSS (${response.status}) ${rssUrl}`
+      )
+      return []
+    }
+
+    let rawItems: TakecomicRssItem | TakecomicRssItem[] | undefined
+    try {
+      const parser = new XMLParser({
+        ignoreAttributes: false,
+      })
+      const rss = parser.parse(response.data) as TakecomicRssResponse
+      rawItems = rss.rss?.channel?.item
+    } catch (error) {
+      logger.warn(`❗ Failed to parse official RSS: ${String(error)}`)
+      return []
+    }
+    if (!rawItems) {
+      logger.warn('❗ No item entries in official RSS')
+      return []
+    }
+
+    const items = Array.isArray(rawItems) ? rawItems : [rawItems]
+    const episodes: TakecomicEpisode[] = []
+    const seen = new Set<string>()
+
+    for (const item of items) {
+      const title = item.title?.trim() ?? ''
+      const url = this.normalizeEpisodeUrl(item.link ?? '')
+      if (!title || !url || seen.has(url)) {
+        continue
+      }
+      seen.add(url)
+
+      const date = this.formatRssPubDateToJstDate(item.pubDate ?? '')
+      const thumbnailUrl = PopTeamEpic.normalizeUrl(
+        item['media:thumbnail']?.['@_url'] ?? ''
+      )
+
+      episodes.push({
+        title,
+        url,
+        date,
+        thumbnailUrl,
+      })
+    }
+
+    return episodes.slice(0, 10)
   }
 
   /**
@@ -560,51 +670,44 @@ export default class PopTeamEpic extends BaseService {
   }
 
   /**
-   * シリーズページからエピソードリストを抽出する
+   * 公式 RSS の pubDate を JST の日付文字列へ変換する
    *
-   * @param $ cheerio オブジェクト
-   * @returns エピソード情報の配列（タイトル、URL、日付、サムネイル画像URL）
+   * @param pubDate 公式 RSS の pubDate
+   * @returns YYYY/MM/DD 形式の日付文字列
    */
-  private extractTakecomicEpisodes($: ReturnType<typeof cheerio.load>): {
-    title: string
-    url: string
-    date: string
-    thumbnailUrl: string
-  }[] {
-    const episodes: {
-      title: string
-      url: string
-      date: string
-      thumbnailUrl: string
-    }[] = []
-    const seen = new Set<string>()
-
-    for (const element of $('.series-eplist-item')) {
-      const anchor = $(element).find('a.series-eplist-item-link').first()
-      const href = anchor.attr('href') ?? ''
-      if (!href) {
-        continue
-      }
-      const url = PopTeamEpic.normalizeUrl(href)
-      if (seen.has(url)) {
-        continue
-      }
-      seen.add(url)
-      const title = $(element).find('.series-eplist-item-h-text').text().trim()
-      const date = $(element)
-        .find('.series-eplist-item-meta-date')
-        .text()
-        .trim()
-      // サムネイル画像URLを取得（-sm を -lg に変換）
-      const thumbnailSrc = $(element).find('img').first().attr('src') ?? ''
-      const thumbnailUrl = thumbnailSrc
-        ? PopTeamEpic.normalizeUrl(
-            thumbnailSrc.replace(/-sm\.(webp|png|jpe?g)$/i, '-lg.$1')
-          )
-        : ''
-      episodes.push({ title, url, date, thumbnailUrl })
+  private formatRssPubDateToJstDate(pubDate: string): string {
+    const parsedDate = new Date(pubDate)
+    if (Number.isNaN(parsedDate.getTime())) {
+      return ''
     }
-    return episodes
+
+    const jstDate = new Date(parsedDate.getTime() + 9 * 60 * 60 * 1000)
+    const year = jstDate.getUTCFullYear()
+    const month = String(jstDate.getUTCMonth() + 1).padStart(2, '0')
+    const day = String(jstDate.getUTCDate()).padStart(2, '0')
+    return `${year}/${month}/${day}`
+  }
+
+  /**
+   * 公式 RSS の URL をエピソード URL として正規化する
+   *
+   * @param url 公式 RSS 内の URL
+   * @returns クエリを除去したエピソード URL
+   */
+  private normalizeEpisodeUrl(url: string): string {
+    const normalizedUrl = PopTeamEpic.normalizeUrl(url)
+    if (!normalizedUrl) {
+      return ''
+    }
+
+    try {
+      const parsedUrl = new URL(normalizedUrl)
+      parsedUrl.search = ''
+      parsedUrl.hash = ''
+      return parsedUrl.toString().replace(/\/$/, '')
+    } catch {
+      return normalizedUrl
+    }
   }
 
   private async saveImages(
