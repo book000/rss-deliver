@@ -501,13 +501,15 @@ export default class PopTeamEpic extends BaseService {
       for (let r = 0; r < gridSize; r++) {
         const srcIndex = scramble[destTileIndex]
 
-        if (srcIndex >= 0 && srcIndex < tiles.length) {
-          compositeOperations.push({
-            input: tiles[srcIndex],
-            left: c * actualTileWidth,
-            top: r * actualTileHeight,
-          })
+        if (srcIndex < 0 || srcIndex >= tiles.length) {
+          return buffer
         }
+
+        compositeOperations.push({
+          input: tiles[srcIndex],
+          left: c * actualTileWidth,
+          top: r * actualTileHeight,
+        })
         destTileIndex++
       }
     }
