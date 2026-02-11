@@ -51,6 +51,12 @@ export default class PopTeamEpic extends BaseService {
   private image: string | null = null
   private siteName: string | null = null
 
+  private static readonly COMMON_HEADERS = {
+    'User-Agent':
+      'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36',
+    'Accept-Language': 'ja,en-US;q=0.9,en;q=0.8',
+  }
+
   information(): ServiceInformation {
     if (!this.title || !this.link || !this.image || !this.siteName) {
       throw new Error('Service is not initialized')
@@ -119,11 +125,9 @@ export default class PopTeamEpic extends BaseService {
     const response = await axios.get(takecomicSeriesUrl, {
       validateStatus: () => true,
       headers: {
-        'User-Agent':
-          'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36',
+        ...PopTeamEpic.COMMON_HEADERS,
         Accept:
           'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
-        'Accept-Language': 'ja,en-US;q=0.9,en;q=0.8',
       },
     })
     if (response.status !== 200) {
@@ -161,11 +165,9 @@ export default class PopTeamEpic extends BaseService {
     const response = await axios.get(seriesUrl, {
       validateStatus: () => true,
       headers: {
-        'User-Agent':
-          'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36',
+        ...PopTeamEpic.COMMON_HEADERS,
         Accept:
           'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
-        'Accept-Language': 'ja,en-US;q=0.9,en;q=0.8',
       },
     })
     if (response.status !== 200) {
@@ -230,11 +232,9 @@ export default class PopTeamEpic extends BaseService {
       const response = await axios.get(episodeUrl, {
         validateStatus: () => true,
         headers: {
-          'User-Agent':
-            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36',
+          ...PopTeamEpic.COMMON_HEADERS,
           Accept:
             'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
-          'Accept-Language': 'ja,en-US;q=0.9,en;q=0.8',
         },
       })
       if (response.status !== 200) {
@@ -261,7 +261,7 @@ export default class PopTeamEpic extends BaseService {
       // 各ページの画像を取得・復元
       const imageUrls: string[] = []
       for (let i = 0; i < contentsInfo.totalPages; i++) {
-        const pageData = contentsInfo.result[i]
+        const pageData = contentsInfo.result[i] as PageContentInfo | undefined
         if (!pageData) {
           continue
         }
@@ -322,10 +322,8 @@ export default class PopTeamEpic extends BaseService {
     const headers = {
       Origin: 'https://takecomic.jp',
       Referer: episodeUrl,
-      'User-Agent':
-        'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36',
+      ...PopTeamEpic.COMMON_HEADERS,
       Accept: 'application/json, text/plain, */*',
-      'Accept-Language': 'ja,en-US;q=0.9,en;q=0.8',
     }
 
     // ステップ1: page-to=1 で totalPages を取得
@@ -405,8 +403,7 @@ export default class PopTeamEpic extends BaseService {
         validateStatus: () => true,
         headers: {
           Referer: episodeUrl,
-          'User-Agent':
-            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36',
+          ...PopTeamEpic.COMMON_HEADERS,
           Accept:
             'image/avif,image/webp,image/apng,image/svg+xml,image/*,*/*;q=0.8',
         },
@@ -499,10 +496,10 @@ export default class PopTeamEpic extends BaseService {
     // scramble[i] = srcIndex
     // 出力も Column-Major 順序で配置する
     const compositeOperations: sharp.OverlayOptions[] = []
-    let f = 0
+    let destTileIndex = 0
     for (let c = 0; c < gridSize; c++) {
       for (let r = 0; r < gridSize; r++) {
-        const srcIndex = scramble[f]
+        const srcIndex = scramble[destTileIndex]
 
         if (srcIndex >= 0 && srcIndex < tiles.length) {
           compositeOperations.push({
@@ -511,7 +508,7 @@ export default class PopTeamEpic extends BaseService {
             top: r * actualTileHeight,
           })
         }
-        f++
+        destTileIndex++
       }
     }
 
