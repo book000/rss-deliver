@@ -282,11 +282,17 @@ export default class PopTeamEpic extends BaseService {
       return []
     }
 
-    const parser = new XMLParser({
-      ignoreAttributes: false,
-    })
-    const rss = parser.parse(response.data) as TakecomicRssResponse
-    const rawItems = rss.rss?.channel?.item
+    let rawItems: TakecomicRssItem | TakecomicRssItem[] | undefined
+    try {
+      const parser = new XMLParser({
+        ignoreAttributes: false,
+      })
+      const rss = parser.parse(response.data) as TakecomicRssResponse
+      rawItems = rss.rss?.channel?.item
+    } catch (error) {
+      logger.warn(`❗ Failed to parse official RSS: ${String(error)}`)
+      return []
+    }
     if (!rawItems) {
       logger.warn('❗ No item entries in official RSS')
       return []
