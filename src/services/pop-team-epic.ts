@@ -36,8 +36,8 @@ interface ContentsInfoResponse {
   scrollDirection: string
   /** 見開き指定 */
   spreadDesignation: number
-  /** ページデータ（キーはページ番号の文字列） */
-  result: Record<string, PageContentInfo | undefined>
+  /** ページデータ（ページ順に格納された配列） */
+  result: PageContentInfo[]
 }
 
 /**
@@ -50,6 +50,12 @@ export default class PopTeamEpic extends BaseService {
   private link: string | null = null
   private image: string | null = null
   private siteName: string | null = null
+
+  private static readonly COMMON_HEADERS = {
+    'User-Agent':
+      'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36',
+    'Accept-Language': 'ja,en-US;q=0.9,en;q=0.8',
+  }
 
   information(): ServiceInformation {
     if (!this.title || !this.link || !this.image || !this.siteName) {
@@ -114,11 +120,20 @@ export default class PopTeamEpic extends BaseService {
     siteName: string
     source: 'takecomic'
   } | null> {
+    const logger = Logger.configure('PopTeamEpic::fetchTakecomicSeason')
     const takecomicSeriesUrl = 'https://takecomic.jp/series/8f3616ce97c36'
     const response = await axios.get(takecomicSeriesUrl, {
       validateStatus: () => true,
+      headers: {
+        ...PopTeamEpic.COMMON_HEADERS,
+        Accept:
+          'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+      },
     })
     if (response.status !== 200) {
+      logger.warn(
+        `❗ Failed to fetch takecomic series page (status=${response.status})`
+      )
       return null
     }
 
@@ -149,6 +164,11 @@ export default class PopTeamEpic extends BaseService {
     const logger = Logger.configure('PopTeamEpic::collectTakecomicItems')
     const response = await axios.get(seriesUrl, {
       validateStatus: () => true,
+      headers: {
+        ...PopTeamEpic.COMMON_HEADERS,
+        Accept:
+          'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+      },
     })
     if (response.status !== 200) {
       throw new Error(`Failed to fetch: ${response.status}`)
@@ -211,6 +231,11 @@ export default class PopTeamEpic extends BaseService {
       // エピソードページを取得
       const response = await axios.get(episodeUrl, {
         validateStatus: () => true,
+        headers: {
+          ...PopTeamEpic.COMMON_HEADERS,
+          Accept:
+            'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+        },
       })
       if (response.status !== 200) {
         logger.warn(`❗ Failed to fetch episode page (${response.status})`)
@@ -236,7 +261,7 @@ export default class PopTeamEpic extends BaseService {
       // 各ページの画像を取得・復元
       const imageUrls: string[] = []
       for (let i = 0; i < contentsInfo.totalPages; i++) {
-        const pageData = contentsInfo.result[String(i)]
+        const pageData = contentsInfo.result[i] as PageContentInfo | undefined
         if (!pageData) {
           continue
         }
@@ -297,10 +322,8 @@ export default class PopTeamEpic extends BaseService {
     const headers = {
       Origin: 'https://takecomic.jp',
       Referer: episodeUrl,
-      'User-Agent':
-        'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36',
+      ...PopTeamEpic.COMMON_HEADERS,
       Accept: 'application/json, text/plain, */*',
-      'Accept-Language': 'ja,en-US;q=0.9,en;q=0.8',
     }
 
     // ステップ1: page-to=1 で totalPages を取得
@@ -380,8 +403,7 @@ export default class PopTeamEpic extends BaseService {
         validateStatus: () => true,
         headers: {
           Referer: episodeUrl,
-          'User-Agent':
-            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36',
+          ...PopTeamEpic.COMMON_HEADERS,
           Accept:
             'image/avif,image/webp,image/apng,image/svg+xml,image/*,*/*;q=0.8',
         },
@@ -449,43 +471,47 @@ export default class PopTeamEpic extends BaseService {
     const actualTileHeight = Math.floor(metadata.height / gridSize)
 
     // 各タイルを抽出（clone() を使用して再デコードを避ける）
+    // Column-Major 順序で抽出する: (0,0), (0,1), (0,2), (0,3), (1,0)...
     const tiles: Buffer[] = []
-    for (let i = 0; i < scramble.length; i++) {
-      const row = Math.floor(i / gridSize)
-      const col = i % gridSize
-      const left = col * actualTileWidth
-      const top = row * actualTileHeight
+    for (let c = 0; c < gridSize; c++) {
+      for (let r = 0; r < gridSize; r++) {
+        const left = c * actualTileWidth
+        const top = r * actualTileHeight
 
-      const tile = await image
-        .clone()
-        .extract({
-          left,
-          top,
-          width: actualTileWidth,
-          height: actualTileHeight,
-        })
-        .toBuffer()
+        const tile = await image
+          .clone()
+          .extract({
+            left,
+            top,
+            width: actualTileWidth,
+            height: actualTileHeight,
+          })
+          .toBuffer()
 
-      tiles.push(tile)
+        tiles.push(tile)
+      }
     }
 
     // スクランブル配列に従ってタイルを再配置
-    // scramble[i] = j は、出力位置 i に入力位置 j のタイルを配置する
+    // scramble[i] = srcIndex
+    // 出力も Column-Major 順序で配置する
     const compositeOperations: sharp.OverlayOptions[] = []
-    for (const [i, sourceIndex] of scramble.entries()) {
-      // 不正なインデックスの場合は元の画像を返す
-      if (sourceIndex < 0 || sourceIndex >= tiles.length) {
-        return buffer
+    let destTileIndex = 0
+    for (let c = 0; c < gridSize; c++) {
+      for (let r = 0; r < gridSize; r++) {
+        const srcIndex = scramble[destTileIndex]
+
+        if (srcIndex < 0 || srcIndex >= tiles.length) {
+          return buffer
+        }
+
+        compositeOperations.push({
+          input: tiles[srcIndex],
+          left: c * actualTileWidth,
+          top: r * actualTileHeight,
+        })
+        destTileIndex++
       }
-
-      const targetRow = Math.floor(i / gridSize)
-      const targetCol = i % gridSize
-
-      compositeOperations.push({
-        input: tiles[sourceIndex],
-        left: targetCol * actualTileWidth,
-        top: targetRow * actualTileHeight,
-      })
     }
 
     // 復元画像を作成
@@ -539,7 +565,7 @@ export default class PopTeamEpic extends BaseService {
    * @param $ cheerio オブジェクト
    * @returns エピソード情報の配列（タイトル、URL、日付、サムネイル画像URL）
    */
-  private extractTakecomicEpisodes($: cheerio.CheerioAPI): {
+  private extractTakecomicEpisodes($: ReturnType<typeof cheerio.load>): {
     title: string
     url: string
     date: string
