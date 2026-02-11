@@ -213,21 +213,13 @@ export default class PopTeamEpic extends BaseService {
   /**
    * エピソード一覧を収集して RSS アイテムを生成する
    *
-   * まず公式 RSS から一覧を取得し、失敗時はシリーズ HTML 抽出にフォールバックする。
-   *
    * @param seriesUrl シリーズページの URL
    * @returns RSS アイテムの配列
    */
   private async collectTakecomicItems(seriesUrl: string): Promise<Item[]> {
     const logger = Logger.configure('PopTeamEpic::collectTakecomicItems')
     const items: Item[] = []
-    let episodes = await this.fetchTakecomicEpisodesFromRss(seriesUrl, logger)
-    if (episodes.length === 0) {
-      logger.warn(
-        '⚠️ Failed to get episodes from official RSS, falling back to series HTML'
-      )
-      episodes = await this.fetchTakecomicEpisodesFromHtml(seriesUrl)
-    }
+    const episodes = await this.fetchTakecomicEpisodesFromRss(seriesUrl, logger)
 
     for (const episode of episodes) {
       const date = this.parseJstDate(episode.date)
@@ -326,30 +318,6 @@ export default class PopTeamEpic extends BaseService {
     }
 
     return episodes.slice(0, 10)
-  }
-
-  /**
-   * シリーズ HTML からエピソード一覧を取得する
-   *
-   * @param seriesUrl シリーズページの URL
-   * @returns エピソード情報の配列
-   */
-  private async fetchTakecomicEpisodesFromHtml(
-    seriesUrl: string
-  ): Promise<TakecomicEpisode[]> {
-    const response = await axios.get(seriesUrl, {
-      validateStatus: () => true,
-      headers: {
-        ...PopTeamEpic.COMMON_HEADERS,
-        Accept:
-          'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
-      },
-    })
-    if (response.status !== 200) {
-      throw new Error(`Failed to fetch: ${response.status}`)
-    }
-    const $ = cheerio.load(response.data)
-    return this.extractTakecomicEpisodes($)
   }
 
   /**
@@ -693,46 +661,6 @@ export default class PopTeamEpic extends BaseService {
     const hash = this.hash(processedBuffer)
     fs.writeFileSync(`output/popute/${hash}.jpg`, processedBuffer)
     return `https://book000.github.io/rss-deliver/popute/${hash}.jpg`
-  }
-
-  /**
-   * シリーズ HTML からエピソードリストを抽出する
-   *
-   * @param $ cheerio オブジェクト
-   * @returns エピソード情報の配列（タイトル、URL、日付、サムネイル画像 URL）
-   */
-  private extractTakecomicEpisodes(
-    $: ReturnType<typeof cheerio.load>
-  ): TakecomicEpisode[] {
-    const episodes: TakecomicEpisode[] = []
-    const seen = new Set<string>()
-
-    for (const element of $('.series-eplist-item')) {
-      const anchor = $(element).find('a.series-eplist-item-link').first()
-      const href = anchor.attr('href') ?? ''
-      if (!href) {
-        continue
-      }
-      const url = PopTeamEpic.normalizeUrl(href)
-      if (seen.has(url)) {
-        continue
-      }
-      seen.add(url)
-      const title = $(element).find('.series-eplist-item-h-text').text().trim()
-      const date = $(element)
-        .find('.series-eplist-item-meta-date')
-        .text()
-        .trim()
-      // サムネイル画像URLを取得（-sm を -lg に変換）
-      const thumbnailSrc = $(element).find('img').first().attr('src') ?? ''
-      const thumbnailUrl = thumbnailSrc
-        ? PopTeamEpic.normalizeUrl(
-            thumbnailSrc.replace(/-sm\.(webp|png|jpe?g)$/i, '-lg.$1')
-          )
-        : ''
-      episodes.push({ title, url, date, thumbnailUrl })
-    }
-    return episodes
   }
 
   /**
