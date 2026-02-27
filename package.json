@@ -34,7 +34,7 @@
     "axios": "1.13.5",
     "canvas": "3.2.1",
     "cheerio": "1.2.0",
-    "eslint": "9.39.3",
+    "eslint": "10.0.2",
     "eslint-config-standard": "17.1.0",
     "eslint-plugin-import": "2.32.0",
     "eslint-plugin-n": "17.24.0",
