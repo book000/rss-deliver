@@ -30,7 +30,7 @@
   "devDependencies": {
     "@book000/eslint-config": "1.13.10",
     "@book000/node-utils": "1.24.71",
-    "@types/node": "24.10.13",
+    "@types/node": "24.10.15",
     "axios": "1.13.5",
     "canvas": "3.2.1",
     "cheerio": "1.2.0",
