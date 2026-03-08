@@ -7,6 +7,10 @@ settings:
 importers:
 
   .:
+    dependencies:
+      node-ical:
+        specifier: ^0.25.5
+        version: 0.25.5
     devDependencies:
       '@book000/eslint-config':
         specifier: 1.13.12
@@ -444,6 +448,10 @@ packages:
     engines: {node: ^18.17.0 || ^20.3.0 || >=21.0.0}
     cpu: [x64]
     os: [win32]
+
+  '@js-temporal/polyfill@0.5.1':
+    resolution: {integrity: sha512-hloP58zRVCRSpgDxmqCWJNlizAlUgJFqG2ypq79DCvyv9tHjRYMDOcPFjzfl/A1/YxDvRCZz8wvZvmapQnKwFQ==}
+    engines: {node: '>=12'}
 
   '@napi-rs/canvas-android-arm64@0.1.96':
     resolution: {integrity: sha512-ew1sPrN3dGdZ3L4FoohPfnjq0f9/Jk7o+wP7HkQZokcXgIUD6FIyICEWGhMYzv53j63wUcPvZeAwgewX58/egg==}
@@ -1448,6 +1456,9 @@ packages:
   js-tokens@4.0.0:
     resolution: {integrity: sha512-RdJUflcE3cUzKiMqQgsCu06FPu9UdIJO0beYbPhHN4k6apgJtifcoCtT9bcxOpYBtpD2kCM6Sbzg4CausW/PKQ==}
 
+  jsbi@4.3.2:
+    resolution: {integrity: sha512-9fqMSQbhJykSeii05nxKl4m6Eqn2P6rOlYiS+C5Dr/HPIU/7yZxu5qzbs40tgaFORiw2Amd0mirjxatXYMkIew==}
+
   jsesc@3.1.0:
     resolution: {integrity: sha512-/sM3dO2FOzXjKQhJuo0Q173wf2KOo8t4I8vHy6lF9poUp7bKT0/NHE8fPX23PwfhnykfqnC2xRxOnVw5XuGIaA==}
     engines: {node: '>=6'}
@@ -1564,6 +1575,10 @@ packages:
   node-exports-info@1.6.0:
     resolution: {integrity: sha512-pyFS63ptit/P5WqUkt+UUfe+4oevH+bFeIiPPdfb0pFeYEu/1ELnJu5l+5EcTKYL5M7zaAa7S8ddywgXypqKCw==}
     engines: {node: '>= 0.4'}
+
+  node-ical@0.25.5:
+    resolution: {integrity: sha512-hj1I+kV38EXdhMB9Sh9phtvdzeJML/HvYbiKqBqcET1O2JiFmJnvpEWISNLA5nUeCWQAaTqiDhZH4uwUTG2Vdg==}
+    engines: {node: '>=18'}
 
   node-readable-to-web-readable-stream@0.4.2:
     resolution: {integrity: sha512-/cMZNI34v//jUTrI+UIo4ieHAB5EZRY/+7OmXZgBxaWBMcW2tGdceIw06RFxWxrKZ5Jp3sI2i5TsRo+CBhtVLQ==}
@@ -1759,6 +1774,9 @@ packages:
     engines: {node: '>= 0.4'}
     hasBin: true
 
+  rrule-temporal@1.5.1:
+    resolution: {integrity: sha512-mV82lZ7OzMOXX5g+SCR8FWRMSvhTnPSznjQ2Vguezjz1nEPEv/Ap/Z/FsIZ/AxA15M9X99m05911/MCXFY+FsA==}
+
   run-z@2.1.0:
     resolution: {integrity: sha512-GGG0odDAOlGc6JvUXjrIiHmS2ZpyAKoJVIEPmSFapkK32ax+V9Q1lRtJFPBjFBZWTVflbkIbwEFTAsexLYxqdw==}
     engines: {node: '>=18'}
@@ -1915,6 +1933,12 @@ packages:
   tar-stream@2.2.0:
     resolution: {integrity: sha512-ujeqbceABgwMZxEJnk2HDY2DlnUZ+9oEcb1KzTVfYHio0UE6dG71n60d8D2I4qNvleWrrXpmjpt7vZeF1LnMZQ==}
     engines: {node: '>=6'}
+
+  temporal-polyfill@0.3.0:
+    resolution: {integrity: sha512-qNsTkX9K8hi+FHDfHmf22e/OGuXmfBm9RqNismxBrnSmZVJKegQ+HYYXT+R7Ha8F/YSm2Y34vmzD4cxMu2u95g==}
+
+  temporal-spec@0.3.0:
+    resolution: {integrity: sha512-n+noVpIqz4hYgFSMOSiINNOUOMFtV5cZQNCmmszA6GiVFVRt3G7AqVyhXjhCSmowvQn+NsGn+jMDMKJYHd3bSQ==}
 
   text-hex@1.0.0:
     resolution: {integrity: sha512-uuVGNWzgJ4yhRaNSiubPY7OjISw4sw4E5Uv0wbjp+OzcbmVU/rsT8ujgcXJhn9ypzsgr5vlzpPqP+MBBKcGvbg==}
@@ -2336,6 +2360,10 @@ snapshots:
 
   '@img/sharp-win32-x64@0.34.5':
     optional: true
+
+  '@js-temporal/polyfill@0.5.1':
+    dependencies:
+      jsbi: 4.3.2
 
   '@napi-rs/canvas-android-arm64@0.1.96':
     optional: true
@@ -3529,6 +3557,8 @@ snapshots:
 
   js-tokens@4.0.0: {}
 
+  jsbi@4.3.2: {}
+
   jsesc@3.1.0: {}
 
   json-buffer@3.0.1: {}
@@ -3649,6 +3679,11 @@ snapshots:
       es-errors: 1.3.0
       object.entries: 1.1.9
       semver: 6.3.1
+
+  node-ical@0.25.5:
+    dependencies:
+      rrule-temporal: 1.5.1
+      temporal-polyfill: 0.3.0
 
   node-readable-to-web-readable-stream@0.4.2:
     optional: true
@@ -3874,6 +3909,10 @@ snapshots:
       object-keys: 1.1.1
       path-parse: 1.0.7
       supports-preserve-symlinks-flag: 1.0.0
+
+  rrule-temporal@1.5.1:
+    dependencies:
+      '@js-temporal/polyfill': 0.5.1
 
   run-z@2.1.0:
     dependencies:
@@ -4112,6 +4151,12 @@ snapshots:
       fs-constants: 1.0.0
       inherits: 2.0.4
       readable-stream: 3.6.2
+
+  temporal-polyfill@0.3.0:
+    dependencies:
+      temporal-spec: 0.3.0
+
+  temporal-spec@0.3.0: {}
 
   text-hex@1.0.0: {}
 
