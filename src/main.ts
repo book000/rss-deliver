@@ -13,6 +13,7 @@ import Dev1and from './services/dev1and'
 import TdrUpdates from './services/tdr-updates'
 import PopTeamEpic from './services/pop-team-epic'
 import Fish4Koma from './services/fish-4koma'
+import GitHubEvents from './services/github-events'
 import {
   fetchDeletedArticlesHistory,
   detectDeletedArticles,
@@ -83,6 +84,7 @@ async function generateRSS() {
     new TdrUpdates(),
     new PopTeamEpic(),
     new Fish4Koma(),
+    new GitHubEvents(),
   ]
 
   // 各サービスの削除記事を検出してまとめる
