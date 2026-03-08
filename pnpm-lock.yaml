@@ -45,7 +45,7 @@ importers:
         specifier: 5.4.2
         version: 5.4.2
       node-ical:
-        specifier: ^0.25.5
+        specifier: 0.25.5
         version: 0.25.5
       pdfjs-dist:
         specifier: 5.5.207
