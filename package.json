@@ -39,7 +39,7 @@
     "eslint-plugin-import": "2.32.0",
     "eslint-plugin-n": "17.24.0",
     "eslint-plugin-promise": "7.2.1",
-    "fast-xml-parser": "5.5.1",
+    "fast-xml-parser": "5.5.3",
     "node-ical": "0.25.5",
     "pdfjs-dist": "5.5.207",
     "prettier": "3.8.1",
