@@ -45,8 +45,8 @@ importers:
         specifier: 5.5.5
         version: 5.5.5
       node-ical:
-        specifier: 0.25.5
-        version: 0.25.5
+        specifier: 0.25.6
+        version: 0.25.6
       pdfjs-dist:
         specifier: 5.5.207
         version: 5.5.207
@@ -1575,8 +1575,8 @@ packages:
     resolution: {integrity: sha512-pyFS63ptit/P5WqUkt+UUfe+4oevH+bFeIiPPdfb0pFeYEu/1ELnJu5l+5EcTKYL5M7zaAa7S8ddywgXypqKCw==}
     engines: {node: '>= 0.4'}
 
-  node-ical@0.25.5:
-    resolution: {integrity: sha512-hj1I+kV38EXdhMB9Sh9phtvdzeJML/HvYbiKqBqcET1O2JiFmJnvpEWISNLA5nUeCWQAaTqiDhZH4uwUTG2Vdg==}
+  node-ical@0.25.6:
+    resolution: {integrity: sha512-Wo3GSBGYUNkcxOjHhevKTGa/+eB7ZwNLCq50h/eTX/YHSDZz1nT4KzXArO455CGHLD68gc5vw3nevqWQpOjjLQ==}
     engines: {node: '>=18'}
 
   node-readable-to-web-readable-stream@0.4.2:
@@ -3687,7 +3687,7 @@ snapshots:
       object.entries: 1.1.9
       semver: 6.3.1
 
-  node-ical@0.25.5:
+  node-ical@0.25.6:
     dependencies:
       rrule-temporal: 1.5.1
       temporal-polyfill: 0.3.2
