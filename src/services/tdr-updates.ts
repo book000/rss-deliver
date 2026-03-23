@@ -10,11 +10,14 @@ import * as pdfjs from 'pdfjs-dist/legacy/build/pdf.mjs'
 import { createCanvas } from 'canvas'
 
 export default class TdrUpdates extends BaseService {
+  private readonly pageUrl =
+    'https://www.tokyodisneyresort.jp/tdr/news/update.html'
+
   information(): ServiceInformation {
     return {
-      title: '大切なお知らせ | 東京ディズニーリゾート',
-      link: 'https://www.tokyodisneyresort.jp/tdr/update.html',
-      description: '東京ディズニーリゾート「大切なお知らせ」をご案内します。',
+      title: 'サイト更新情報 | 東京ディズニーリゾート',
+      link: this.pageUrl,
+      description: '東京ディズニーリゾート「サイト更新情報」をご案内します。',
       generator: 'book000/rss-deliver',
       language: 'ja',
     }
@@ -22,25 +25,22 @@ export default class TdrUpdates extends BaseService {
 
   async collect(): Promise<CollectResult> {
     const logger = Logger.configure('TdrUpdates::collect')
-    const response = await axios.get(
-      'https://www.tokyodisneyresort.jp/tdr/update.html',
-      {
-        headers: {
-          'User-Agent':
-            'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:121.0) Gecko/20100101 Firefox/121.0',
-          Accept:
-            'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
-          'Accept-Language': 'ja,en-US;q=0.7,en;q=0.3',
-          'Accept-Encoding': 'gzip, deflate, br',
-          Connection: 'keep-alive',
-          'Upgrade-Insecure-Requests': '1',
-          Pragma: 'no-cache',
-          'Cache-Control': 'no-cache',
-          DNT: '1',
-        },
-        validateStatus: () => true,
-      }
-    )
+    const response = await axios.get(this.pageUrl, {
+      headers: {
+        'User-Agent':
+          'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:121.0) Gecko/20100101 Firefox/121.0',
+        Accept:
+          'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+        'Accept-Language': 'ja,en-US;q=0.7,en;q=0.3',
+        'Accept-Encoding': 'gzip, deflate, br',
+        Connection: 'keep-alive',
+        'Upgrade-Insecure-Requests': '1',
+        Pragma: 'no-cache',
+        'Cache-Control': 'no-cache',
+        DNT: '1',
+      },
+      validateStatus: () => true,
+    })
     if (response.status !== 200) {
       throw new Error(`Failed to fetch: ${response.status}`)
     }
@@ -48,7 +48,8 @@ export default class TdrUpdates extends BaseService {
     const items: Item[] = []
     for (const element of $('div.listUpdate ul li a')) {
       const anchor = $(element)
-      const url = anchor.attr('href') ?? ''
+      const href = anchor.attr('href') ?? ''
+      const url = new URL(href, this.pageUrl).toString()
       const title = anchor.find('p.txt').text()
       const dateRaw = anchor.find('p.date').text() // 2023.7.24 更新情報
       const year = ('0000' + dateRaw.split('.')[0]).slice(-4)
