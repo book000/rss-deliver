@@ -70,7 +70,7 @@ export default class TdrUpdates extends BaseService {
       const day = ('00' + dateRaw.split('.')[2].split(' ')[0]).slice(-2)
       const date = new Date(`${year}-${month}-${day}T00:00:00+09:00`)
 
-      logger.info(`📃 ${title} ${url} (${year}/${month}/${day}`)
+      logger.info(`📃 ${title} ${url} (${year}/${month}/${day})`)
 
       // カテゴリタグ（span.iconTag）を取得する
       const category = anchor.find('span.iconTag').text().trim()

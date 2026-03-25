@@ -3,6 +3,7 @@ import axios from 'axios'
 import * as cheerio from 'cheerio'
 import crypto from 'node:crypto'
 import fs from 'node:fs'
+import path from 'node:path'
 
 /** デフォルトで除去するセレクタのリスト */
 const DEFAULT_REMOVE_SELECTORS = [
@@ -105,20 +106,30 @@ export async function fetchArticleWithCache(
   } = {}
 ): Promise<string> {
   const urlHash = crypto.createHash('sha256').update(url).digest('hex')
-  const cachePath = `${cacheDir}/${urlHash}.json`
+  const cachePath = path.join(cacheDir, `${urlHash}.json`)
   const cacheTtlMs = options.cacheTtlMs ?? DEFAULT_CACHE_TTL_MS
 
   // キャッシュが存在し有効期限内であればキャッシュから返す
   if (fs.existsSync(cachePath)) {
-    const cached = JSON.parse(
-      fs.readFileSync(cachePath, 'utf8')
-    ) as ArticleCacheData
-    const cachedAt = new Date(cached.fetchedAt).getTime()
-    if (Date.now() - cachedAt < cacheTtlMs) {
-      logger.info(`📦 記事キャッシュを使用: ${url}`)
-      return cached.content
+    try {
+      const cached = JSON.parse(
+        fs.readFileSync(cachePath, 'utf8')
+      ) as ArticleCacheData
+      const cachedAt = new Date(cached.fetchedAt).getTime()
+      if (Date.now() - cachedAt < cacheTtlMs) {
+        logger.info(`📦 記事キャッシュを使用: ${url}`)
+        return cached.content
+      }
+      logger.info(`⏰ 記事キャッシュが期限切れのため再フェッチ: ${url}`)
+    } catch {
+      // 壊れたキャッシュは無視して再フェッチする
+      logger.warn(`⚠️ Failed to read cache, re-fetching: ${cachePath}`)
+      try {
+        fs.unlinkSync(cachePath)
+      } catch {
+        // 削除失敗は致命的ではないため無視する
+      }
     }
-    logger.info(`⏰ 記事キャッシュが期限切れのため再フェッチ: ${url}`)
   }
 
   // 記事ページをフェッチする
