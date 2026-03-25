@@ -69,6 +69,10 @@ interface ZeenChangelogResponse {
 }
 
 export default class ZennChangelog extends BaseService {
+  /**
+   * サービス情報を返す。
+   * @returns サービスのタイトル・リンク・説明などのメタ情報
+   */
   information(): ServiceInformation {
     return {
       title: 'Zenn Changelog',
@@ -85,6 +89,11 @@ export default class ZennChangelog extends BaseService {
     }
   }
 
+  /**
+   * Zenn Changelog の変更履歴を収集する。
+   * 各記事ページのコンテンツはキャッシュ付きでフェッチし、失敗時は RSS の description をフォールバックとして使用する。
+   * @returns 収集結果（アイテムリストとステータス）
+   */
   async collect(): Promise<CollectResult> {
     const logger = Logger.configure('ZennChangelog::collect')
     const parser = new XMLParser({

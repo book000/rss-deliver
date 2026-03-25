@@ -7,6 +7,10 @@ import axios from 'axios'
 import * as cheerio from 'cheerio'
 
 export default class FF14LodestoneMaintenance extends BaseService {
+  /**
+   * サービス情報を返す。
+   * @returns サービスのタイトル・リンク・説明などのメタ情報
+   */
   information(): ServiceInformation {
     return {
       title: 'FF14 Lodestone Maintenance',
@@ -18,6 +22,11 @@ export default class FF14LodestoneMaintenance extends BaseService {
     }
   }
 
+  /**
+   * FF14 Lodestone のメンテナンス一覧を収集する。
+   * 各記事ページのコンテンツはキャッシュ付きでフェッチして返す。
+   * @returns 収集結果（アイテムリストとステータス）
+   */
   async collect(): Promise<CollectResult> {
     const logger = Logger.configure('FF14LodestoneMaintenance::collect')
     const response = await axios.get<string>(
@@ -55,9 +64,18 @@ export default class FF14LodestoneMaintenance extends BaseService {
       const title = item.find('p').text()
       const link = 'https://jp.finalfantasyxiv.com' + (item.attr('href') ?? '')
 
-      const text = await fetchArticleWithCache(link, this, logger, {
-        contentSelector: 'div.news__detail__wrapper',
-      })
+      let text: string
+      try {
+        text = await fetchArticleWithCache(link, this, logger, {
+          contentSelector: 'div.news__detail__wrapper',
+        })
+      } catch (error) {
+        logger.error(
+          `❌ Failed to fetch article content: ${link}`,
+          error as Error
+        )
+        text = `<p>${title}</p>`
+      }
 
       items.push({
         title,
