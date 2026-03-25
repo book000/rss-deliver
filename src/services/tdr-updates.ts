@@ -2,6 +2,7 @@ import { BaseService } from '@/base-service'
 import { Logger } from '@book000/node-utils'
 import CollectResult, { Item } from '@/model/collect-result'
 import ServiceInformation from '@/model/service-information'
+import { fetchArticleWithCache } from '@/utils/article-fetcher'
 import axios from 'axios'
 import * as cheerio from 'cheerio'
 import crypto from 'node:crypto'
@@ -13,6 +14,10 @@ export default class TdrUpdates extends BaseService {
   private readonly pageUrl =
     'https://www.tokyodisneyresort.jp/tdr/news/update.html'
 
+  /**
+   * サービス情報を返す。
+   * @returns サービスのタイトル・リンク・説明などのメタ情報
+   */
   information(): ServiceInformation {
     return {
       title: 'サイト更新情報 | 東京ディズニーリゾート',
@@ -23,6 +28,11 @@ export default class TdrUpdates extends BaseService {
     }
   }
 
+  /**
+   * 東京ディズニーリゾートのサイト更新情報を収集する。
+   * 各記事ページのコンテンツはキャッシュ付きでフェッチし、PDF の場合は画像化して返す。
+   * @returns 収集結果（アイテムリストとステータス）
+   */
   async collect(): Promise<CollectResult> {
     const logger = Logger.configure('TdrUpdates::collect')
     const response = await axios.get(this.pageUrl, {
@@ -57,12 +67,28 @@ export default class TdrUpdates extends BaseService {
       const day = ('00' + dateRaw.split('.')[2].split(' ')[0]).slice(-2)
       const date = new Date(`${year}-${month}-${day}T00:00:00+09:00`)
 
-      logger.info(`📃 ${title} ${url} (${year}/${month}/${day}`)
+      logger.info(`📃 ${title} ${url} (${year}/${month}/${day})`)
 
-      let content
+      // カテゴリタグ（span.iconTag）を取得する
+      const category = anchor.find('span.iconTag').text().trim()
+
+      let content: string
       if (url.endsWith('.pdf')) {
+        // PDF の場合は各ページを画像化してコンテンツとして設定する
         const pdfUrls = await this.pdf2png(url)
-        content = pdfUrls.map((url) => `<img src="${url}">`).join('<br>')
+        content = pdfUrls.map((pdfUrl) => `<img src="${pdfUrl}">`).join('<br>')
+      } else {
+        // HTML ページの場合は記事ページをフェッチしてコンテンツとして設定する
+        try {
+          content = await fetchArticleWithCache(url, this, logger)
+        } catch (error) {
+          // フェッチに失敗した場合はリストページの説明文をフォールバックとして使用する
+          logger.error(
+            `Failed to fetch article, using fallback: ${url}`,
+            error as Error
+          )
+          content = `<p><strong>${category}</strong></p><p>${title}</p>`
+        }
       }
 
       items.push({
