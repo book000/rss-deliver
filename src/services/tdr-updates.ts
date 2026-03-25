@@ -14,9 +14,6 @@ export default class TdrUpdates extends BaseService {
   private readonly pageUrl =
     'https://www.tokyodisneyresort.jp/tdr/news/update.html'
 
-  /** 記事キャッシュを保存するディレクトリ */
-  private readonly articleCacheDir = '.article-cache/tdr-updates'
-
   /**
    * サービス情報を返す。
    * @returns サービスのタイトル・リンク・説明などのメタ情報
@@ -83,11 +80,7 @@ export default class TdrUpdates extends BaseService {
       } else {
         // HTML ページの場合は記事ページをフェッチしてコンテンツとして設定する
         try {
-          content = await fetchArticleWithCache(
-            url,
-            this.articleCacheDir,
-            logger
-          )
+          content = await fetchArticleWithCache(url, this, logger)
         } catch (error) {
           // フェッチに失敗した場合はリストページの説明文をフォールバックとして使用する
           logger.error(

@@ -1,3 +1,4 @@
+import { BaseService } from '@/base-service'
 import { Logger } from '@book000/node-utils'
 import axios from 'axios'
 import * as cheerio from 'cheerio'
@@ -43,6 +44,21 @@ const DEFAULT_HEADERS: Record<string, string> = {
 /** キャッシュの有効期限（ミリ秒）。デフォルトは 7 日 */
 const DEFAULT_CACHE_TTL_MS = 7 * 24 * 60 * 60 * 1000
 
+/** キャッシュのベースディレクトリ */
+const ARTICLE_CACHE_BASE_DIR = '.article-cache'
+
+/**
+ * クラス名をケバブケースに変換する。
+ * @param name クラス名 (例: TdrUpdates)
+ * @returns ケバブケースの文字列 (例: tdr-updates)
+ */
+function toKebabCase(name: string): string {
+  return name
+    .replaceAll(/([A-Z]+)([A-Z][a-z0-9])/g, '$1-$2')
+    .replaceAll(/([a-z0-9])([A-Z])/g, '$1-$2')
+    .toLowerCase()
+}
+
 /** キャッシュデータの型定義 */
 interface ArticleCacheData {
   /** 記事の URL */
@@ -84,8 +100,9 @@ export function extractArticleContent(
  * 記事ページのコンテンツをキャッシュ付きでフェッチする。
  * キャッシュが存在し有効期限内であればキャッシュから返し、なければフェッチしてキャッシュに保存する。
  * 空のコンテンツはキャッシュしない（次回フェッチで再取得できるようにする）。
+ * キャッシュディレクトリは `.article-cache/<サービスクラス名のケバブケース>` に自動決定される。
  * @param url 記事ページの URL
- * @param cacheDir キャッシュを保存するディレクトリ
+ * @param service キャッシュディレクトリの導出に使用するサービスインスタンス
  * @param logger ロガー
  * @param options オプション
  * @param options.headers HTTP リクエストヘッダー (デフォルト: 標準ブラウザヘッダー)
@@ -96,7 +113,7 @@ export function extractArticleContent(
  */
 export async function fetchArticleWithCache(
   url: string,
-  cacheDir: string,
+  service: BaseService,
   logger: Logger,
   options: {
     headers?: Record<string, string>
@@ -105,6 +122,10 @@ export async function fetchArticleWithCache(
     cacheTtlMs?: number
   } = {}
 ): Promise<string> {
+  const cacheDir = path.join(
+    ARTICLE_CACHE_BASE_DIR,
+    toKebabCase(service.constructor.name)
+  )
   const urlHash = crypto.createHash('sha256').update(url).digest('hex')
   const cachePath = path.join(cacheDir, `${urlHash}.json`)
   const cacheTtlMs = options.cacheTtlMs ?? DEFAULT_CACHE_TTL_MS
