@@ -134,3 +134,6 @@ dist
 
 # other
 output/
+
+# 記事フェッチキャッシュ
+.article-cache/

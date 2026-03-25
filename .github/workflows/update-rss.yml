@@ -57,6 +57,14 @@ jobs:
           restore-keys: |
             popute-images-
 
+      - name: 📦 Restore article cache
+        uses: actions/cache/restore@v5
+        with:
+          path: .article-cache
+          key: article-cache-${{ github.run_id }}
+          restore-keys: |
+            article-cache-
+
       - name: Update RSS
         id: update-rss
         run: pnpm start
@@ -68,6 +76,14 @@ jobs:
         with:
           path: output/popute
           key: popute-images-${{ github.run_id }}
+
+      - name: 💾 Save article cache
+        if: always()
+        continue-on-error: true
+        uses: actions/cache/save@v5
+        with:
+          path: .article-cache
+          key: article-cache-${{ github.run_id }}
 
       - name: Error handling
         if: failure()

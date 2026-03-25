@@ -2,6 +2,7 @@ import { BaseService } from '@/base-service'
 import { Logger } from '@book000/node-utils'
 import CollectResult, { Item } from '@/model/collect-result'
 import ServiceInformation from '@/model/service-information'
+import { fetchArticleWithCache } from '@/utils/article-fetcher'
 import axios from 'axios'
 import * as cheerio from 'cheerio'
 import crypto from 'node:crypto'
@@ -12,6 +13,9 @@ import { createCanvas } from 'canvas'
 export default class TdrUpdates extends BaseService {
   private readonly pageUrl =
     'https://www.tokyodisneyresort.jp/tdr/news/update.html'
+
+  /** 記事キャッシュを保存するディレクトリ */
+  private readonly articleCacheDir = '.article-cache/tdr-updates'
 
   information(): ServiceInformation {
     return {
@@ -68,8 +72,21 @@ export default class TdrUpdates extends BaseService {
         const pdfUrls = await this.pdf2png(url)
         content = pdfUrls.map((pdfUrl) => `<img src="${pdfUrl}">`).join('<br>')
       } else {
-        // HTML ページの場合はリストページから取得したカテゴリと説明文をコンテンツとして設定する
-        content = `<p><strong>${category}</strong></p><p>${title}</p>`
+        // HTML ページの場合は記事ページをフェッチしてコンテンツとして設定する
+        try {
+          content = await fetchArticleWithCache(
+            url,
+            this.articleCacheDir,
+            logger
+          )
+        } catch (error) {
+          // フェッチに失敗した場合はリストページの説明文をフォールバックとして使用する
+          logger.error(
+            `Failed to fetch article, using fallback: ${url}`,
+            error as Error
+          )
+          content = `<p><strong>${category}</strong></p><p>${title}</p>`
+        }
       }
 
       items.push({
