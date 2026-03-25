@@ -1,11 +1,16 @@
 import { BaseService } from '@/base-service'
 import CollectResult, { Item } from '@/model/collect-result'
 import ServiceInformation from '@/model/service-information'
+import { fetchArticleWithCache } from '@/utils/article-fetcher'
 import { Logger } from '@book000/node-utils'
 import axios from 'axios'
 import * as cheerio from 'cheerio'
 
 export default class FF14LodestoneMaintenance extends BaseService {
+  /**
+   * サービス情報を返す。
+   * @returns サービスのタイトル・リンク・説明などのメタ情報
+   */
   information(): ServiceInformation {
     return {
       title: 'FF14 Lodestone Maintenance',
@@ -17,6 +22,11 @@ export default class FF14LodestoneMaintenance extends BaseService {
     }
   }
 
+  /**
+   * FF14 Lodestone のメンテナンス一覧を収集する。
+   * 各記事ページのコンテンツはキャッシュ付きでフェッチして返す。
+   * @returns 収集結果（アイテムリストとステータス）
+   */
   async collect(): Promise<CollectResult> {
     const logger = Logger.configure('FF14LodestoneMaintenance::collect')
     const response = await axios.get<string>(
@@ -54,42 +64,29 @@ export default class FF14LodestoneMaintenance extends BaseService {
       const title = item.find('p').text()
       const link = 'https://jp.finalfantasyxiv.com' + (item.attr('href') ?? '')
 
-      const content = await this.getContent(link)
-      const pubDate = content.pubDate
-      const text = content.text
+      let text: string
+      try {
+        text = await fetchArticleWithCache(link, this, logger, {
+          contentSelector: 'div.news__detail__wrapper',
+        })
+      } catch (error) {
+        logger.error(
+          `❌ Failed to fetch article content: ${link}`,
+          error as Error
+        )
+        text = `<p>${title}</p>`
+      }
 
       items.push({
         title,
         link,
         'content:encoded': text,
-        pubDate,
       })
     }
 
     return {
       status: true,
       items,
-    }
-  }
-
-  private async getContent(
-    url: string
-  ): Promise<{ pubDate: string; text: string }> {
-    const response = await axios.get(url, {
-      validateStatus: () => true,
-    })
-    if (response.status !== 200) {
-      throw new Error(`Failed to fetch content: ${response.status}`)
-    }
-
-    const $ = cheerio.load(response.data)
-    const text = $('div.news__detail__wrapper').html() ?? ''
-    const timeScript =
-      $('header.news__header > time[class^=news__ic] > script').html() ?? ''
-    const pubDate = /ldst_strftime\((\d+),.*?\)/.exec(timeScript)?.[1] ?? ''
-    return {
-      pubDate: new Date(Number(pubDate) * 1000).toUTCString(),
-      text,
     }
   }
 }
