@@ -1,9 +1,9 @@
 import { BaseService } from '@/base-service'
-import { Logger } from '@book000/node-utils'
 import CollectResult, { Item } from '@/model/collect-result'
 import ServiceInformation from '@/model/service-information'
+import { fetchArticleWithCache } from '@/utils/article-fetcher'
+import { Logger } from '@book000/node-utils'
 import axios from 'axios'
-import * as cheerio from 'cheerio'
 import { XMLParser } from 'fast-xml-parser'
 
 interface LinkClass {
@@ -68,44 +68,6 @@ interface ZeenChangelogResponse {
   rss: RSS
 }
 
-class ZennChangelogItem {
-  readonly itemId: string
-
-  readonly itemText: string | null
-  readonly itemUrl: string | null
-  static cacheInfo: string | null = null
-
-  private constructor(
-    itemId: string,
-    itemText: string | null,
-    itemUrl: string | null
-  ) {
-    this.itemId = itemId
-    this.itemText = itemText
-    this.itemUrl = itemUrl
-  }
-
-  public static async of(itemId: string) {
-    const logger = Logger.configure('ZennChangelogItem.of')
-    logger.info(`📄 Loading ${itemId}`)
-    const itemUrl = `https://info.zenn.dev/${itemId}`
-    const response = await axios.get<string>(itemUrl, {
-      validateStatus: () => true,
-    })
-    if (response.status !== 200) {
-      logger.warn(`❗ Failed to get changelog (${response.status})`)
-      return null
-    }
-    const $ = cheerio.load(response.data)
-
-    // Get item text
-    const itemTextElement = $('[class^="SlugPage_blogBody"]')
-    const itemText = itemTextElement.html()
-
-    return new ZennChangelogItem(itemId, itemText, itemUrl)
-  }
-}
-
 export default class ZennChangelog extends BaseService {
   information(): ServiceInformation {
     return {
@@ -124,6 +86,7 @@ export default class ZennChangelog extends BaseService {
   }
 
   async collect(): Promise<CollectResult> {
+    const logger = Logger.configure('ZennChangelog::collect')
     const parser = new XMLParser({
       ignoreAttributes: false,
     })
@@ -139,34 +102,32 @@ export default class ZennChangelog extends BaseService {
     const oldFeed: ZeenChangelogResponse = parser.parse(response.data)
     const items: Item[] = []
     for (const item of oldFeed.rss.channel.item.slice(0, 10)) {
-      // 直近の10件を取得
+      // 直近の 10 件を取得
       const link: string = item.link
+      const itemUrl = `https://info.zenn.dev/${link.split('/').pop() ?? ''}`
 
-      const itemId = link.split('/').pop()
-      const changelog =
-        itemId === undefined ? null : await ZennChangelogItem.of(itemId)
-
-      const contents = []
-      if (changelog?.itemText) {
-        contents.push(changelog.itemText)
-      }
-      if (changelog?.itemUrl) {
-        contents.push(
-          '\n\n<a href="' +
-            changelog.itemUrl +
-            '">' +
-            changelog.itemUrl +
-            '</a>'
+      let content: string
+      try {
+        content = await fetchArticleWithCache(itemUrl, this, logger, {
+          contentSelector: '[class^="SlugPage_blogBody"]',
+        })
+      } catch (error) {
+        logger.warn(
+          `⚠️ Failed to fetch article content, using description: ${itemUrl}`,
+          error as Error
         )
+        content = item.description ?? ''
       }
-      if (contents.length === 0) {
-        contents.push(item.description)
+
+      if (!content.trim()) {
+        content = item.description ?? ''
       }
 
       items.push({
         title: item.title,
         link,
-        'content:encoded': contents.map((s) => s?.trim()).join('\n\n'),
+        pubDate: item.pubDate,
+        'content:encoded': content,
       })
     }
     return {
