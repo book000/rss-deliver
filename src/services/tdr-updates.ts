@@ -17,6 +17,10 @@ export default class TdrUpdates extends BaseService {
   /** 記事キャッシュを保存するディレクトリ */
   private readonly articleCacheDir = '.article-cache/tdr-updates'
 
+  /**
+   * サービス情報を返す。
+   * @returns サービスのタイトル・リンク・説明などのメタ情報
+   */
   information(): ServiceInformation {
     return {
       title: 'サイト更新情報 | 東京ディズニーリゾート',
@@ -27,6 +31,11 @@ export default class TdrUpdates extends BaseService {
     }
   }
 
+  /**
+   * 東京ディズニーリゾートのサイト更新情報を収集する。
+   * 各記事ページのコンテンツはキャッシュ付きでフェッチし、PDF の場合は画像化して返す。
+   * @returns 収集結果（アイテムリストとステータス）
+   */
   async collect(): Promise<CollectResult> {
     const logger = Logger.configure('TdrUpdates::collect')
     const response = await axios.get(this.pageUrl, {

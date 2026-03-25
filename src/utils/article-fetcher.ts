@@ -32,7 +32,15 @@ const DEFAULT_HEADERS: Record<string, string> = {
   Accept: 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
   'Accept-Language': 'ja,en-US;q=0.7,en;q=0.3',
   'Accept-Encoding': 'gzip, deflate, br',
+  Connection: 'keep-alive',
+  'Upgrade-Insecure-Requests': '1',
+  Pragma: 'no-cache',
+  'Cache-Control': 'no-cache',
+  DNT: '1',
 }
+
+/** キャッシュの有効期限（ミリ秒）。デフォルトは 7 日 */
+const DEFAULT_CACHE_TTL_MS = 7 * 24 * 60 * 60 * 1000
 
 /** キャッシュデータの型定義 */
 interface ArticleCacheData {
@@ -73,7 +81,8 @@ export function extractArticleContent(
 
 /**
  * 記事ページのコンテンツをキャッシュ付きでフェッチする。
- * キャッシュが存在する場合はキャッシュから返し、なければフェッチしてキャッシュに保存する。
+ * キャッシュが存在し有効期限内であればキャッシュから返し、なければフェッチしてキャッシュに保存する。
+ * 空のコンテンツはキャッシュしない（次回フェッチで再取得できるようにする）。
  * @param url 記事ページの URL
  * @param cacheDir キャッシュを保存するディレクトリ
  * @param logger ロガー
@@ -81,6 +90,7 @@ export function extractArticleContent(
  * @param options.headers HTTP リクエストヘッダー (デフォルト: 標準ブラウザヘッダー)
  * @param options.contentSelector メインコンテンツのセレクタ (デフォルト: '#mainArea')
  * @param options.removeSelectors 除去するセレクタのリスト (デフォルト: 標準的なノイズ要素)
+ * @param options.cacheTtlMs キャッシュの有効期限（ミリ秒、デフォルト: 7 日）
  * @returns 記事ページのメインコンテンツ HTML
  */
 export async function fetchArticleWithCache(
@@ -91,18 +101,24 @@ export async function fetchArticleWithCache(
     headers?: Record<string, string>
     contentSelector?: string
     removeSelectors?: string[]
+    cacheTtlMs?: number
   } = {}
 ): Promise<string> {
   const urlHash = crypto.createHash('sha256').update(url).digest('hex')
   const cachePath = `${cacheDir}/${urlHash}.json`
+  const cacheTtlMs = options.cacheTtlMs ?? DEFAULT_CACHE_TTL_MS
 
-  // キャッシュが存在する場合はキャッシュから返す
+  // キャッシュが存在し有効期限内であればキャッシュから返す
   if (fs.existsSync(cachePath)) {
-    logger.info(`📦 記事キャッシュを使用: ${url}`)
     const cached = JSON.parse(
       fs.readFileSync(cachePath, 'utf8')
     ) as ArticleCacheData
-    return cached.content
+    const cachedAt = new Date(cached.fetchedAt).getTime()
+    if (Date.now() - cachedAt < cacheTtlMs) {
+      logger.info(`📦 記事キャッシュを使用: ${url}`)
+      return cached.content
+    }
+    logger.info(`⏰ 記事キャッシュが期限切れのため再フェッチ: ${url}`)
   }
 
   // 記事ページをフェッチする
@@ -120,6 +136,12 @@ export async function fetchArticleWithCache(
     options.contentSelector,
     options.removeSelectors
   )
+
+  // 空のコンテンツはキャッシュしない（次回フェッチで再取得できるようにする）
+  if (!content.trim()) {
+    logger.warn(`⚠️ Empty content extracted, skipping cache: ${url}`)
+    return content
+  }
 
   // キャッシュディレクトリを作成してキャッシュに保存する
   if (!fs.existsSync(cacheDir)) {
