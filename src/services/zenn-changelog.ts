@@ -120,10 +120,10 @@ export default class ZennChangelog extends BaseService {
         content = await fetchArticleWithCache(itemUrl, this, logger, {
           contentSelector: '[class^="SlugPage_blogBody"]',
         })
-      } catch (error) {
+      } catch (err) {
         logger.warn(
           `⚠️ Failed to fetch article content, using description: ${itemUrl}`,
-          error as Error
+          err as Error
         )
         content = item.description ?? ''
       }

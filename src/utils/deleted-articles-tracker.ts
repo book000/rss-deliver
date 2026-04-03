@@ -60,8 +60,8 @@ export async function fetchDeletedArticlesHistory(): Promise<DeletedArticlesHist
       `✅ Fetched deleted articles history with ${response.data.articles.length} articles`
     )
     return response.data
-  } catch (error) {
-    logger.error('❌ Failed to fetch deleted articles history', error as Error)
+  } catch (err) {
+    logger.error('❌ Failed to fetch deleted articles history', err as Error)
     return null
   }
 }
@@ -188,8 +188,8 @@ export function saveDeletedArticlesHistory(
     )
     writeFileSync(outputPath, JSON.stringify(history, null, 2))
     logger.info(`💾 Saved deleted articles history to ${outputPath}`)
-  } catch (error) {
-    logger.error('❌ Failed to save deleted articles history', error as Error)
+  } catch (err) {
+    logger.error('❌ Failed to save deleted articles history', err as Error)
   }
 }
 

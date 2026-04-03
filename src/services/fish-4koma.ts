@@ -142,9 +142,9 @@ export default class Fish4Koma extends BaseService {
             maxImageSize = imageSize
             largestImageUrl = imageUrl
           }
-        } catch (error) {
+        } catch (err) {
           logger.warn(
-            `❗ Error checking image size ${imageUrl}: ${String(error)}`
+            `❗ Error checking image size ${imageUrl}: ${String(err)}`
           )
         }
       }
@@ -177,9 +177,9 @@ export default class Fish4Koma extends BaseService {
 
             savedImageUrl = `https://book000.github.io/rss-deliver/fish4koma/${hash}.jpg`
           }
-        } catch (error) {
+        } catch (err) {
           logger.warn(
-            `❗ Error processing largest image ${largestImageUrl}: ${String(error)}`
+            `❗ Error processing largest image ${largestImageUrl}: ${String(err)}`
           )
         }
       }

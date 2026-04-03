@@ -81,11 +81,11 @@ export default class TdrUpdates extends BaseService {
         // HTML ページの場合は記事ページをフェッチしてコンテンツとして設定する
         try {
           content = await fetchArticleWithCache(url, this, logger)
-        } catch (error) {
+        } catch (err) {
           // フェッチに失敗した場合はリストページの説明文をフォールバックとして使用する
           logger.error(
             `Failed to fetch article, using fallback: ${url}`,
-            error as Error
+            err as Error
           )
           content = `<p><strong>${category}</strong></p><p>${title}</p>`
         }
