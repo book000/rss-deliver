@@ -33,7 +33,7 @@ function getParameterValue(
 function extractEventUrl(description: string): string | undefined {
   const $ = cheerio.load(description)
   const links = $('a[href]')
-  for (const element of links.toArray()) {
+  for (const element of links) {
     const href = $(element).attr('href')
     if (href?.startsWith('http')) {
       return href
@@ -174,8 +174,8 @@ export default class GitHubEvents extends BaseService {
         status: true,
         items,
       }
-    } catch (error) {
-      logger.error('❌ Failed to collect GitHub events', error as Error)
+    } catch (err) {
+      logger.error('❌ Failed to collect GitHub events', err as Error)
       return {
         status: false,
         items: [],

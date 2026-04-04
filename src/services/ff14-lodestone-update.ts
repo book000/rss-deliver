@@ -69,10 +69,10 @@ export default class FF14LodestoneUpdate extends BaseService {
         text = await fetchArticleWithCache(link, this, logger, {
           contentSelector: 'div.news__detail__wrapper',
         })
-      } catch (error) {
+      } catch (err) {
         logger.error(
           `❌ Failed to fetch article content: ${link}`,
-          error as Error
+          err as Error
         )
         text = `<p>${title}</p>`
       }

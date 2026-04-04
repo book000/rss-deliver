@@ -289,8 +289,8 @@ export default class PopTeamEpic extends BaseService {
       })
       const rss = parser.parse(response.data) as TakecomicRssResponse
       rawItems = rss.rss?.channel?.item
-    } catch (error) {
-      logger.warn(`❗ Failed to parse official RSS: ${String(error)}`)
+    } catch (err) {
+      logger.warn(`❗ Failed to parse official RSS: ${String(err)}`)
       return []
     }
     if (!rawItems) {
@@ -387,8 +387,8 @@ export default class PopTeamEpic extends BaseService {
       }
 
       return imageUrls
-    } catch (error) {
-      logger.warn(`❗ Failed to fetch episode images: ${String(error)}`)
+    } catch (err) {
+      logger.warn(`❗ Failed to fetch episode images: ${String(err)}`)
       return []
     }
   }
@@ -543,8 +543,8 @@ export default class PopTeamEpic extends BaseService {
 
       // 画像を保存
       return await this.saveUnscrambledImage(unscrambledBuffer)
-    } catch (error) {
-      logger.warn(`❗ Failed to unscramble image: ${String(error)}`)
+    } catch (err) {
+      logger.warn(`❗ Failed to unscramble image: ${String(err)}`)
       return null
     }
   }

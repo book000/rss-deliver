@@ -91,12 +91,12 @@ export async function getPreviousFeed(serviceName: string): Promise<RssItem[]> {
 
       logger.info(`✅ Found ${itemsArray.length} previous items`)
       return itemsArray
-    } catch (error) {
-      logger.error('❌ Failed to parse previous feed', error as Error)
+    } catch (err) {
+      logger.error('❌ Failed to parse previous feed', err as Error)
       return []
     }
-  } catch (error) {
-    logger.error('❌ Failed to fetch previous feed', error as Error)
+  } catch (err) {
+    logger.error('❌ Failed to fetch previous feed', err as Error)
     return []
   }
 }

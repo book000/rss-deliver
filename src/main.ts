@@ -123,10 +123,10 @@ async function generateRSS() {
           )
         }
       }
-    } catch (error) {
+    } catch (err) {
       logger.error(
         `❌ Error occurred while generating RSS: ${service.constructor.name}`,
-        error as Error
+        err as Error
       )
     }
   })
