@@ -1,4 +1,3 @@
-import axios from 'axios'
 import { XMLParser } from 'fast-xml-parser'
 import { Logger } from '@book000/node-utils'
 import { Item } from '@/model/collect-result'
@@ -56,16 +55,16 @@ export async function getPreviousFeed(serviceName: string): Promise<RssItem[]> {
     const feedUrl = `https://book000.github.io/rss-deliver/${serviceName}.xml`
     logger.info(`📥 Fetching previous feed from ${feedUrl}`)
 
-    const response = await axios.get<string>(feedUrl, {
-      validateStatus: () => true,
-      timeout: 10_000,
+    const res = await fetch(feedUrl, {
+      signal: AbortSignal.timeout(10_000),
     })
 
-    if (response.status !== 200) {
-      logger.warn(`❌ Failed to fetch previous feed: ${response.status}`)
+    if (res.status !== 200) {
+      logger.warn(`❌ Failed to fetch previous feed: ${res.status}`)
       return []
     }
 
+    const text = await res.text()
     const parser = new XMLParser({
       ignoreAttributes: false,
     })
@@ -77,7 +76,7 @@ export async function getPreviousFeed(serviceName: string): Promise<RssItem[]> {
             item?: RssItem | RssItem[]
           }
         }
-      } = parser.parse(response.data)
+      } = parser.parse(text)
       const items = parsed.rss?.channel?.item ?? []
 
       // 配列でない場合（アイテムが1つだけの場合）は配列に変換

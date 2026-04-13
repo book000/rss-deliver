@@ -1,7 +1,6 @@
 import { BaseService } from '@/base-service'
 import CollectResult from '@/model/collect-result'
 import ServiceInformation from '@/model/service-information'
-import axios from 'axios'
 
 interface Item {
   id: number
@@ -66,20 +65,17 @@ export default class Dev1and extends BaseService {
   }
 
   async collect(): Promise<CollectResult> {
-    const response = await axios.get<Dev1andFeedResponse>(
-      'https://feed.dev1and.com/api/v1/dashboard',
-      {
-        validateStatus: () => true,
-      }
-    )
-    if (response.status !== 200) {
+    const res = await fetch('https://feed.dev1and.com/api/v1/dashboard')
+    if (res.status !== 200) {
       return {
         status: false,
         items: [],
       }
     }
 
-    const lastUpdatedAtRaw = response.data.last_updated_at
+    const response = (await res.json()) as Dev1andFeedResponse
+
+    const lastUpdatedAtRaw = response.last_updated_at
     const lastUpdatedAt = new Date(lastUpdatedAtRaw.replaceAll('/', '-'))
     const lastUpdatedDateText = this.getYearMonthWeek(lastUpdatedAt)
     const lastUpdatedDate = lastUpdatedDateText
@@ -87,7 +83,7 @@ export default class Dev1and extends BaseService {
       .replaceAll('#', '-')
       .replaceAll(' ', '-')
 
-    const weeklyArticle = response.data.data.weekly_hit.items.map((item) => {
+    const weeklyArticle = response.data.weekly_hit.items.map((item) => {
       return [
         '<li>',
         '<a href="' + item.url + '">' + item.title + '</a>',
@@ -100,20 +96,18 @@ export default class Dev1and extends BaseService {
       ].join('')
     })
 
-    const hatenaBookmarks = response.data.data.weekly_hatena.items.map(
-      (item) => {
-        return [
-          '<li>',
-          '<a href="' + item.url + '">' + item.title + '</a>',
-          ' [' +
-            item.good_count.toString() +
-            ', ' +
-            item.hit_count.toString() +
-            ']',
-          '</li>',
-        ].join('')
-      }
-    )
+    const hatenaBookmarks = response.data.weekly_hatena.items.map((item) => {
+      return [
+        '<li>',
+        '<a href="' + item.url + '">' + item.title + '</a>',
+        ' [' +
+          item.good_count.toString() +
+          ', ' +
+          item.hit_count.toString() +
+          ']',
+        '</li>',
+      ].join('')
+    })
 
     return {
       status: true,

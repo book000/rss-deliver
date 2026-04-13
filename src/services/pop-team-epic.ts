@@ -2,7 +2,6 @@ import { BaseService } from '@/base-service'
 import { Logger } from '@book000/node-utils'
 import CollectResult, { Item } from '@/model/collect-result'
 import ServiceInformation from '@/model/service-information'
-import axios from 'axios'
 import * as cheerio from 'cheerio'
 import { XMLParser } from 'fast-xml-parser'
 import fs from 'node:fs'
@@ -178,22 +177,21 @@ export default class PopTeamEpic extends BaseService {
   } | null> {
     const logger = Logger.configure('PopTeamEpic::fetchTakecomicSeason')
     const takecomicSeriesUrl = 'https://takecomic.jp/series/8f3616ce97c36'
-    const response = await axios.get(takecomicSeriesUrl, {
-      validateStatus: () => true,
+    const res = await fetch(takecomicSeriesUrl, {
       headers: {
         ...PopTeamEpic.COMMON_HEADERS,
         Accept:
           'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
       },
     })
-    if (response.status !== 200) {
+    if (res.status !== 200) {
       logger.warn(
-        `❗ Failed to fetch takecomic series page (status=${response.status})`
+        `❗ Failed to fetch takecomic series page (status=${res.status})`
       )
       return null
     }
 
-    const $ = cheerio.load(response.data)
+    const $ = cheerio.load(await res.text())
     const title = $('meta[property="og:title"]').attr('content')?.trim() ?? ''
     const image = PopTeamEpic.normalizeUrl(
       $('meta[property="og:image"]').attr('content') ?? ''
@@ -272,13 +270,9 @@ export default class PopTeamEpic extends BaseService {
     logger: Logger
   ): Promise<TakecomicEpisode[]> {
     const rssUrl = `${seriesUrl.replace(/\/$/, '')}/rss`
-    const response = await axios.get<string>(rssUrl, {
-      validateStatus: () => true,
-    })
-    if (response.status !== 200) {
-      logger.warn(
-        `❗ Failed to fetch official RSS (${response.status}) ${rssUrl}`
-      )
+    const res = await fetch(rssUrl)
+    if (res.status !== 200) {
+      logger.warn(`❗ Failed to fetch official RSS (${res.status}) ${rssUrl}`)
       return []
     }
 
@@ -287,7 +281,7 @@ export default class PopTeamEpic extends BaseService {
       const parser = new XMLParser({
         ignoreAttributes: false,
       })
-      const rss = parser.parse(response.data) as TakecomicRssResponse
+      const rss = parser.parse(await res.text()) as TakecomicRssResponse
       rawItems = rss.rss?.channel?.item
     } catch (error) {
       logger.warn(`❗ Failed to parse official RSS: ${String(error)}`)
@@ -339,21 +333,20 @@ export default class PopTeamEpic extends BaseService {
   ): Promise<string[]> {
     try {
       // エピソードページを取得
-      const response = await axios.get(episodeUrl, {
-        validateStatus: () => true,
+      const res = await fetch(episodeUrl, {
         headers: {
           ...PopTeamEpic.COMMON_HEADERS,
           Accept:
             'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
         },
       })
-      if (response.status !== 200) {
-        logger.warn(`❗ Failed to fetch episode page (${response.status})`)
+      if (res.status !== 200) {
+        logger.warn(`❗ Failed to fetch episode page (${res.status})`)
         return []
       }
 
       // viewerId を抽出
-      const viewerId = this.extractViewerId(response.data)
+      const viewerId = this.extractViewerId(await res.text())
       if (!viewerId) {
         logger.warn('❗ viewerId not found in episode page')
         return []
@@ -447,24 +440,22 @@ export default class PopTeamEpic extends BaseService {
 
     logger.info(`📡 Fetching totalPages: viewerId=${viewerId}`)
 
-    const initialResponse = await axios.get<ContentsInfoResponse>(initialUrl, {
-      validateStatus: () => true,
-      headers,
-    })
+    const initialRes = await fetch(initialUrl, { headers })
 
-    if (initialResponse.status !== 200) {
+    if (initialRes.status !== 200) {
       logger.warn(
-        `❌ API error (initial): status=${initialResponse.status}, viewerId=${viewerId}`
+        `❌ API error (initial): status=${initialRes.status}, viewerId=${viewerId}`
       )
       return null
     }
 
-    const totalPages = initialResponse.data.totalPages
+    const initialData = (await initialRes.json()) as ContentsInfoResponse
+    const totalPages = initialData.totalPages
     logger.info(`📖 totalPages=${totalPages}`)
 
     if (totalPages <= 1) {
       // 1 ページのみの場合は初回レスポンスをそのまま返す
-      return initialResponse.data
+      return initialData
     }
 
     // ステップ2: 全ページを取得
@@ -476,21 +467,18 @@ export default class PopTeamEpic extends BaseService {
     })
     const fullUrl = `https://takecomic.jp/api/book/contentsInfo?${fullParams.toString()}`
 
-    const fullResponse = await axios.get<ContentsInfoResponse>(fullUrl, {
-      validateStatus: () => true,
-      headers,
-    })
+    const fullRes = await fetch(fullUrl, { headers })
 
-    if (fullResponse.status !== 200) {
+    if (fullRes.status !== 200) {
       logger.warn(
-        `❌ API error (full): status=${fullResponse.status}, viewerId=${viewerId}`
+        `❌ API error (full): status=${fullRes.status}, viewerId=${viewerId}`
       )
       return null
     }
 
     logger.info(`✅ Fetched ${totalPages} pages successfully`)
 
-    return fullResponse.data
+    return (await fullRes.json()) as ContentsInfoResponse
   }
 
   /**
@@ -508,9 +496,7 @@ export default class PopTeamEpic extends BaseService {
   ): Promise<string | null> {
     try {
       // 画像をダウンロード（CloudFront 署名付き URL には適切なヘッダーが必要）
-      const response = await axios.get(pageData.imageUrl, {
-        responseType: 'arraybuffer',
-        validateStatus: () => true,
+      const res = await fetch(pageData.imageUrl, {
         headers: {
           Referer: episodeUrl,
           ...PopTeamEpic.COMMON_HEADERS,
@@ -519,12 +505,12 @@ export default class PopTeamEpic extends BaseService {
         },
       })
 
-      if (response.status !== 200) {
-        logger.warn(`❗ Failed to download image (${response.status})`)
+      if (res.status !== 200) {
+        logger.warn(`❗ Failed to download image (${res.status})`)
         return null
       }
 
-      const scrambledBuffer = Buffer.from(response.data)
+      const scrambledBuffer = Buffer.from(await res.arrayBuffer())
 
       // スクランブル配列をパース
       let scramble: number[]
@@ -754,17 +740,14 @@ export default class PopTeamEpic extends BaseService {
     }
 
     const imageUrl = PopTeamEpic.normalizeUrl(image)
-    const response = await axios.get(imageUrl, {
-      responseType: 'arraybuffer',
-      validateStatus: () => true,
-    })
-    if (response.status !== 200) {
+    const imageRes = await fetch(imageUrl)
+    if (imageRes.status !== 200) {
       logger.warn(
-        `❗ Failed to download image (${response.status}) ${imageUrl}`
+        `❗ Failed to download image (${imageRes.status}) ${imageUrl}`
       )
       return null
     }
-    return Buffer.from(response.data)
+    return Buffer.from(await imageRes.arrayBuffer())
   }
 
   private parseJstDate(dateText: string): Date | null {

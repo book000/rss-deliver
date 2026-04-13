@@ -2,7 +2,6 @@ import { BaseService } from '@/base-service'
 import { Logger } from '@book000/node-utils'
 import CollectResult, { Item } from '@/model/collect-result'
 import ServiceInformation from '@/model/service-information'
-import axios from 'axios'
 import * as cheerio from 'cheerio'
 
 export default class PhysicalUpLettuceClub extends BaseService {
@@ -24,16 +23,11 @@ export default class PhysicalUpLettuceClub extends BaseService {
 
   async collect(): Promise<CollectResult> {
     const logger = Logger.configure('PhysicalUpLettuceClub::collect')
-    const response = await axios.get(
-      'https://www.lettuceclub.net/news/serial/11656/',
-      {
-        validateStatus: () => true,
-      }
-    )
-    if (response.status !== 200) {
-      throw new Error(`Failed to fetch: ${response.status}`)
+    const res = await fetch('https://www.lettuceclub.net/news/serial/11656/')
+    if (!res.ok) {
+      throw new Error(`Failed to fetch: ${res.status}`)
     }
-    const $ = cheerio.load(response.data)
+    const $ = cheerio.load(await res.text())
     const items: Item[] = []
     for (const index of $('div.l-contents ol.p-items__list li.p-items__item')) {
       const item = $(index)
@@ -77,13 +71,11 @@ export default class PhysicalUpLettuceClub extends BaseService {
     images: string[]
     pubDate: string
   } | null> {
-    const response = await axios.get(url, {
-      validateStatus: () => true,
-    })
-    if (response.status !== 200) {
+    const res = await fetch(url)
+    if (res.status !== 200) {
       return null
     }
-    const $ = cheerio.load(response.data)
+    const $ = cheerio.load(await res.text())
 
     const images: string[] = []
     for (const index of $('div.l-contents figure img')) {

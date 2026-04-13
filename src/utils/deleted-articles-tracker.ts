@@ -1,4 +1,3 @@
-import axios from 'axios'
 import { Logger } from '@book000/node-utils'
 import { Item } from '@/model/collect-result'
 import { DeletedArticle, DeletedArticlesHistory } from '@/model/deleted-article'
@@ -41,25 +40,20 @@ export async function fetchDeletedArticlesHistory(): Promise<DeletedArticlesHist
 
   try {
     // キャッシュバスターを追加
-    const response = await axios.get<DeletedArticlesHistory>(
-      `${DELETED_ARTICLES_HISTORY_URL}?t=${Date.now()}`,
-      {
-        validateStatus: () => true,
-        timeout: 10_000,
-      }
-    )
+    const res = await fetch(`${DELETED_ARTICLES_HISTORY_URL}?t=${Date.now()}`, {
+      signal: AbortSignal.timeout(10_000),
+    })
 
-    if (response.status !== 200) {
-      logger.warn(
-        `❌ Failed to fetch deleted articles history: ${response.status}`
-      )
+    if (res.status !== 200) {
+      logger.warn(`❌ Failed to fetch deleted articles history: ${res.status}`)
       return null
     }
 
+    const data = (await res.json()) as DeletedArticlesHistory
     logger.info(
-      `✅ Fetched deleted articles history with ${response.data.articles.length} articles`
+      `✅ Fetched deleted articles history with ${data.articles.length} articles`
     )
-    return response.data
+    return data
   } catch (error) {
     logger.error('❌ Failed to fetch deleted articles history', error as Error)
     return null

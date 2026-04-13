@@ -3,7 +3,6 @@ import { Logger } from '@book000/node-utils'
 import CollectResult, { Item } from '@/model/collect-result'
 import ServiceInformation from '@/model/service-information'
 import { fetchArticleWithCache } from '@/utils/article-fetcher'
-import axios from 'axios'
 import * as cheerio from 'cheerio'
 import crypto from 'node:crypto'
 import fs from 'node:fs'
@@ -35,7 +34,7 @@ export default class TdrUpdates extends BaseService {
    */
   async collect(): Promise<CollectResult> {
     const logger = Logger.configure('TdrUpdates::collect')
-    const response = await axios.get(this.pageUrl, {
+    const res = await fetch(this.pageUrl, {
       headers: {
         'User-Agent':
           'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:121.0) Gecko/20100101 Firefox/121.0',
@@ -49,12 +48,11 @@ export default class TdrUpdates extends BaseService {
         'Cache-Control': 'no-cache',
         DNT: '1',
       },
-      validateStatus: () => true,
     })
-    if (response.status !== 200) {
-      throw new Error(`Failed to fetch: ${response.status}`)
+    if (!res.ok) {
+      throw new Error(`Failed to fetch: ${res.status}`)
     }
-    const $ = cheerio.load(response.data)
+    const $ = cheerio.load(await res.text())
     const items: Item[] = []
     for (const element of $('div.listUpdate ul li a')) {
       const anchor = $(element)
@@ -105,14 +103,11 @@ export default class TdrUpdates extends BaseService {
   }
 
   async pdf2png(url: string): Promise<string[]> {
-    const response = await axios.get(url, {
-      responseType: 'arraybuffer',
-      validateStatus: () => true,
-    })
-    if (response.status !== 200) {
-      throw new Error(`Failed to fetch pdf: ${response.status}`)
+    const res = await fetch(url)
+    if (!res.ok) {
+      throw new Error(`Failed to fetch pdf: ${res.status}`)
     }
-    const pdfData = new Uint8Array(response.data)
+    const pdfData = new Uint8Array(await res.arrayBuffer())
     const pdfDocument = await pdfjs.getDocument({ data: pdfData }).promise
 
     if (!fs.existsSync('output/tdr-updates/')) {

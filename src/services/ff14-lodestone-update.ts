@@ -3,7 +3,6 @@ import CollectResult, { Item } from '@/model/collect-result'
 import ServiceInformation from '@/model/service-information'
 import { fetchArticleWithCache } from '@/utils/article-fetcher'
 import { Logger } from '@book000/node-utils'
-import axios from 'axios'
 import * as cheerio from 'cheerio'
 
 export default class FF14LodestoneUpdate extends BaseService {
@@ -29,24 +28,20 @@ export default class FF14LodestoneUpdate extends BaseService {
    */
   async collect(): Promise<CollectResult> {
     const logger = Logger.configure('FF14LodestoneUpdate::collect')
-    const response = await axios.get<string>(
-      'https://jp.finalfantasyxiv.com/lodestone/',
-      {
-        validateStatus: () => true,
-      }
-    )
-    if (response.status !== 200 && response.data.includes('メンテナンス中')) {
+    const res = await fetch('https://jp.finalfantasyxiv.com/lodestone/')
+    const data = await res.text()
+    if (res.status !== 200 && data.includes('メンテナンス中')) {
       logger.info('🚧 FF14 Lodestone is under maintenance')
       return {
         status: false,
         items: [],
       }
     }
-    if (response.status !== 200) {
-      throw new Error(`Failed to fetch: ${response.status}`)
+    if (res.status !== 200) {
+      throw new Error(`Failed to fetch: ${res.status}`)
     }
 
-    const $ = cheerio.load(response.data)
+    const $ = cheerio.load(data)
     const items: Item[] = []
     /*
       -: 最新
