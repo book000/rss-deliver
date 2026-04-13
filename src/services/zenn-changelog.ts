@@ -3,7 +3,6 @@ import CollectResult, { Item } from '@/model/collect-result'
 import ServiceInformation from '@/model/service-information'
 import { fetchArticleWithCache } from '@/utils/article-fetcher'
 import { Logger } from '@book000/node-utils'
-import axios from 'axios'
 import { XMLParser } from 'fast-xml-parser'
 
 interface LinkClass {
@@ -99,16 +98,14 @@ export default class ZennChangelog extends BaseService {
     const parser = new XMLParser({
       ignoreAttributes: false,
     })
-    const response = await axios.get('https://info.zenn.dev/rss/feed.xml', {
-      validateStatus: () => true,
-    })
-    if (response.status !== 200) {
+    const res = await fetch('https://info.zenn.dev/rss/feed.xml')
+    if (res.status !== 200) {
       return {
         status: false,
         items: [],
       }
     }
-    const oldFeed: ZeenChangelogResponse = parser.parse(response.data)
+    const oldFeed: ZeenChangelogResponse = parser.parse(await res.text())
     const items: Item[] = []
     for (const item of oldFeed.rss.channel.item.slice(0, 10)) {
       // 直近の 10 件を取得

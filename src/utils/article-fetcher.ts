@@ -1,6 +1,5 @@
 import { BaseService } from '@/base-service'
 import { Logger } from '@book000/node-utils'
-import axios from 'axios'
 import * as cheerio from 'cheerio'
 import crypto from 'node:crypto'
 import fs from 'node:fs'
@@ -155,16 +154,15 @@ export async function fetchArticleWithCache(
 
   // 記事ページをフェッチする
   logger.info(`🌐 記事ページをフェッチ: ${url}`)
-  const response = await axios.get(url, {
+  const res = await fetch(url, {
     headers: options.headers ?? DEFAULT_HEADERS,
-    validateStatus: () => true,
   })
-  if (response.status !== 200) {
-    throw new Error(`Failed to fetch article: ${response.status} ${url}`)
+  if (res.status !== 200) {
+    throw new Error(`Failed to fetch article: ${res.status} ${url}`)
   }
 
   const content = extractArticleContent(
-    response.data as string,
+    await res.text(),
     options.contentSelector,
     options.removeSelectors
   )

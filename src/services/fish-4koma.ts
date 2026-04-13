@@ -2,7 +2,6 @@ import { BaseService } from '@/base-service'
 import { Logger } from '@book000/node-utils'
 import CollectResult, { Item } from '@/model/collect-result'
 import ServiceInformation from '@/model/service-information'
-import axios from 'axios'
 import * as cheerio from 'cheerio'
 import fs from 'node:fs'
 import crypto from 'node:crypto'
@@ -28,14 +27,9 @@ export default class Fish4Koma extends BaseService {
   async collect(): Promise<CollectResult> {
     const logger = Logger.configure('Fish4Koma::collect')
 
-    const response = await axios.get(
-      'https://nyopenasu.livedoor.blog/index.rdf',
-      {
-        validateStatus: () => true,
-      }
-    )
-    if (response.status !== 200) {
-      logger.warn(`❗ Failed to fetch RSS feed (${response.status})`)
+    const res = await fetch('https://nyopenasu.livedoor.blog/index.rdf')
+    if (res.status !== 200) {
+      logger.warn(`❗ Failed to fetch RSS feed (${res.status})`)
       return {
         status: false,
         items: [],
@@ -46,7 +40,7 @@ export default class Fish4Koma extends BaseService {
       ignoreAttributes: false,
       parseAttributeValue: false,
     })
-    const parsed = parser.parse(response.data) as {
+    const parsed = parser.parse(await res.text()) as {
       'rdf:RDF': {
         channel: unknown
         item?: {
@@ -73,15 +67,13 @@ export default class Fish4Koma extends BaseService {
       logger.info(`📃 Processing: ${rssItem.title} - ${itemUrl}`)
 
       // 記事の詳細ページを取得
-      const itemResponse = await axios.get(itemUrl, {
-        validateStatus: () => true,
-      })
-      if (itemResponse.status !== 200) {
-        logger.warn(`❗ Failed to fetch item page (${itemResponse.status})`)
+      const itemRes = await fetch(itemUrl)
+      if (itemRes.status !== 200) {
+        logger.warn(`❗ Failed to fetch item page (${itemRes.status})`)
         continue
       }
 
-      const $ = cheerio.load(itemResponse.data)
+      const $ = cheerio.load(await itemRes.text())
 
       // 記事本文から画像を抽出
       const articleBody = $('.article-body-inner')
@@ -125,16 +117,13 @@ export default class Fish4Koma extends BaseService {
       // 最大サイズの画像を特定
       for (const imageUrl of images) {
         try {
-          const imageResponse = await axios.get(imageUrl, {
-            responseType: 'arraybuffer',
-            validateStatus: () => true,
-          })
-          if (imageResponse.status !== 200) {
+          const imageRes = await fetch(imageUrl)
+          if (imageRes.status !== 200) {
             logger.warn(`❗ Failed to download image: ${imageUrl}`)
             continue
           }
 
-          const buffer = Buffer.from(imageResponse.data)
+          const buffer = Buffer.from(await imageRes.arrayBuffer())
           const metadata = await sharp(buffer).metadata()
           const imageSize = (metadata.width || 0) * (metadata.height || 0)
 
@@ -152,12 +141,9 @@ export default class Fish4Koma extends BaseService {
       let savedImageUrl: string | null = null
       if (largestImageUrl) {
         try {
-          const imageResponse = await axios.get(largestImageUrl, {
-            responseType: 'arraybuffer',
-            validateStatus: () => true,
-          })
-          if (imageResponse.status === 200) {
-            const buffer = Buffer.from(imageResponse.data)
+          const imageRes2 = await fetch(largestImageUrl)
+          if (imageRes2.ok) {
+            const buffer = Buffer.from(await imageRes2.arrayBuffer())
 
             // 画像をトリミングして余白を追加
             const processedBuffer = await sharp(buffer)

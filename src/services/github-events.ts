@@ -2,7 +2,6 @@ import { BaseService } from '@/base-service'
 import { Logger } from '@book000/node-utils'
 import CollectResult, { Item } from '@/model/collect-result'
 import ServiceInformation from '@/model/service-information'
-import axios from 'axios'
 import * as cheerio from 'cheerio'
 import ical, { VEvent, ParameterValue } from 'node-ical'
 
@@ -70,11 +69,9 @@ export default class GitHubEvents extends BaseService {
 
     try {
       // ICS ファイルを取得
-      const response = await axios.get<string>(ICS_URL, {
-        validateStatus: () => true,
-      })
-      if (response.status !== 200) {
-        logger.error(`❌ Failed to fetch ICS: ${response.status}`)
+      const res = await fetch(ICS_URL)
+      if (res.status !== 200) {
+        logger.error(`❌ Failed to fetch ICS: ${res.status}`)
         return {
           status: false,
           items: [],
@@ -82,7 +79,7 @@ export default class GitHubEvents extends BaseService {
       }
 
       // ICS をパース
-      const calendar = ical.sync.parseICS(response.data)
+      const calendar = ical.sync.parseICS(await res.text())
 
       // VEVENT のみ抽出
       const events = Object.values(calendar).filter(
