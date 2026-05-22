@@ -60,5 +60,8 @@
         "arm64"
       ]
     }
+  },
+  "dependencies": {
+    "fast-xml-builder": "^1.2.0"
   }
 }
