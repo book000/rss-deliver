@@ -1,4 +1,4 @@
-import { Builder as XMLBuilder } from 'fast-xml-builder'
+import XMLBuilder from 'fast-xml-builder'
 import { XMLParser } from 'fast-xml-parser'
 import fs from 'node:fs'
 import { BaseService } from './base-service'
