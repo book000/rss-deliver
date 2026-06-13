@@ -41,7 +41,7 @@
     "fast-xml-builder": "1.2.0",
     "fast-xml-parser": "5.8.0",
     "node-ical": "0.26.1",
-    "pdfjs-dist": "5.7.284",
+    "pdfjs-dist": "6.0.227",
     "prettier": "3.8.4",
     "run-z": "2.1.0",
     "sharp": "0.34.5",
