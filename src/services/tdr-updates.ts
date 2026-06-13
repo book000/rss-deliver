@@ -60,9 +60,9 @@ export default class TdrUpdates extends BaseService {
       const url = new URL(href, this.pageUrl).toString()
       const title = anchor.find('p.txt').text()
       const dateRaw = anchor.find('p.date').text() // 2023.7.24 更新情報
-      const year = ('0000' + dateRaw.split('.')[0]).slice(-4)
-      const month = ('00' + dateRaw.split('.')[1]).slice(-2)
-      const day = ('00' + dateRaw.split('.')[2].split(' ')[0]).slice(-2)
+      const year = ('0000' + dateRaw.split('.', 1)[0]).slice(-4)
+      const month = ('00' + dateRaw.split('.', 2)[1]).slice(-2)
+      const day = ('00' + dateRaw.split('.', 3)[2].split(' ', 1)[0]).slice(-2)
       const date = new Date(`${year}-${month}-${day}T00:00:00+09:00`)
 
       logger.info(`📃 ${title} ${url} (${year}/${month}/${day})`)

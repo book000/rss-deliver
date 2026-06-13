@@ -50,9 +50,9 @@ async function generateRSSService(service: BaseService) {
     },
     rss: {
       '@_version': '2.0',
-      '@_xmlns:dc': 'http://purl.org/dc/elements/1.1/',
-      '@_xmlns:content': 'http://purl.org/rss/1.0/modules/content/',
-      '@_xmlns:atom': 'http://www.w3.org/2005/Atom',
+      '@_xmlns:dc': 'https://purl.org/dc/elements/1.1/',
+      '@_xmlns:content': 'https://purl.org/rss/1.0/modules/content/',
+      '@_xmlns:atom': 'https://www.w3.org/2005/Atom',
       channel: service.information(),
       item: processedItems,
     },
