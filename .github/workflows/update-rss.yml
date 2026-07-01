@@ -17,7 +17,7 @@ jobs:
       - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7
 
       - name: Setup pnpm
-        uses: pnpm/action-setup@v6
+        uses: pnpm/action-setup@0ebf47130e4866e96fce0953f49152a61190b271 # v6
         id: pnpm-install
         with:
           run_install: false
@@ -29,14 +29,14 @@ jobs:
           echo "STORE_PATH=$(pnpm store path)" >> $GITHUB_OUTPUT
 
       - name: 📂 Setup pnpm cache
-        uses: actions/cache@v6
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6
         with:
           path: ${{ steps.pnpm-cache.outputs.STORE_PATH }}
           key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
           restore-keys: |
             ${{ runner.os }}-pnpm-store-
 
-      - uses: actions/setup-node@v6
+      - uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6
         with:
           node-version-file: .node-version
 
@@ -50,7 +50,7 @@ jobs:
           pnpm install --frozen-lockfile --prefer-frozen-lockfile
 
       - name: 🖼️ Restore popute image cache
-        uses: actions/cache/restore@v6
+        uses: actions/cache/restore@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6
         with:
           path: output/popute
           key: popute-images-${{ github.run_id }}
@@ -58,7 +58,7 @@ jobs:
             popute-images-
 
       - name: 📦 Restore article cache
-        uses: actions/cache/restore@v6
+        uses: actions/cache/restore@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6
         with:
           path: .article-cache
           key: article-cache-${{ github.run_id }}
@@ -72,7 +72,7 @@ jobs:
       - name: 🖼️ Save popute image cache
         if: always()
         continue-on-error: true
-        uses: actions/cache/save@v6
+        uses: actions/cache/save@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6
         with:
           path: output/popute
           key: popute-images-${{ github.run_id }}
@@ -80,14 +80,14 @@ jobs:
       - name: 💾 Save article cache
         if: always()
         continue-on-error: true
-        uses: actions/cache/save@v6
+        uses: actions/cache/save@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6
         with:
           path: .article-cache
           key: article-cache-${{ github.run_id }}
 
       - name: Error handling
         if: failure()
-        uses: Ilshidur/action-discord@0.4.0
+        uses: Ilshidur/action-discord@d2594079a10f1d6739ee50a2471f0ca57418b554 # 0.4.0
         with:
           args: ''
         env:
@@ -102,7 +102,7 @@ jobs:
             ]
 
       - name: Upload Pages-artifact
-        uses: actions/upload-pages-artifact@v5
+        uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9 # v5
         if: always()
         with:
           path: output
@@ -120,4 +120,4 @@ jobs:
     steps:
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v5
+        uses: actions/deploy-pages@cd2ce8fcbc39b97be8ca5fce6e763baed58fa128 # v5
