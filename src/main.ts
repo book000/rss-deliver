@@ -10,7 +10,7 @@ import FF14LodestoneUpdate from './services/ff14-lodestone-update'
 import PhysicalUpLettuceClub from './services/physical-up-lettuce-club'
 import Rikei2LettuceClub from './services/rikei-2-lettuce-club'
 import ZennChangelog from './services/zenn-changelog'
-import Dev1and from './services/dev1and'
+import Development1and from './services/development1and'
 import TdrUpdates from './services/tdr-updates'
 import PopTeamEpic from './services/pop-team-epic'
 import Fish4Koma from './services/fish-4koma'
@@ -81,7 +81,7 @@ async function generateRSS() {
     new FF14LodestoneObstacle(),
     new PhysicalUpLettuceClub(),
     new Rikei2LettuceClub(),
-    new Dev1and(),
+    new Development1and(),
     new TdrUpdates(),
     new PopTeamEpic(),
     new Fish4Koma(),
@@ -190,7 +190,10 @@ function generateList() {
     .filter((s) => s !== null)
   fs.writeFileSync(
     'output/index.html',
-    template.replace('{{ RSS-FILES }}', '<ul>' + list.join('\n') + '</ul>')
+    template.replace(
+      '{{ RSS-FILES }}',
+      () => '<ul>' + list.join('\n') + '</ul>'
+    )
   )
   logger.info('✅ Generated list')
 }

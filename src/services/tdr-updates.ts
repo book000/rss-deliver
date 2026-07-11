@@ -34,7 +34,7 @@ export default class TdrUpdates extends BaseService {
    */
   async collect(): Promise<CollectResult> {
     const logger = Logger.configure('TdrUpdates::collect')
-    const res = await fetch(this.pageUrl, {
+    const response = await fetch(this.pageUrl, {
       headers: {
         'User-Agent':
           'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:121.0) Gecko/20100101 Firefox/121.0',
@@ -49,15 +49,15 @@ export default class TdrUpdates extends BaseService {
         DNT: '1',
       },
     })
-    if (!res.ok) {
-      throw new Error(`Failed to fetch: ${res.status}`)
+    if (!response.ok) {
+      throw new Error(`Failed to fetch: ${response.status}`)
     }
-    const $ = cheerio.load(await res.text())
+    const $ = cheerio.load(await response.text())
     const items: Item[] = []
     for (const element of $('div.listUpdate ul li a')) {
       const anchor = $(element)
       const href = anchor.attr('href') ?? ''
-      const url = new URL(href, this.pageUrl).toString()
+      const url = new URL(href, this.pageUrl).href
       const title = anchor.find('p.txt').text()
       const dateRaw = anchor.find('p.date').text() // 2023.7.24 更新情報
       const year = ('0000' + dateRaw.split('.', 1)[0]).slice(-4)
@@ -103,11 +103,11 @@ export default class TdrUpdates extends BaseService {
   }
 
   async pdf2png(url: string): Promise<string[]> {
-    const res = await fetch(url)
-    if (!res.ok) {
-      throw new Error(`Failed to fetch pdf: ${res.status}`)
+    const response = await fetch(url)
+    if (!response.ok) {
+      throw new Error(`Failed to fetch pdf: ${response.status}`)
     }
-    const pdfData = new Uint8Array(await res.arrayBuffer())
+    const pdfData = new Uint8Array(await response.arrayBuffer())
     const pdfDocument = await pdfjs.getDocument({ data: pdfData }).promise
 
     if (!fs.existsSync('output/tdr-updates/')) {

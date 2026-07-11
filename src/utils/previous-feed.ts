@@ -55,16 +55,16 @@ export async function getPreviousFeed(serviceName: string): Promise<RssItem[]> {
     const feedUrl = `https://book000.github.io/rss-deliver/${serviceName}.xml`
     logger.info(`📥 Fetching previous feed from ${feedUrl}`)
 
-    const res = await fetch(feedUrl, {
+    const response = await fetch(feedUrl, {
       signal: AbortSignal.timeout(10_000),
     })
 
-    if (res.status !== 200) {
-      logger.warn(`❌ Failed to fetch previous feed: ${res.status}`)
+    if (response.status !== 200) {
+      logger.warn(`❌ Failed to fetch previous feed: ${response.status}`)
       return []
     }
 
-    const text = await res.text()
+    const text = await response.text()
     const parser = new XMLParser({
       ignoreAttributes: false,
     })
@@ -115,22 +115,22 @@ export function inheritPubDate(
   deletedHistory?: DeletedArticlesHistory | null,
   serviceName?: string
 ): Item {
-  const logger = Logger.configure(
-    `utils.inheritPubDate${serviceName ? `.${serviceName}` : ''}`
-  )
-
   // すでにpubDateがある場合はそのまま返す
   if (newItem.pubDate) {
     return newItem
   }
+
+  const logger = Logger.configure(
+    `utils.inheritPubDate${serviceName ? `.${serviceName}` : ''}`
+  )
 
   // IDとして使える値を決定（優先順位: guid > link > title）
   const itemId = (newItem.guid?.['#text'] ?? newItem.link) || newItem.title
 
   // 前回のアイテムから一致するものを検索
   const previousItem = previousItems.find((item) => {
-    const prevId = (item.guid?.['#text'] ?? item.link) || item.title
-    return prevId === itemId
+    const previousId = (item.guid?.['#text'] ?? item.link) || item.title
+    return previousId === itemId
   })
 
   // 前回のpubDateがある場合は引き継ぐ

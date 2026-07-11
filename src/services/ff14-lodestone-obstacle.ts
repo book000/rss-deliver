@@ -28,17 +28,17 @@ export default class FF14LodestoneObstacle extends BaseService {
    */
   async collect(): Promise<CollectResult> {
     const logger = Logger.configure('FF14LodestoneObstacle::collect')
-    const res = await fetch('https://jp.finalfantasyxiv.com/lodestone/')
-    const data = await res.text()
-    if (res.status !== 200 && data.includes('メンテナンス中')) {
+    const response = await fetch('https://jp.finalfantasyxiv.com/lodestone/')
+    const data = await response.text()
+    if (response.status !== 200 && data.includes('メンテナンス中')) {
       logger.info('🚧 FF14 Lodestone is under maintenance')
       return {
         status: false,
         items: [],
       }
     }
-    if (res.status !== 200) {
-      throw new Error(`Failed to fetch: ${res.status}`)
+    if (response.status !== 200) {
+      throw new Error(`Failed to fetch: ${response.status}`)
     }
 
     const $ = cheerio.load(data)

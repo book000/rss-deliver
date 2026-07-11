@@ -98,14 +98,14 @@ export default class ZennChangelog extends BaseService {
     const parser = new XMLParser({
       ignoreAttributes: false,
     })
-    const res = await fetch('https://info.zenn.dev/rss/feed.xml')
-    if (res.status !== 200) {
+    const response = await fetch('https://info.zenn.dev/rss/feed.xml')
+    if (response.status !== 200) {
       return {
         status: false,
         items: [],
       }
     }
-    const oldFeed: ZeenChangelogResponse = parser.parse(await res.text())
+    const oldFeed: ZeenChangelogResponse = parser.parse(await response.text())
     const items: Item[] = []
     for (const item of oldFeed.rss.channel.item.slice(0, 10)) {
       // 直近の 10 件を取得

@@ -69,9 +69,9 @@ export default class GitHubEvents extends BaseService {
 
     try {
       // ICS ファイルを取得
-      const res = await fetch(ICS_URL)
-      if (res.status !== 200) {
-        logger.error(`❌ Failed to fetch ICS: ${res.status}`)
+      const response = await fetch(ICS_URL)
+      if (response.status !== 200) {
+        logger.error(`❌ Failed to fetch ICS: ${response.status}`)
         return {
           status: false,
           items: [],
@@ -79,7 +79,7 @@ export default class GitHubEvents extends BaseService {
       }
 
       // ICS をパース
-      const calendar = ical.sync.parseICS(await res.text())
+      const calendar = ical.sync.parseICS(await response.text())
 
       // VEVENT のみ抽出
       const events = Object.values(calendar).filter(
@@ -115,7 +115,7 @@ export default class GitHubEvents extends BaseService {
 
         // 開始・終了日時
         if (event.start instanceof Date) {
-          const startStr = event.start.toLocaleString('ja-JP', {
+          const startString = event.start.toLocaleString('ja-JP', {
             timeZone: 'Asia/Tokyo',
             year: 'numeric',
             month: '2-digit',
@@ -123,10 +123,10 @@ export default class GitHubEvents extends BaseService {
             hour: '2-digit',
             minute: '2-digit',
           })
-          contentParts.push(`<p>開始: ${startStr}</p>`)
+          contentParts.push(`<p>開始: ${startString}</p>`)
         }
         if (event.end instanceof Date) {
-          const endStr = event.end.toLocaleString('ja-JP', {
+          const endString = event.end.toLocaleString('ja-JP', {
             timeZone: 'Asia/Tokyo',
             year: 'numeric',
             month: '2-digit',
@@ -134,7 +134,7 @@ export default class GitHubEvents extends BaseService {
             hour: '2-digit',
             minute: '2-digit',
           })
-          contentParts.push(`<p>終了: ${endStr}</p>`)
+          contentParts.push(`<p>終了: ${endString}</p>`)
         }
 
         // 場所

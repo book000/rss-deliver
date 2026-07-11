@@ -177,21 +177,21 @@ export default class PopTeamEpic extends BaseService {
   } | null> {
     const logger = Logger.configure('PopTeamEpic::fetchTakecomicSeason')
     const takecomicSeriesUrl = 'https://takecomic.jp/series/8f3616ce97c36'
-    const res = await fetch(takecomicSeriesUrl, {
+    const response = await fetch(takecomicSeriesUrl, {
       headers: {
         ...PopTeamEpic.COMMON_HEADERS,
         Accept:
           'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
       },
     })
-    if (res.status !== 200) {
+    if (response.status !== 200) {
       logger.warn(
-        `❗ Failed to fetch takecomic series page (status=${res.status})`
+        `❗ Failed to fetch takecomic series page (status=${response.status})`
       )
       return null
     }
 
-    const $ = cheerio.load(await res.text())
+    const $ = cheerio.load(await response.text())
     const title = $('meta[property="og:title"]').attr('content')?.trim() ?? ''
     const image = PopTeamEpic.normalizeUrl(
       $('meta[property="og:image"]').attr('content') ?? ''
@@ -252,7 +252,7 @@ export default class PopTeamEpic extends BaseService {
         'content:encoded': imageUrls
           .map((url) => `<img src="${url}">`)
           .join('<br>'),
-        ...(date ? { pubDate: date.toUTCString() } : {}),
+        ...(date && { pubDate: date.toUTCString() }),
       })
     }
     return items
@@ -270,9 +270,11 @@ export default class PopTeamEpic extends BaseService {
     logger: Logger
   ): Promise<TakecomicEpisode[]> {
     const rssUrl = `${seriesUrl.replace(/\/$/, '')}/rss`
-    const res = await fetch(rssUrl)
-    if (res.status !== 200) {
-      logger.warn(`❗ Failed to fetch official RSS (${res.status}) ${rssUrl}`)
+    const response = await fetch(rssUrl)
+    if (response.status !== 200) {
+      logger.warn(
+        `❗ Failed to fetch official RSS (${response.status}) ${rssUrl}`
+      )
       return []
     }
 
@@ -281,7 +283,7 @@ export default class PopTeamEpic extends BaseService {
       const parser = new XMLParser({
         ignoreAttributes: false,
       })
-      const rss = parser.parse(await res.text()) as TakecomicRssResponse
+      const rss = parser.parse(await response.text()) as TakecomicRssResponse
       rawItems = rss.rss?.channel?.item
     } catch (error) {
       logger.warn(`❗ Failed to parse official RSS: ${String(error)}`)
@@ -333,20 +335,20 @@ export default class PopTeamEpic extends BaseService {
   ): Promise<string[]> {
     try {
       // エピソードページを取得
-      const res = await fetch(episodeUrl, {
+      const response = await fetch(episodeUrl, {
         headers: {
           ...PopTeamEpic.COMMON_HEADERS,
           Accept:
             'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
         },
       })
-      if (res.status !== 200) {
-        logger.warn(`❗ Failed to fetch episode page (${res.status})`)
+      if (response.status !== 200) {
+        logger.warn(`❗ Failed to fetch episode page (${response.status})`)
         return []
       }
 
       // viewerId を抽出
-      const viewerId = this.extractViewerId(await res.text())
+      const viewerId = this.extractViewerId(await response.text())
       if (!viewerId) {
         logger.warn('❗ viewerId not found in episode page')
         return []
@@ -363,8 +365,9 @@ export default class PopTeamEpic extends BaseService {
 
       // 各ページの画像を取得・復元
       const imageUrls: string[] = []
-      for (let i = 0; i < contentsInfo.totalPages; i++) {
-        const pageData = contentsInfo.result[i] as PageContentInfo | undefined
+      for (let index = 0; index < contentsInfo.totalPages; index++) {
+        const pageData = contentsInfo.result[index] as
+          PageContentInfo | undefined
         if (!pageData) {
           continue
         }
@@ -394,10 +397,10 @@ export default class PopTeamEpic extends BaseService {
    */
   private extractViewerId(html: string): string | null {
     // data-comici-viewer-id 属性から viewerId を探す
-    const dataAttrRegex = /data-comici-viewer-id="([a-f0-9]{32})"/i
-    const dataAttrMatch = dataAttrRegex.exec(html)
-    if (dataAttrMatch?.[1]) {
-      return dataAttrMatch[1]
+    const dataAttributeRegex = /data-comici-viewer-id="([a-f0-9]{32})"/i
+    const dataAttributeMatch = dataAttributeRegex.exec(html)
+    if (dataAttributeMatch?.[1]) {
+      return dataAttributeMatch[1]
     }
 
     // __next_f (React Server Components) から viewerId を探す（フォールバック）
@@ -430,26 +433,26 @@ export default class PopTeamEpic extends BaseService {
     }
 
     // ステップ1: page-to=1 で totalPages を取得
-    const initialParams = new URLSearchParams({
+    const initialParameters = new URLSearchParams({
       'user-id': '',
       'comici-viewer-id': viewerId,
       'page-from': '0',
       'page-to': '1',
     })
-    const initialUrl = `https://takecomic.jp/api/book/contentsInfo?${initialParams.toString()}`
+    const initialUrl = `https://takecomic.jp/api/book/contentsInfo?${initialParameters.toString()}`
 
     logger.info(`📡 Fetching totalPages: viewerId=${viewerId}`)
 
-    const initialRes = await fetch(initialUrl, { headers })
+    const initialResponse = await fetch(initialUrl, { headers })
 
-    if (initialRes.status !== 200) {
+    if (initialResponse.status !== 200) {
       logger.warn(
-        `❌ API error (initial): status=${initialRes.status}, viewerId=${viewerId}`
+        `❌ API error (initial): status=${initialResponse.status}, viewerId=${viewerId}`
       )
       return null
     }
 
-    const initialData = (await initialRes.json()) as ContentsInfoResponse
+    const initialData = (await initialResponse.json()) as ContentsInfoResponse
     const totalPages = initialData.totalPages
     logger.info(`📖 totalPages=${totalPages}`)
 
@@ -459,26 +462,26 @@ export default class PopTeamEpic extends BaseService {
     }
 
     // ステップ2: 全ページを取得
-    const fullParams = new URLSearchParams({
+    const fullParameters = new URLSearchParams({
       'user-id': '',
       'comici-viewer-id': viewerId,
       'page-from': '0',
       'page-to': String(totalPages),
     })
-    const fullUrl = `https://takecomic.jp/api/book/contentsInfo?${fullParams.toString()}`
+    const fullUrl = `https://takecomic.jp/api/book/contentsInfo?${fullParameters.toString()}`
 
-    const fullRes = await fetch(fullUrl, { headers })
+    const fullResponse = await fetch(fullUrl, { headers })
 
-    if (fullRes.status !== 200) {
+    if (fullResponse.status !== 200) {
       logger.warn(
-        `❌ API error (full): status=${fullRes.status}, viewerId=${viewerId}`
+        `❌ API error (full): status=${fullResponse.status}, viewerId=${viewerId}`
       )
       return null
     }
 
     logger.info(`✅ Fetched ${totalPages} pages successfully`)
 
-    return (await fullRes.json()) as ContentsInfoResponse
+    return (await fullResponse.json()) as ContentsInfoResponse
   }
 
   /**
@@ -496,7 +499,7 @@ export default class PopTeamEpic extends BaseService {
   ): Promise<string | null> {
     try {
       // 画像をダウンロード（CloudFront 署名付き URL には適切なヘッダーが必要）
-      const res = await fetch(pageData.imageUrl, {
+      const response = await fetch(pageData.imageUrl, {
         headers: {
           Referer: episodeUrl,
           ...PopTeamEpic.COMMON_HEADERS,
@@ -505,12 +508,12 @@ export default class PopTeamEpic extends BaseService {
         },
       })
 
-      if (res.status !== 200) {
-        logger.warn(`❗ Failed to download image (${res.status})`)
+      if (response.status !== 200) {
+        logger.warn(`❗ Failed to download image (${response.status})`)
         return null
       }
 
-      const scrambledBuffer = Buffer.from(await res.arrayBuffer())
+      const scrambledBuffer = Buffer.from(await response.arrayBuffer())
 
       // スクランブル配列をパース
       let scramble: number[]
@@ -548,7 +551,7 @@ export default class PopTeamEpic extends BaseService {
   ): Promise<Buffer> {
     // グリッドサイズを計算（通常は 4x4 = 16 タイル）
     const gridSize = Math.sqrt(scramble.length)
-    if (!Number.isInteger(gridSize)) {
+    if (!Number.isSafeInteger(gridSize)) {
       // スクランブルなしとして元の画像を返す
       return buffer
     }
@@ -592,21 +595,21 @@ export default class PopTeamEpic extends BaseService {
     // scramble[i] = srcIndex
     // 出力も Column-Major 順序で配置する
     const compositeOperations: sharp.OverlayOptions[] = []
-    let destTileIndex = 0
+    let destinationTileIndex = 0
     for (let c = 0; c < gridSize; c++) {
       for (let r = 0; r < gridSize; r++) {
-        const srcIndex = scramble[destTileIndex]
+        const sourceIndex = scramble[destinationTileIndex]
 
-        if (srcIndex < 0 || srcIndex >= tiles.length) {
+        if (sourceIndex < 0 || sourceIndex >= tiles.length) {
           return buffer
         }
 
         compositeOperations.push({
-          input: tiles[srcIndex],
+          input: tiles[sourceIndex],
           left: c * actualTileWidth,
           top: r * actualTileHeight,
         })
-        destTileIndex++
+        destinationTileIndex++
       }
     }
 
@@ -690,7 +693,7 @@ export default class PopTeamEpic extends BaseService {
       const parsedUrl = new URL(normalizedUrl)
       parsedUrl.search = ''
       parsedUrl.hash = ''
-      return parsedUrl.toString().replace(/\/$/, '')
+      return parsedUrl.href.replace(/\/$/, '')
     } catch {
       return normalizedUrl
     }
@@ -740,14 +743,14 @@ export default class PopTeamEpic extends BaseService {
     }
 
     const imageUrl = PopTeamEpic.normalizeUrl(image)
-    const imageRes = await fetch(imageUrl)
-    if (imageRes.status !== 200) {
+    const imageResponse = await fetch(imageUrl)
+    if (imageResponse.status !== 200) {
       logger.warn(
-        `❗ Failed to download image (${imageRes.status}) ${imageUrl}`
+        `❗ Failed to download image (${imageResponse.status}) ${imageUrl}`
       )
       return null
     }
-    return Buffer.from(await imageRes.arrayBuffer())
+    return Buffer.from(await imageResponse.arrayBuffer())
   }
 
   private parseJstDate(dateText: string): Date | null {
@@ -766,7 +769,7 @@ export default class PopTeamEpic extends BaseService {
       return `https:${url}`
     }
     if (url.startsWith('/')) {
-      return new URL(url, 'https://takecomic.jp').toString()
+      return new URL(url, 'https://takecomic.jp').href
     }
     return url
   }

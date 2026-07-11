@@ -40,16 +40,21 @@ export async function fetchDeletedArticlesHistory(): Promise<DeletedArticlesHist
 
   try {
     // キャッシュバスターを追加
-    const res = await fetch(`${DELETED_ARTICLES_HISTORY_URL}?t=${Date.now()}`, {
-      signal: AbortSignal.timeout(10_000),
-    })
+    const response = await fetch(
+      `${DELETED_ARTICLES_HISTORY_URL}?t=${Date.now()}`,
+      {
+        signal: AbortSignal.timeout(10_000),
+      }
+    )
 
-    if (res.status !== 200) {
-      logger.warn(`❌ Failed to fetch deleted articles history: ${res.status}`)
+    if (response.status !== 200) {
+      logger.warn(
+        `❌ Failed to fetch deleted articles history: ${response.status}`
+      )
       return null
     }
 
-    const data = (await res.json()) as DeletedArticlesHistory
+    const data = (await response.json()) as DeletedArticlesHistory
     logger.info(
       `✅ Fetched deleted articles history with ${data.articles.length} articles`
     )

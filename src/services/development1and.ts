@@ -43,12 +43,12 @@ interface Data {
   monthly_github: Daily
 }
 
-interface Dev1andFeedResponse {
+interface Development1andFeedResponse {
   last_updated_at: string
   data: Data
 }
 
-export default class Dev1and extends BaseService {
+export default class Development1and extends BaseService {
   information(): ServiceInformation {
     return {
       title: 'Devland',
@@ -65,23 +65,20 @@ export default class Dev1and extends BaseService {
   }
 
   async collect(): Promise<CollectResult> {
-    const res = await fetch('https://feed.dev1and.com/api/v1/dashboard')
-    if (res.status !== 200) {
+    const response_ = await fetch('https://feed.dev1and.com/api/v1/dashboard')
+    if (response_.status !== 200) {
       return {
         status: false,
         items: [],
       }
     }
 
-    const response = (await res.json()) as Dev1andFeedResponse
+    const response = (await response_.json()) as Development1andFeedResponse
 
     const lastUpdatedAtRaw = response.last_updated_at
     const lastUpdatedAt = new Date(lastUpdatedAtRaw.replaceAll('/', '-'))
     const lastUpdatedDateText = this.getYearMonthWeek(lastUpdatedAt)
-    const lastUpdatedDate = lastUpdatedDateText
-      .replaceAll('/', '-')
-      .replaceAll('#', '-')
-      .replaceAll(' ', '-')
+    const lastUpdatedDate = lastUpdatedDateText.replaceAll(/[/# ]/g, '-')
 
     const weeklyArticle = response.data.weekly_hit.items.map((item) => {
       return [

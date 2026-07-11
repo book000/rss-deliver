@@ -23,8 +23,10 @@ export default class Rikei2LettuceClub extends BaseService {
 
   async collect(): Promise<CollectResult> {
     const logger = Logger.configure('Rikei2LettuceClub::collect')
-    const res = await fetch('https://www.lettuceclub.net/news/serial/12004/')
-    const $ = cheerio.load(await res.text())
+    const response = await fetch(
+      'https://www.lettuceclub.net/news/serial/12004/'
+    )
+    const $ = cheerio.load(await response.text())
     const items: Item[] = []
     for (const index of $('div.l-contents ol.p-items__list li.p-items__item')) {
       const item = $(index)
@@ -68,11 +70,11 @@ export default class Rikei2LettuceClub extends BaseService {
     images: string[]
     pubDate: string
   } | null> {
-    const res = await fetch(url)
-    if (res.status !== 200) {
+    const response = await fetch(url)
+    if (response.status !== 200) {
       return null
     }
-    const $ = cheerio.load(await res.text())
+    const $ = cheerio.load(await response.text())
 
     const images: string[] = []
     for (const index of $('div.l-contents figure img')) {

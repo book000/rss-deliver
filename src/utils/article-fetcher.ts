@@ -73,18 +73,18 @@ interface ArticleCacheData {
  * ヘッダー・フッター・ナビゲーション等を除去してメインエリアの HTML を返す。
  * @param html ページの HTML 文字列
  * @param contentSelector メインコンテンツのセレクタ (デフォルト: '#mainArea')
- * @param removeSelectors 除去するセレクタのリスト (デフォルト: 標準的なノイズ要素)
+ * @param selectorsToRemove 除去するセレクタのリスト (デフォルト: 標準的なノイズ要素)
  * @returns 抽出したコンテンツ HTML
  */
 export function extractArticleContent(
   html: string,
   contentSelector: string = DEFAULT_CONTENT_SELECTOR,
-  removeSelectors: string[] = DEFAULT_REMOVE_SELECTORS
+  selectorsToRemove: string[] = DEFAULT_REMOVE_SELECTORS
 ): string {
   const $ = cheerio.load(html)
 
   // ナビゲーション・ヘッダー・フッターなどのノイズ要素を除去する
-  for (const selector of removeSelectors) {
+  for (const selector of selectorsToRemove) {
     $(selector).remove()
   }
 
@@ -121,12 +121,12 @@ export async function fetchArticleWithCache(
     cacheTtlMs?: number
   } = {}
 ): Promise<string> {
-  const cacheDir = path.join(
+  const cacheDirectory = path.join(
     ARTICLE_CACHE_BASE_DIR,
     toKebabCase(service.constructor.name)
   )
   const urlHash = crypto.createHash('sha256').update(url).digest('hex')
-  const cachePath = path.join(cacheDir, `${urlHash}.json`)
+  const cachePath = path.join(cacheDirectory, `${urlHash}.json`)
   const cacheTtlMs = options.cacheTtlMs ?? DEFAULT_CACHE_TTL_MS
 
   // キャッシュが存在し有効期限内であればキャッシュから返す
@@ -154,15 +154,15 @@ export async function fetchArticleWithCache(
 
   // 記事ページをフェッチする
   logger.info(`🌐 記事ページをフェッチ: ${url}`)
-  const res = await fetch(url, {
+  const response = await fetch(url, {
     headers: options.headers ?? DEFAULT_HEADERS,
   })
-  if (res.status !== 200) {
-    throw new Error(`Failed to fetch article: ${res.status} ${url}`)
+  if (response.status !== 200) {
+    throw new Error(`Failed to fetch article: ${response.status} ${url}`)
   }
 
   const content = extractArticleContent(
-    await res.text(),
+    await response.text(),
     options.contentSelector,
     options.removeSelectors
   )
@@ -174,8 +174,8 @@ export async function fetchArticleWithCache(
   }
 
   // キャッシュディレクトリを作成してキャッシュに保存する
-  if (!fs.existsSync(cacheDir)) {
-    fs.mkdirSync(cacheDir, { recursive: true })
+  if (!fs.existsSync(cacheDirectory)) {
+    fs.mkdirSync(cacheDirectory, { recursive: true })
   }
   const cacheData: ArticleCacheData = {
     url,

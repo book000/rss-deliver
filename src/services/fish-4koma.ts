@@ -27,9 +27,9 @@ export default class Fish4Koma extends BaseService {
   async collect(): Promise<CollectResult> {
     const logger = Logger.configure('Fish4Koma::collect')
 
-    const res = await fetch('https://nyopenasu.livedoor.blog/index.rdf')
-    if (res.status !== 200) {
-      logger.warn(`❗ Failed to fetch RSS feed (${res.status})`)
+    const response = await fetch('https://nyopenasu.livedoor.blog/index.rdf')
+    if (response.status !== 200) {
+      logger.warn(`❗ Failed to fetch RSS feed (${response.status})`)
       return {
         status: false,
         items: [],
@@ -40,7 +40,7 @@ export default class Fish4Koma extends BaseService {
       ignoreAttributes: false,
       parseAttributeValue: false,
     })
-    const parsed = parser.parse(await res.text()) as {
+    const parsed = parser.parse(await response.text()) as {
       'rdf:RDF': {
         channel: unknown
         item?: {
@@ -67,23 +67,23 @@ export default class Fish4Koma extends BaseService {
       logger.info(`📃 Processing: ${rssItem.title} - ${itemUrl}`)
 
       // 記事の詳細ページを取得
-      const itemRes = await fetch(itemUrl)
-      if (itemRes.status !== 200) {
-        logger.warn(`❗ Failed to fetch item page (${itemRes.status})`)
+      const itemResponse = await fetch(itemUrl)
+      if (itemResponse.status !== 200) {
+        logger.warn(`❗ Failed to fetch item page (${itemResponse.status})`)
         continue
       }
 
-      const $ = cheerio.load(await itemRes.text())
+      const $ = cheerio.load(await itemResponse.text())
 
       // 記事本文から画像を抽出
       const articleBody = $('.article-body-inner')
       const images: string[] = []
 
       articleBody.find('img').each((_, element) => {
-        const src = $(element).attr('src')
-        if (src?.includes('livedoor.blogimg.jp')) {
+        const source = $(element).attr('src')
+        if (source?.includes('livedoor.blogimg.jp')) {
           // サムネイルの場合、元画像URLに変換
-          const fullImageUrl = src.replace(/-s$/, '')
+          const fullImageUrl = source.replace(/-s$/, '')
           images.push(fullImageUrl)
         }
       })
@@ -111,39 +111,15 @@ export default class Fish4Koma extends BaseService {
         fs.mkdirSync('output/fish4koma/', { recursive: true })
       }
 
-      let largestImageUrl: string | null = null
-      let maxImageSize = 0
-
       // 最大サイズの画像を特定
-      for (const imageUrl of images) {
-        try {
-          const imageRes = await fetch(imageUrl)
-          if (imageRes.status !== 200) {
-            logger.warn(`❗ Failed to download image: ${imageUrl}`)
-            continue
-          }
-
-          const buffer = Buffer.from(await imageRes.arrayBuffer())
-          const metadata = await sharp(buffer).metadata()
-          const imageSize = (metadata.width || 0) * (metadata.height || 0)
-
-          if (imageSize > maxImageSize) {
-            maxImageSize = imageSize
-            largestImageUrl = imageUrl
-          }
-        } catch (error) {
-          logger.warn(
-            `❗ Error checking image size ${imageUrl}: ${String(error)}`
-          )
-        }
-      }
+      const largestImageUrl = await this.findLargestImage(images, logger)
 
       let savedImageUrl: string | null = null
       if (largestImageUrl) {
         try {
-          const imageRes2 = await fetch(largestImageUrl)
-          if (imageRes2.ok) {
-            const buffer = Buffer.from(await imageRes2.arrayBuffer())
+          const imageResponse2 = await fetch(largestImageUrl)
+          if (imageResponse2.ok) {
+            const buffer = Buffer.from(await imageResponse2.arrayBuffer())
 
             // 画像をトリミングして余白を追加
             const processedBuffer = await sharp(buffer)
@@ -191,5 +167,44 @@ export default class Fish4Koma extends BaseService {
     const hash = crypto.createHash('md5')
     hash.update(buffer)
     return hash.digest('hex')
+  }
+
+  /**
+   * 候補画像の中から最大サイズの画像 URL を特定する。
+   * @param images 候補画像 URL のリスト
+   * @param logger ロガー
+   * @returns 最大サイズの画像 URL。取得できるものがなければ null
+   */
+  async findLargestImage(
+    images: string[],
+    logger: Logger
+  ): Promise<string | null> {
+    let largestImageUrl: string | null = null
+    let maxImageSize = 0
+
+    for (const imageUrl of images) {
+      try {
+        const imageResponse = await fetch(imageUrl)
+        if (imageResponse.status !== 200) {
+          logger.warn(`❗ Failed to download image: ${imageUrl}`)
+          continue
+        }
+
+        const buffer = Buffer.from(await imageResponse.arrayBuffer())
+        const metadata = await sharp(buffer).metadata()
+        const imageSize = (metadata.width || 0) * (metadata.height || 0)
+
+        if (imageSize > maxImageSize) {
+          maxImageSize = imageSize
+          largestImageUrl = imageUrl
+        }
+      } catch (error) {
+        logger.warn(
+          `❗ Error checking image size ${imageUrl}: ${String(error)}`
+        )
+      }
+    }
+
+    return largestImageUrl
   }
 }
