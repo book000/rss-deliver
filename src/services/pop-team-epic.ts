@@ -6,7 +6,7 @@ import * as cheerio from 'cheerio'
 import { XMLParser } from 'fast-xml-parser'
 import fs from 'node:fs'
 import crypto from 'node:crypto'
-import sharp from 'sharp'
+import sharp, { type OverlayOptions } from 'sharp'
 
 /**
  * contentsInfo API のページデータ
@@ -591,7 +591,7 @@ export default class PopTeamEpic extends BaseService {
     // スクランブル配列に従ってタイルを再配置
     // scramble[i] = srcIndex
     // 出力も Column-Major 順序で配置する
-    const compositeOperations: sharp.OverlayOptions[] = []
+    const compositeOperations: OverlayOptions[] = []
     let destTileIndex = 0
     for (let c = 0; c < gridSize; c++) {
       for (let r = 0; r < gridSize; r++) {
