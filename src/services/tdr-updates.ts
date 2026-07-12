@@ -57,7 +57,7 @@ export default class TdrUpdates extends BaseService {
     for (const element of $('div.listUpdate ul li a')) {
       const anchor = $(element)
       const href = anchor.attr('href') ?? ''
-      const url = new URL(href, this.pageUrl).toString()
+      const url = new URL(href, this.pageUrl).href
       const title = anchor.find('p.txt').text()
       const dateRaw = anchor.find('p.date').text() // 2023.7.24 更新情報
       const year = ('0000' + dateRaw.split('.', 1)[0]).slice(-4)

@@ -115,14 +115,14 @@ export function inheritPubDate(
   deletedHistory?: DeletedArticlesHistory | null,
   serviceName?: string
 ): Item {
-  const logger = Logger.configure(
-    `utils.inheritPubDate${serviceName ? `.${serviceName}` : ''}`
-  )
-
   // すでにpubDateがある場合はそのまま返す
   if (newItem.pubDate) {
     return newItem
   }
+
+  const logger = Logger.configure(
+    `utils.inheritPubDate${serviceName ? `.${serviceName}` : ''}`
+  )
 
   // IDとして使える値を決定（優先順位: guid > link > title）
   const itemId = (newItem.guid?.['#text'] ?? newItem.link) || newItem.title

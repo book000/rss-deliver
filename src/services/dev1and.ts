@@ -78,10 +78,7 @@ export default class Dev1and extends BaseService {
     const lastUpdatedAtRaw = response.last_updated_at
     const lastUpdatedAt = new Date(lastUpdatedAtRaw.replaceAll('/', '-'))
     const lastUpdatedDateText = this.getYearMonthWeek(lastUpdatedAt)
-    const lastUpdatedDate = lastUpdatedDateText
-      .replaceAll('/', '-')
-      .replaceAll('#', '-')
-      .replaceAll(' ', '-')
+    const lastUpdatedDate = lastUpdatedDateText.replaceAll(/[/# ]/g, '-')
 
     const weeklyArticle = response.data.weekly_hit.items.map((item) => {
       return [
