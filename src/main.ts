@@ -190,7 +190,10 @@ function generateList() {
     .filter((s) => s !== null)
   fs.writeFileSync(
     'output/index.html',
-    template.replace('{{ RSS-FILES }}', '<ul>' + list.join('\n') + '</ul>')
+    template.replace(
+      '{{ RSS-FILES }}',
+      () => '<ul>' + list.join('\n') + '</ul>'
+    )
   )
   logger.info('✅ Generated list')
 }

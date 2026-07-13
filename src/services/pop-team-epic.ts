@@ -252,7 +252,7 @@ export default class PopTeamEpic extends BaseService {
         'content:encoded': imageUrls
           .map((url) => `<img src="${url}">`)
           .join('<br>'),
-        ...(date ? { pubDate: date.toUTCString() } : {}),
+        ...(date && { pubDate: date.toUTCString() }),
       })
     }
     return items
@@ -548,7 +548,7 @@ export default class PopTeamEpic extends BaseService {
   ): Promise<Buffer> {
     // グリッドサイズを計算（通常は 4x4 = 16 タイル）
     const gridSize = Math.sqrt(scramble.length)
-    if (!Number.isInteger(gridSize)) {
+    if (!Number.isSafeInteger(gridSize)) {
       // スクランブルなしとして元の画像を返す
       return buffer
     }
@@ -690,7 +690,7 @@ export default class PopTeamEpic extends BaseService {
       const parsedUrl = new URL(normalizedUrl)
       parsedUrl.search = ''
       parsedUrl.hash = ''
-      return parsedUrl.toString().replace(/\/$/, '')
+      return parsedUrl.href.replace(/\/$/, '')
     } catch {
       return normalizedUrl
     }
@@ -766,7 +766,7 @@ export default class PopTeamEpic extends BaseService {
       return `https:${url}`
     }
     if (url.startsWith('/')) {
-      return new URL(url, 'https://takecomic.jp').toString()
+      return new URL(url, 'https://takecomic.jp').href
     }
     return url
   }
