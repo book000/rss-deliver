@@ -29,17 +29,28 @@ export default class PhysicalUpLettuceClub extends BaseService {
     }
     const $ = cheerio.load(await res.text())
     const items: Item[] = []
-    for (const index of $('div.l-contents ol.p-items__list li.p-items__item')) {
+    const seenLinks = new Set<string>()
+    // 記事一覧のグリッド表示・「最新話」ハイライト表示のどちらも
+    // 記事詳細への <a href="/news/article/.../display/"> を持つため、
+    // 一覧全体からまとめて拾う
+    for (const index of $('a[href*="/news/article/"]')) {
       const item = $(index)
-      const title = item.find('p.c-item__title').text()
-      let link =
-        'https://www.lettuceclub.net' + (item.find('a').attr('href') ?? '')
-      if (!link.includes('article')) {
+      const href = item.attr('href') ?? ''
+      if (!href.includes('article')) {
         continue
       }
+      let link = 'https://www.lettuceclub.net' + href
       if (link.endsWith('display/')) {
         link = link.replace('display/', '')
       }
+      if (seenLinks.has(link)) {
+        continue
+      }
+      seenLinks.add(link)
+
+      // タイトルは <a> 内の最後の <p> に入っている
+      // (グリッド表示ではジャンルタグの <p> の次にタイトルの <p> が続く)
+      const title = item.find('p').last().text().trim()
 
       const content = await this.getContent(link)
       if (!content) {
@@ -77,19 +88,28 @@ export default class PhysicalUpLettuceClub extends BaseService {
     }
     const $ = cheerio.load(await res.text())
 
+    // 記事ページには広告・関連商品・バナー等の figure/img も混在するため、
+    // URL に含まれる記事 ID を持つ画像パスのみに絞り込む
+    const articleId = /\/article\/(\d+)\//.exec(url)?.[1]
+
     const images: string[] = []
-    for (const index of $('div.l-contents figure img')) {
-      const url = $(index).attr('src') ?? ''
-      if (!url.startsWith('https')) {
+    for (const index of $('figure img')) {
+      const src = $(index).attr('src') ?? ''
+      if (!src.startsWith('https')) {
         continue
       }
-      images.push(url)
+      if (articleId && !src.includes(`/i/N1/${articleId}/`)) {
+        continue
+      }
+      images.push(src)
     }
-    const rawPubDate = $('main time.c-date').attr('datetime') ?? '' // 2021.04.28
-    const pubDate = new Date(rawPubDate.replaceAll('.', '/')).toUTCString()
+
+    // 「公開」日時を持つ <time datetime="..."> を採用する
+    // (ページ末尾のランキングウィジェットにも <time> があるため先頭のものを使う)
+    const rawPubDate = $('time[datetime*="T"]').first().attr('datetime') ?? ''
+    const pubDate = rawPubDate ? new Date(rawPubDate).toUTCString() : ''
     return {
-      // 1つ目はサムネイルなので除外
-      images: images.slice(1),
+      images,
       pubDate,
     }
   }
