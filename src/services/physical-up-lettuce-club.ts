@@ -30,9 +30,8 @@ export default class PhysicalUpLettuceClub extends BaseService {
     const $ = cheerio.load(await res.text())
     const items: Item[] = []
     const seenLinks = new Set<string>()
-    // 記事一覧のグリッド表示・「最新話」ハイライト表示のどちらも
-    // 記事詳細への <a href="/news/article/.../display/"> を持つため、
-    // 一覧全体からまとめて拾う
+    // グリッド表示・「最新話」ハイライト表示のどちらも同じ形式のリンクを持つため、
+    // 表示ブロックごとに分けず一覧全体からまとめて拾う
     for (const index of $('a[href*="/news/article/"]')) {
       const item = $(index)
       const href = item.attr('href') ?? ''
@@ -48,8 +47,7 @@ export default class PhysicalUpLettuceClub extends BaseService {
       }
       seenLinks.add(link)
 
-      // タイトルは <a> 内の最後の <p> に入っている
-      // (グリッド表示ではジャンルタグの <p> の次にタイトルの <p> が続く)
+      // グリッド表示ではジャンルタグの <p> の次にタイトルの <p> が続く
       const title = item.find('p').last().text().trim()
 
       const content = await this.getContent(link)
@@ -88,8 +86,7 @@ export default class PhysicalUpLettuceClub extends BaseService {
     }
     const $ = cheerio.load(await res.text())
 
-    // 記事ページには広告・関連商品・バナー等の figure/img も混在するため、
-    // URL に含まれる記事 ID を持つ画像パスのみに絞り込む
+    // 広告・関連商品等の figure/img と区別するため、記事ID を含む画像のみに絞り込む
     const articleId = /\/article\/(\d+)\//.exec(url)?.[1]
 
     const images: string[] = []
@@ -104,8 +101,7 @@ export default class PhysicalUpLettuceClub extends BaseService {
       images.push(src)
     }
 
-    // 「公開」日時を持つ <time datetime="..."> を採用する
-    // (ページ末尾のランキングウィジェットにも <time> があるため先頭のものを使う)
+    // ページ末尾のランキングウィジェットにも <time> があるため先頭のものを使う
     const rawPubDate = $('time[datetime*="T"]').first().attr('datetime') ?? ''
     const pubDate = rawPubDate ? new Date(rawPubDate).toUTCString() : ''
     return {
