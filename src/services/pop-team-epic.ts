@@ -754,7 +754,7 @@ export default class PopTeamEpic extends BaseService {
     if (!dateText) {
       return null
     }
-    const [year, month, day] = dateText.split('/')
+    const [year, month, day] = dateText.split('/', 3)
     if (!year || !month || !day) {
       return null
     }
