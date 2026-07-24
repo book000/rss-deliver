@@ -45,8 +45,8 @@ importers:
         specifier: 5.10.1
         version: 5.10.1
       node-ical:
-        specifier: 0.26.1
-        version: 0.26.1
+        specifier: 0.27.0
+        version: 0.27.0
       pdfjs-dist:
         specifier: 6.1.200
         version: 6.1.200
@@ -474,10 +474,6 @@ packages:
 
   '@jridgewell/sourcemap-codec@1.5.5':
     resolution: {integrity: sha512-cYQ9310grqxueWbl+WuIUIaiUaDcj7WOq5fVhEljNVgRfOUhY9fy2zTvfoqWsnebh8Sl70VScFbICvJnLKB0Og==}
-
-  '@js-temporal/polyfill@0.5.1':
-    resolution: {integrity: sha512-hloP58zRVCRSpgDxmqCWJNlizAlUgJFqG2ypq79DCvyv9tHjRYMDOcPFjzfl/A1/YxDvRCZz8wvZvmapQnKwFQ==}
-    engines: {node: '>=12'}
 
   '@napi-rs/canvas-android-arm64@1.0.2':
     resolution: {integrity: sha512-IMXKVQod0ol4vt3gmClUfXz4JAgHYESGPCUqmH3lQxBoL0K/2greJaQE1HVBVxWWFKfLc4OLZVdxg7kXVyXv+g==}
@@ -1653,9 +1649,6 @@ packages:
   js-tokens@4.0.0:
     resolution: {integrity: sha512-RdJUflcE3cUzKiMqQgsCu06FPu9UdIJO0beYbPhHN4k6apgJtifcoCtT9bcxOpYBtpD2kCM6Sbzg4CausW/PKQ==}
 
-  jsbi@4.3.2:
-    resolution: {integrity: sha512-9fqMSQbhJykSeii05nxKl4m6Eqn2P6rOlYiS+C5Dr/HPIU/7yZxu5qzbs40tgaFORiw2Amd0mirjxatXYMkIew==}
-
   jsesc@3.1.0:
     resolution: {integrity: sha512-/sM3dO2FOzXjKQhJuo0Q173wf2KOo8t4I8vHy6lF9poUp7bKT0/NHE8fPX23PwfhnykfqnC2xRxOnVw5XuGIaA==}
     engines: {node: '>=6'}
@@ -1782,9 +1775,9 @@ packages:
     resolution: {integrity: sha512-kXs9Go0cah0qHVV2v389IXQLdLCeE1xfFtjOAF+iobu0OIoG1pje8At2vMHyaPMiPMnG/LWP50twML21eMcAag==}
     engines: {node: '>= 0.4'}
 
-  node-ical@0.26.1:
-    resolution: {integrity: sha512-KoYLpsz7Ga9lPDpt9vy0iKcgcb/9Ix7ICRZd0csLXMl2lZOSONGj7HrcktJFR7Jid1l44Zu1H4k/1nB04rWPgQ==}
-    engines: {node: '>=20'}
+  node-ical@0.27.0:
+    resolution: {integrity: sha512-WYXDfh5cm4BnJNB1ZC5pSkMXUyBFjE31ni96HqOIImt80kVIa+gcHzWAxB5CUX4W0vg1Dv0Vy8EvGPEf3lwFXg==}
+    engines: {node: '>=22'}
 
   node-releases@2.0.50:
     resolution: {integrity: sha512-J6l92tKHX6w8Jy5nO1Vuc01NoIiRGi/d6qBKVxh+IQ8Cr3b6HbVNfKiF8ZpFKufTwpwxMmce2W3iQZ861ZRyTg==}
@@ -1990,8 +1983,8 @@ packages:
     engines: {node: '>= 0.4'}
     hasBin: true
 
-  rrule-temporal@1.6.0:
-    resolution: {integrity: sha512-tlhiNroletItRVdVP3knk92MCPNdFmPpehQMxf+jSo0CHZpmp1WUsvdVpg2iS++J9+O7/89J64BldN21kbcBqA==}
+  rrule-temporal@2.0.1:
+    resolution: {integrity: sha512-pUSHCgOho0yNYMQRu7P6TSqqaj1GjYdSXlzo4zRoO7dVvY3Is7a2QMKYzSLJrMU/OF0tRB/9NzK1YLjQ8dmkug==}
 
   run-z@2.1.0:
     resolution: {integrity: sha512-GGG0odDAOlGc6JvUXjrIiHmS2ZpyAKoJVIEPmSFapkK32ax+V9Q1lRtJFPBjFBZWTVflbkIbwEFTAsexLYxqdw==}
@@ -2672,10 +2665,6 @@ snapshots:
     optional: true
 
   '@jridgewell/sourcemap-codec@1.5.5': {}
-
-  '@js-temporal/polyfill@0.5.1':
-    dependencies:
-      jsbi: 4.3.2
 
   '@napi-rs/canvas-android-arm64@1.0.2':
     optional: true
@@ -4096,8 +4085,6 @@ snapshots:
 
   js-tokens@4.0.0: {}
 
-  jsbi@4.3.2: {}
-
   jsesc@3.1.0: {}
 
   json-buffer@3.0.1: {}
@@ -4229,9 +4216,9 @@ snapshots:
       object.entries: 1.1.9
       semver: 6.3.1
 
-  node-ical@0.26.1:
+  node-ical@0.27.0:
     dependencies:
-      rrule-temporal: 1.6.0
+      rrule-temporal: 2.0.1
       temporal-polyfill: 0.3.2
 
   node-releases@2.0.50: {}
@@ -4464,9 +4451,8 @@ snapshots:
       path-parse: 1.0.7
       supports-preserve-symlinks-flag: 1.0.0
 
-  rrule-temporal@1.6.0:
+  rrule-temporal@2.0.1:
     dependencies:
-      '@js-temporal/polyfill': 0.5.1
       temporal-spec: 1.0.0
 
   run-z@2.1.0:
