@@ -1,0 +1,13 @@
+diff --git a/node-ical.d.ts b/node-ical.d.ts
+index 1d5a12fa7bb792925724f00dee93a86fd7c7ee4e..4ce5721791e478e64d7113199bfd50c0caa8a952 100644
+--- a/node-ical.d.ts
++++ b/node-ical.d.ts
+@@ -109,7 +109,7 @@ declare module 'node-ical' {
+     options: ExpandRecurringEventOptions,
+   ): EventInstance[];
+ 
+-  declare const _default: {
++  const _default: {
+     fromURL: typeof fromURL;
+     parseFile: typeof parseFile;
+     parseICS: typeof parseICS;
