@@ -196,16 +196,15 @@ export default class PopTeamEpic extends BaseService {
     const image = PopTeamEpic.normalizeUrl(
       $('meta[property="og:image"]').attr('content') ?? ''
     )
-    if (!title || !image) {
-      return null
-    }
-    return {
-      title,
-      url: takecomicSeriesUrl,
-      image,
-      siteName: '竹コミ！',
-      source: 'takecomic',
-    }
+    return !title || !image
+      ? null
+      : {
+          title,
+          url: takecomicSeriesUrl,
+          image,
+          siteName: '竹コミ！',
+          source: 'takecomic',
+        }
   }
 
   /**
@@ -755,20 +754,16 @@ export default class PopTeamEpic extends BaseService {
       return null
     }
     const [year, month, day] = dateText.split('/', 3)
-    if (!year || !month || !day) {
-      return null
-    }
-    return new Date(`${year}-${month}-${day}T00:00:00+09:00`)
+    return !year || !month || !day
+      ? null
+      : new Date(`${year}-${month}-${day}T00:00:00+09:00`)
   }
 
   private static normalizeUrl(url: string): string {
     if (url.startsWith('//')) {
       return `https:${url}`
     }
-    if (url.startsWith('/')) {
-      return new URL(url, 'https://takecomic.jp').href
-    }
-    return url
+    return url.startsWith('/') ? new URL(url, 'https://takecomic.jp').href : url
   }
 
   hash(buffer: Buffer): string {
