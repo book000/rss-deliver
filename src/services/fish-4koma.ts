@@ -81,11 +81,12 @@ export default class Fish4Koma extends BaseService {
 
       articleBody.find('img').each((_, element) => {
         const src = $(element).attr('src')
-        if (src?.includes('livedoor.blogimg.jp')) {
-          // サムネイルの場合、元画像URLに変換
-          const fullImageUrl = src.replace(/-s$/, '')
-          images.push(fullImageUrl)
+        if (!src?.includes('livedoor.blogimg.jp')) {
+          return
         }
+        // サムネイルの場合、元画像URLに変換
+        const fullImageUrl = src.replace(/-s$/, '')
+        images.push(fullImageUrl)
       })
 
       // リンクから元画像を取得

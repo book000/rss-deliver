@@ -20,8 +20,7 @@ const EVENTS_PAGE_URL = 'https://resources.github.com/ja/events/'
 function getParameterValue(
   value: ParameterValue | undefined
 ): string | undefined {
-  if (typeof value === 'string') return value
-  return value?.val
+  return typeof value === 'string' ? value : value?.val
 }
 
 /**
