@@ -163,7 +163,7 @@ settings:
   excludeLinksFromLockfile: false
 
 patchedDependencies:
-  node-ical@0.27.1: c4444a7270176ed7757ab1a7ff14fe38ecc011ff529788dffb57b31459a5213b
+  node-ical@0.27.2: c4444a7270176ed7757ab1a7ff14fe38ecc011ff529788dffb57b31459a5213b
 
 importers:
 
@@ -206,8 +206,8 @@ importers:
         specifier: 5.11.1
         version: 5.11.1
       node-ical:
-        specifier: 0.27.1
-        version: 0.27.1(patch_hash=c4444a7270176ed7757ab1a7ff14fe38ecc011ff529788dffb57b31459a5213b)
+        specifier: 0.27.2
+        version: 0.27.2(patch_hash=c4444a7270176ed7757ab1a7ff14fe38ecc011ff529788dffb57b31459a5213b)
       pdfjs-dist:
         specifier: 6.3.289
         version: 6.3.289
@@ -1880,8 +1880,8 @@ packages:
     resolution: {integrity: sha512-kXs9Go0cah0qHVV2v389IXQLdLCeE1xfFtjOAF+iobu0OIoG1pje8At2vMHyaPMiPMnG/LWP50twML21eMcAag==}
     engines: {node: '>= 0.4'}
 
-  node-ical@0.27.1:
-    resolution: {integrity: sha512-5fiKuh/h2HrWKzFt20LtRQdjtjdGfijGfDnCfdAEc++SFX9gA6sa7xwj7/BJmRfWtW/NJWBenN4tOJhg0vM3pg==}
+  node-ical@0.27.2:
+    resolution: {integrity: sha512-RCjSxeNZN9Btv+xAZzB/GAet1FLcbmhcImLyynxU0LXyM7SgiQ1RnEitBsPgFTjMelUn6cw3GAjYc6w9MA5sIg==}
     engines: {node: '>=22'}
 
   node-releases@2.0.54:
@@ -2092,8 +2092,8 @@ packages:
     engines: {node: '>= 0.4'}
     hasBin: true
 
-  rrule-temporal@2.2.3:
-    resolution: {integrity: sha512-FAhonFfd9UUy6VI9kjzlbDPMjp/lgEGLH+dAGKJ9WYi7J4tHNaNb3Qp5jjjEhpOxFQgCwb2xz8HjMHbdFVLJoQ==}
+  rrule-temporal@2.2.6:
+    resolution: {integrity: sha512-izTnMn8pAFNLDuyRfF+H53YnWOF7tsA5+RcGrha4onVzOnXn8YXQ7tJE5StNZvAZXvxz0In3R/IQhbQJpi7EYQ==}
 
   run-z@2.1.0:
     resolution: {integrity: sha512-GGG0odDAOlGc6JvUXjrIiHmS2ZpyAKoJVIEPmSFapkK32ax+V9Q1lRtJFPBjFBZWTVflbkIbwEFTAsexLYxqdw==}
@@ -4219,9 +4219,9 @@ snapshots:
       object.entries: 1.1.9
       semver: 6.3.1
 
-  node-ical@0.27.1(patch_hash=c4444a7270176ed7757ab1a7ff14fe38ecc011ff529788dffb57b31459a5213b):
+  node-ical@0.27.2(patch_hash=c4444a7270176ed7757ab1a7ff14fe38ecc011ff529788dffb57b31459a5213b):
     dependencies:
-      rrule-temporal: 2.2.3
+      rrule-temporal: 2.2.6
       temporal-polyfill: 1.0.4
 
   node-releases@2.0.54: {}
@@ -4459,7 +4459,7 @@ snapshots:
       path-parse: 1.0.7
       supports-preserve-symlinks-flag: 1.0.0
 
-  rrule-temporal@2.2.3:
+  rrule-temporal@2.2.6:
     dependencies:
       temporal-spec: 1.0.1
 

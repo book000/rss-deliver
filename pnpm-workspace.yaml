@@ -5,4 +5,4 @@ allowBuilds:
 minimumReleaseAgeExclude:
   - '@book000/*'
 patchedDependencies:
-  node-ical@0.27.1: patches/node-ical@0.27.1.patch
+  node-ical@0.27.2: patches/node-ical@0.27.2.patch
