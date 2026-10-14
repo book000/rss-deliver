@@ -162,9 +162,6 @@ settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
-patchedDependencies:
-  node-ical@0.27.2: c4444a7270176ed7757ab1a7ff14fe38ecc011ff529788dffb57b31459a5213b
-
 importers:
 
   .:
@@ -206,8 +203,8 @@ importers:
         specifier: 5.11.2
         version: 5.11.2
       node-ical:
-        specifier: 0.27.2
-        version: 0.27.2(patch_hash=c4444a7270176ed7757ab1a7ff14fe38ecc011ff529788dffb57b31459a5213b)
+        specifier: 0.27.3
+        version: 0.27.3
       pdfjs-dist:
         specifier: 6.4.299
         version: 6.4.299
@@ -2030,8 +2027,8 @@ packages:
     resolution: {integrity: sha512-kXs9Go0cah0qHVV2v389IXQLdLCeE1xfFtjOAF+iobu0OIoG1pje8At2vMHyaPMiPMnG/LWP50twML21eMcAag==}
     engines: {node: '>= 0.4'}
 
-  node-ical@0.27.2:
-    resolution: {integrity: sha512-RCjSxeNZN9Btv+xAZzB/GAet1FLcbmhcImLyynxU0LXyM7SgiQ1RnEitBsPgFTjMelUn6cw3GAjYc6w9MA5sIg==}
+  node-ical@0.27.3:
+    resolution: {integrity: sha512-KT8DFQXcOlx4kXRUEr7XvEDa3SE7yury8ZKG6GB3JB20v9d0SKSSieThbXCI8kpTsyNeQkKqfJn/nbnmaRMpRw==}
     engines: {node: '>=22'}
 
   node-releases@2.0.57:
@@ -4429,7 +4426,7 @@ snapshots:
       object.entries: 1.1.9
       semver: 6.3.1
 
-  node-ical@0.27.2(patch_hash=c4444a7270176ed7757ab1a7ff14fe38ecc011ff529788dffb57b31459a5213b):
+  node-ical@0.27.3:
     dependencies:
       rrule-temporal: 2.2.7
       temporal-polyfill: 1.0.5
