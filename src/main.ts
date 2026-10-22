@@ -23,8 +23,19 @@ import {
 } from './utils/deleted-articles-tracker'
 import { DeletedArticle } from './model/deleted-article'
 import { getPreviousFeed } from './utils/previous-feed'
+import { Item } from './model/collect-result'
 
-async function generateRSSService(service: BaseService) {
+/**
+ * サービスの RSS を生成して出力する
+ *
+ * collect() はここで 1 回だけ実行し、削除記事検出にも同じ取得結果を使えるよう返す。
+ *
+ * @param service 対象サービス
+ * @returns 取得結果のアイテム（pubDate 処理前）。取得に失敗した場合は undefined
+ */
+async function generateRSSService(
+  service: BaseService
+): Promise<Item[] | undefined> {
   const filename = service.constructor.name
   const logger = Logger.configure(`main.generateRSSService#${filename}`)
   logger.info(`📝 Generating ${filename}...`)
@@ -36,7 +47,7 @@ async function generateRSSService(service: BaseService) {
   const collect = await service.collect()
   if (!collect.status) {
     logger.warn(`❌ ${filename} is not available`)
-    return
+    return undefined
   }
 
   // pubDateを処理
@@ -64,6 +75,8 @@ async function generateRSSService(service: BaseService) {
 
   fs.writeFileSync('output/' + filename + '.xml', feed.toString())
   logger.info(`✅ Generated ${filename}`)
+
+  return collect.items
 }
 
 async function generateRSS() {
@@ -98,16 +111,15 @@ async function generateRSS() {
       // 前回のフィードを取得
       const previousItems = await getPreviousFeed(serviceName)
 
-      // 新しいフィードを生成
-      await generateRSSService(service)
+      // 新しいフィードを生成（RSS 生成に使った取得結果を削除記事検出にも使う）
+      const collectedItems = await generateRSSService(service)
 
-      // 削除記事を検出（前回フィードが存在する場合のみ）
-      const collect = await service.collect()
-      if (collect.status) {
+      // 削除記事を検出（取得に成功し、前回フィードが存在する場合のみ）
+      if (collectedItems) {
         if (previousItems.length > 0) {
           const deletedArticles = detectDeletedArticles(
             previousItems,
-            collect.items,
+            collectedItems,
             serviceName
           )
           if (deletedArticles.length > 0) {
