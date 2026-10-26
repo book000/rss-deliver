@@ -136,8 +136,11 @@ function links(items: Item[]): string[] {
 
 /**
  * classifyShow の入力と期待値の組を検証する。
+ * 誤検知と取りこぼしが見つかった記事は、再発を防ぐためにそのままケースにしている。
  */
 function verifyClassifier(): void {
+  const longFiller = 'park news and updates for guests. '.repeat(40)
+
   const accepted: [string, string, string, string][] = [
     ['A1', '新規ショー『ブリング・ザ・リズム！』', '', ''],
     ['A2', 'Introducing a New Parade at Disneyland Paris', '', ''],
@@ -149,31 +152,309 @@ function verifyClassifier(): void {
       '',
       'Guests can see the all-new Pixar parade debut this summer.',
     ],
-    ['A6', 'New Parade Schedule', '', ''],
-    ['A7', 'Fireworks Show Returns with New Finale', '', ''],
+    ['A6', 'The show reopens with a new parade', '', ''],
+    ['A7', '新しい夜のキャッスルプロジェクションがスタート', '', ''],
+    [
+      'A8',
+      '東京ディズニーシー「ハンガーステージ」で新エンターテイメントプログラムを開催',
+      '',
+      '',
+    ],
+    [
+      'A9',
+      '東京ディズニーシー新規ナイトタイムエンターテイメントがスタート',
+      '',
+      '',
+    ],
+    [
+      'A10',
+      'Hong Kong Disneyland presents the first-ever in-park live orchestra performance',
+      '',
+      '',
+    ],
+    [
+      'A11',
+      'Une toute nouvelle parade de jour au Parc Disneyland en 2028',
+      '',
+      '',
+    ],
+    [
+      'A15',
+      'Disney Starlight Nighttime Parade Coming to Magic Kingdom “Later This Summer”',
+      '',
+      '',
+    ],
+    [
+      'A16',
+      'Disneyland Paris to Unveil a New Spectacular Projected onto Sleeping Beauty Castle',
+      '',
+      '',
+    ],
+    [
+      'A17',
+      'All-New Nighttime Parade Coming to Magic Kingdom in Summer 2025',
+      '',
+      '',
+    ],
+    [
+      'A18',
+      'Two New Nighttime Spectaculars Coming to Disneyland Resort in 2023',
+      '',
+      '',
+    ],
+    [
+      'A19',
+      'BREAKING: Brand New Nighttime Spectacular to Replace “Wishes” Beginning May 12',
+      '',
+      '',
+    ],
+    [
+      'A12',
+      'Hong Kong Disneyland Resort to proudly present Much-anticipated Nighttime Spectacular “Momentous” in mid-June',
+      '',
+      '',
+    ],
+    [
+      'A13',
+      'Summer at the resort',
+      '',
+      `Guests will love the brand-new nighttime spectacular. ${longFiller}`,
+    ],
+    [
+      'A14',
+      'Resort update',
+      '',
+      `${longFiller}The new parade opens soon. ${longFiller}A second new show follows.`,
+    ],
+    ['A20', '新規ショー『ブリング・ザ・リズム！』'.normalize('NFD'), '', ''],
+    ['A21', 'Nouveau défilé de Noël'.normalize('NFD'), '', ''],
+    ['A22', '最新情報', '', 'ショーが 7 月に初披露されます。'],
+    ['A23', 'Park news', '', 'The fireworks spectacular debuts on July 4.'],
+    ['A24', 'Actualités du parc', '', 'Un défilé nouveau arrive cet été.'],
+    ['A25', 'Actualités du parc', '', 'Les nouveaux feux d’artifice du parc.'],
+    ['A26', 'All-New Show™ Coming to Disneyland', '', ''],
+    ['A27', 'New™ Parade℠ Debuts This Summer', '', ''],
+    ['A28', 'ＮＥＷ　ＰＡＲＡＤＥ　Ｄｅｂｕｔｓ', '', ''],
+    ['A29', '新ｼｮｰがｽﾀｰﾄ', '', ''],
+    ['A30', '初めてのショー', '', ''],
   ]
   for (const [name, title, summary, bodyText] of accepted) {
     check(name, classifyShow({ title, summary, bodyText }), true)
   }
 
-  const rejected: [string, string, string, string][] = [
-    ['R1', 'Holiday Parade Merchandise Guide', '', ''],
-    ['R2', 'Parade Schedule Update', '', ''],
-    ['R3', 'Fireworks Show Returns This Summer', '', ''],
-    ['R4', '今年もハロウィーンのパレードが復活', '', ''],
-    ['R5', 'Appointment of Independent Non-Executive Directors', '', ''],
-    ['R6', '人事異動について', '', ''],
+  const rejected: [string, string, string, string, string][] = [
+    ['R1', 'Holiday Parade Merchandise Guide', '', '', '運営・グッズ系の語'],
+    ['R2', 'Parade Schedule Update', '', '', '新規を示す語が無い'],
+    ['R3', 'Fireworks Show Returns This Summer', '', '', '毎年恒例の再開催'],
+    ['R4', '今年もハロウィーンのパレードが復活', '', '', '毎年恒例の再開催'],
+    [
+      'R5',
+      'Appointment of Independent Non-Executive Directors',
+      '',
+      '',
+      '演目語なし',
+    ],
+    ['R6', '人事異動について', '', '', '演目語なし'],
     [
       'R7',
       'Indiana Jones et le Temple du Péril : fermeture pour rénovation',
       '',
       '',
+      '演目語なし',
     ],
-    ['R8', 'Park Update', '', 'parade' + ' x'.repeat(100) + ' new'],
+    [
+      'R8',
+      'Park Update',
+      '',
+      `${longFiller}${longFiller}the new parade is great. ${longFiller}`,
+      '本文の奥での 1 回きりの付随的な言及',
+    ],
+    [
+      'R9',
+      'Shanghai Disney Resort Rings in the New Year with Fireworks',
+      '',
+      '',
+      '`New Year` の new',
+    ],
+    [
+      'R10',
+      'Celebrate',
+      '',
+      `${longFiller}new year's fireworks and new year decorations.`,
+      '`New Year` の new',
+    ],
+    [
+      'R11',
+      'JAL、東京ディズニーランド®の新規イースターパレードに協賛',
+      '',
+      '',
+      '発表済みの演目への協賛の告知',
+    ],
+    [
+      'R12',
+      '「東京ディズニーリゾート・スペシャルドローンショー“マジック・イン・ジ・エア”」実施のお知らせ',
+      '',
+      '',
+      '毎年恒例の実施と区別できないため採用しない',
+    ],
+    [
+      'R13',
+      'Fireworks Show Returns with New Finale',
+      '',
+      '',
+      '恒例の演目の再開催（細かな変更）',
+    ],
+    [
+      'R14',
+      'Meet the Performer Who Brings His Heritage Center Stage',
+      'A family tradition and a way to honor his heritage.',
+      '',
+      '`stage` だけでは演目語としない',
+    ],
+    [
+      'R16',
+      'Why Halloween on the High Seas is My New Favorite Fall Tradition',
+      '',
+      '',
+      '演目語なし',
+    ],
+    [
+      'R17',
+      'Live in the Moment and Embrace a Spectacular Summer at Hong Kong Disneyland Resort',
+      '',
+      '',
+      '形容詞の spectacular は演目語としない',
+    ],
+    [
+      'R15',
+      'Hong Kong Disneyland Resort Announces New Pricing Structure',
+      '',
+      '',
+      '演目語なし',
+    ],
+    [
+      'R18',
+      'Parade Schedule Update',
+      '',
+      'The all-new parade debuts this summer.',
+      '運営系の語を含むタイトルは、本文に新規の根拠があっても採用しない',
+    ],
+    [
+      'R20',
+      'New Parade Schedule Update',
+      '',
+      '',
+      '運営情報（新規が隣接していても）',
+    ],
+    [
+      'R21',
+      'Brand-new parade merchandise now available',
+      '',
+      '',
+      'グッズ（新規が隣接していても）',
+    ],
+    [
+      'R22',
+      '【最新】ショー公演中止のお知らせ',
+      '',
+      '',
+      '中止（「最新」の新は新規ではない）',
+    ],
+    [
+      'R23',
+      'New Fireworks Show Returns This Summer',
+      '',
+      '',
+      '恒例の再開催（新規が隣接していても）',
+    ],
+    [
+      'R24',
+      '今年も新パレードが復活',
+      '',
+      '',
+      '恒例の再開催（新規が隣接していても）',
+    ],
+    [
+      'R25',
+      '更新情報',
+      '',
+      '最新情報 ショー',
+      '「最新」「更新」の新は新規ではない',
+    ],
+    ['R26', 'ライブ配信の更新について', '', '', 'ライブ配信は演目ではない'],
+    [
+      'R27',
+      'Disney announces strong financial performance',
+      '',
+      '',
+      'performance は企業の業績にも使われるため、タイトルの演目語としない',
+    ],
+    [
+      'R28',
+      'Cast members launch concert for charity',
+      '',
+      '',
+      'concert は発表を示す語と組み合わせてもタイトルの演目語としない',
+    ],
+    [
+      'R29',
+      'Disney announces New Year concert times',
+      '',
+      '',
+      'New Year の new は新規ではない',
+    ],
+    [
+      'R30',
+      'Nouveautés du parc : drones',
+      '',
+      '',
+      '語の途中の nouveau は新規ではない',
+    ],
+    [
+      'R31',
+      'Park update',
+      '',
+      'Enjoy new dining options and shows this season.',
+      '新規と演目が別の名詞句にまたがる',
+    ],
+    [
+      'R32',
+      'Fireworks Show Reopens, Announced for Friday',
+      '',
+      '',
+      '運営再開のみで、新規の根拠が無い',
+    ],
+    ['R33', '最新ショーのお知らせ', '', '', '「最新」の新は新規ではない'],
+    ['R34', '刷新されたショーの映像', '', '', '「刷新」の新は新規ではない'],
+    ['R35', '新作ライブ配信のお知らせ', '', '', 'ライブ配信は演目ではない'],
+    [
+      'R36',
+      'お知らせ',
+      '',
+      `新規${'あ'.repeat(20)}ショー`,
+      '新規と演目が離れている（文中の間隔の上限）',
+    ],
   ]
-  for (const [name, title, summary, bodyText] of rejected) {
-    check(name, classifyShow({ title, summary, bodyText }), false)
+  for (const [name, title, summary, bodyText, reason] of rejected) {
+    check(
+      `${name} (${reason})`,
+      classifyShow({ title, summary, bodyText }),
+      false
+    )
   }
+
+  const startedAt = performance.now()
+  const dashes = classifyShow({
+    title: 'Update',
+    summary: '',
+    bodyText: `new ${'-'.repeat(40_000)}x nouveau ${'-'.repeat(40_000)}x`,
+  })
+  check('R19 (ハイフンが長く続く本文でも二乗時間にならない)', dashes, false)
+  check(
+    'R19 elapsed time is under 1 second',
+    performance.now() - startedAt < 1000,
+    true
+  )
 }
 
 /**
@@ -183,6 +464,36 @@ function verifyClassifier(): void {
  */
 function readFixture(name: string): string {
   return fs.readFileSync(`src/verify/fixtures/${name}`, 'utf8')
+}
+
+/**
+ * 実際の記事に人が付けた正解ラベルと、classifyShow の判定が一致することを検証する。
+ * 新作のショー・パレード等の告知を正例、協賛・毎年恒例・運営・企業情報・価格などを負例としている。
+ * ルールの調整に使った記事を含むため、未知の記事に対する精度を保証するものではなく、退行の検知に使う。
+ */
+function verifyLabeledCorpus(): void {
+  const items = JSON.parse(readFixture('classifier-corpus.json')) as {
+    title: string
+    summary: string
+    bodyText: string
+    expected: boolean
+  }[]
+  check('corpus: labeled articles', items.length, 35)
+  check(
+    'corpus: positives and negatives',
+    [
+      items.filter((item) => item.expected).length,
+      items.filter((item) => !item.expected).length,
+    ],
+    [18, 17]
+  )
+  check(
+    'corpus: every article is classified as labeled',
+    items
+      .filter((item) => classifyShow(item) !== item.expected)
+      .map((item) => item.title),
+    []
+  )
 }
 
 /**
@@ -545,6 +856,7 @@ async function verifyCollect(): Promise<void> {
  */
 async function main(): Promise<void> {
   verifyClassifier()
+  verifyLabeledCorpus()
   verifyParsers()
   verifyMerge()
   verifyPreviousFeed()
