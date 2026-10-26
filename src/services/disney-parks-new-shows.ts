@@ -2,7 +2,7 @@ import { BaseService } from '@/base-service'
 import CollectResult, { Item } from '@/model/collect-result'
 import ServiceInformation from '@/model/service-information'
 import { loadPreviousFeed } from '@/utils/previous-feed'
-import { classifyShow } from '@/utils/show-classifier'
+import { findNewShowEvidence } from '@/utils/show-classifier'
 import { Logger } from '@book000/node-utils'
 import * as cheerio from 'cheerio'
 import { XMLParser } from 'fast-xml-parser'
@@ -458,9 +458,13 @@ export default class DisneyParksNewShows extends BaseService {
         )
         continue
       }
-      if (!classifyShow(candidate)) {
+      const evidence = findNewShowEvidence(candidate)
+      if (evidence === undefined) {
         continue
       }
+      logger.info(
+        `🎭 Matched ${JSON.stringify(candidate.title)} (${JSON.stringify(evidence)})`
+      )
       const key = normalizeLink(candidate.link)
       const existing = grouped.get(key)
       if (existing) {
