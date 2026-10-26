@@ -1,0 +1,206 @@
+<ul class="tabItems">
+<li class="no-img tdnet category_jaElm release_jaElm renkeiElm olc-group_jaElm" entrydate="2026/10/14">
+        <div class="item">
+                        <a href="/ja/news/news_olc/20261014_01/main/0/link/20261014_01.pdf" target="_blank">
+                            <span class="date">2026/10/14</span>
+            <span class="c_icon">
+                        <span class="category_ja" alt="新カテゴリ" data-category-path="/category_ja"></span>
+                        <span class="release_ja" alt="ニュースリリース" data-category-path="/category_ja/release_ja"></span>
+                        <span class="renkei" alt="自動連携" data-category-path="/renkei"></span>
+                        <span class="olc-group_ja" alt="OLCグループ" data-category-path="/renkei/olc-group_ja"></span>
+            </span>
+            <span class="news_tx">日本初のディズニークルーズの船名を「ディズニー・イマジネーション」に決定</span>
+        <span class="d_icon"><img src="/resources/templating-kit/themes/pop/img/defaulticon/common/pdf.png" alt="pdf"></span>
+        <span class="filesize">（376KB）</span>
+            <span class="n_icon"></span>
+                </a>
+        </div>
+    </li>
+<li class="no-img normal category_jaElm release_jaElm renkeiElm organization_jaElm" entrydate="2026/09/29">
+        <div class="item">
+                        <a href="/ja/news/news_olc/20260929/main/0/link/20260929_01.pdf" target="_blank">
+                            <span class="date">2026/09/29</span>
+            <span class="c_icon">
+                        <span class="category_ja" alt="新カテゴリ" data-category-path="/category_ja"></span>
+                        <span class="release_ja" alt="ニュースリリース" data-category-path="/category_ja/release_ja"></span>
+                        <span class="renkei" alt="自動連携" data-category-path="/renkei"></span>
+                        <span class="organization_ja" alt="組織・人事" data-category-path="/renkei/organization_ja"></span>
+            </span>
+            <span class="news_tx">役員の委嘱の変更および人事異動について</span>
+        <span class="d_icon"><img src="/resources/templating-kit/themes/pop/img/defaulticon/common/pdf.png" alt="pdf"></span>
+        <span class="filesize">（197KB）</span>
+            <span class="n_icon"></span>
+                </a>
+        </div>
+    </li>
+<li class="no-img normal category_jaElm release_jaElm renkeiElm organization_jaElm" entrydate="2026/09/24">
+        <div class="item">
+                        <a href="/ja/news/news_olc/20260924/main/0/link/20260924.pdf" target="_blank">
+                            <span class="date">2026/09/24</span>
+            <span class="c_icon">
+                        <span class="category_ja" alt="新カテゴリ" data-category-path="/category_ja"></span>
+                        <span class="release_ja" alt="ニュースリリース" data-category-path="/category_ja/release_ja"></span>
+                        <span class="renkei" alt="自動連携" data-category-path="/renkei"></span>
+                        <span class="organization_ja" alt="組織・人事" data-category-path="/renkei/organization_ja"></span>
+            </span>
+            <span class="news_tx">人事異動について</span>
+        <span class="d_icon"><img src="/resources/templating-kit/themes/pop/img/defaulticon/common/pdf.png" alt="pdf"></span>
+        <span class="filesize">（83KB）</span>
+            <span class="n_icon"></span>
+                </a>
+        </div>
+    </li>
+<li class="no-img normal category_jaElm release_jaElm renkeiElm organization_jaElm" entrydate="2026/08/25">
+        <div class="item">
+                        <a href="/ja/news/news_olc/20260825/main/0/link/20260825.pdf" target="_blank">
+                            <span class="date">2026/08/25</span>
+            <span class="c_icon">
+                        <span class="category_ja" alt="新カテゴリ" data-category-path="/category_ja"></span>
+                        <span class="release_ja" alt="ニュースリリース" data-category-path="/category_ja/release_ja"></span>
+                        <span class="renkei" alt="自動連携" data-category-path="/renkei"></span>
+                        <span class="organization_ja" alt="組織・人事" data-category-path="/renkei/organization_ja"></span>
+            </span>
+            <span class="news_tx">組織改正について</span>
+        <span class="d_icon"><img src="/resources/templating-kit/themes/pop/img/defaulticon/common/pdf.png" alt="pdf"></span>
+        <span class="filesize">（116KB）</span>
+            <span class="n_icon"></span>
+                </a>
+        </div>
+    </li>
+<li class="no-img tdnet category_jaElm release_jaElm renkeiElm noneElm" entrydate="2026/08/21">
+        <div class="item">
+                        <a href="/ja/news/news_olc/20260821/main/0/link/20260821.pdf" target="_blank">
+                            <span class="date">2026/08/21</span>
+            <span class="c_icon">
+                        <span class="category_ja" alt="新カテゴリ" data-category-path="/category_ja"></span>
+                        <span class="release_ja" alt="ニュースリリース" data-category-path="/category_ja/release_ja"></span>
+                        <span class="renkei" alt="自動連携" data-category-path="/renkei"></span>
+                        <span class="none" alt="その他" data-category-path="/renkei/none"></span>
+            </span>
+            <span class="news_tx">「令和8年8月千葉豪雨」に対する支援について</span>
+        <span class="d_icon"><img src="/resources/templating-kit/themes/pop/img/defaulticon/common/pdf.png" alt="pdf"></span>
+        <span class="filesize">（189KB）</span>
+            <span class="n_icon"></span>
+                </a>
+        </div>
+    </li>
+<li class="no-img tdnet category_jaElm release_jaElm renkeiElm noneElm" entrydate="2026/08/07">
+        <div class="item">
+                        <a href="/ja/news/news_olc/20260807/main/0/link/20260807.pdf" target="_blank">
+                            <span class="date">2026/08/07</span>
+            <span class="c_icon">
+                        <span class="category_ja" alt="新カテゴリ" data-category-path="/category_ja"></span>
+                        <span class="release_ja" alt="ニュースリリース" data-category-path="/category_ja/release_ja"></span>
+                        <span class="renkei" alt="自動連携" data-category-path="/renkei"></span>
+                        <span class="none" alt="その他" data-category-path="/renkei/none"></span>
+            </span>
+            <span class="news_tx">「令和8年熊本地震」に対する支援について</span>
+        <span class="d_icon"><img src="/resources/templating-kit/themes/pop/img/defaulticon/common/pdf.png" alt="pdf"></span>
+        <span class="filesize">（83KB）</span>
+            <span class="n_icon"></span>
+                </a>
+        </div>
+    </li>
+<li class="no-img tdnet category_jaElm release_jaElm renkeiElm resultElm" entrydate="2026/07/30">
+        <div class="item">
+                            <a href="/ja/news/news_olc/auto_20260730503137/pdfFile.pdf" target="_blank">
+                            <span class="date">2026/07/30</span>
+            <span class="c_icon">
+                        <span class="category_ja" alt="新カテゴリ" data-category-path="/category_ja"></span>
+                        <span class="release_ja" alt="ニュースリリース" data-category-path="/category_ja/release_ja"></span>
+                        <span class="renkei" alt="自動連携" data-category-path="/renkei"></span>
+                        <span class="result" alt="決算・業績" data-category-path="/renkei/result"></span>
+            </span>
+            <span class="news_tx">2027年3月期　第1四半期決算説明会</span>
+    <span class="d_icon"><img src="/resources/templating-kit/themes/pop/img/defaulticon/common/pdf.png" alt="pdf"></span>
+        <span class="filesize">（2,639KB）</span>
+            <span class="n_icon"></span>
+                </a>
+        </div>
+    </li>
+<li class="no-img tdnet category_jaElm release_jaElm renkeiElm resultElm" entrydate="2026/07/30">
+        <div class="item">
+                            <a href="/ja/news/news_olc/auto_20260730503122/pdfFile.pdf" target="_blank">
+                            <span class="date">2026/07/30</span>
+            <span class="c_icon">
+                        <span class="category_ja" alt="新カテゴリ" data-category-path="/category_ja"></span>
+                        <span class="release_ja" alt="ニュースリリース" data-category-path="/category_ja/release_ja"></span>
+                        <span class="renkei" alt="自動連携" data-category-path="/renkei"></span>
+                        <span class="result" alt="決算・業績" data-category-path="/renkei/result"></span>
+            </span>
+            <span class="news_tx">2027年3月期　第1四半期決算　補足資料</span>
+    <span class="d_icon"><img src="/resources/templating-kit/themes/pop/img/defaulticon/common/pdf.png" alt="pdf"></span>
+        <span class="filesize">（268KB）</span>
+            <span class="n_icon"></span>
+                </a>
+        </div>
+    </li>
+<li class="no-img tdnet category_jaElm release_jaElm renkeiElm resultElm" entrydate="2026/07/30">
+        <div class="item">
+                            <a href="/ja/news/news_olc/auto_20260729501736/pdfFile.pdf" target="_blank">
+                            <span class="date">2026/07/30</span>
+            <span class="c_icon">
+                        <span class="category_ja" alt="新カテゴリ" data-category-path="/category_ja"></span>
+                        <span class="release_ja" alt="ニュースリリース" data-category-path="/category_ja/release_ja"></span>
+                        <span class="renkei" alt="自動連携" data-category-path="/renkei"></span>
+                        <span class="result" alt="決算・業績" data-category-path="/renkei/result"></span>
+            </span>
+            <span class="news_tx">2027年３月期第１四半期決算短信〔日本基準〕(連結)</span>
+    <span class="d_icon"><img src="/resources/templating-kit/themes/pop/img/defaulticon/common/pdf.png" alt="pdf"></span>
+        <span class="filesize">（509KB）</span>
+            <span class="n_icon"></span>
+                </a>
+        </div>
+    </li>
+<li class="no-img normal category_jaElm release_jaElm renkeiElm organization_jaElm" entrydate="2026/06/26">
+        <div class="item">
+                        <a href="/ja/news/news_olc/20260626/main/0/link/20260626_1.pdf" target="_blank">
+                            <span class="date">2026/06/26</span>
+            <span class="c_icon">
+                        <span class="category_ja" alt="新カテゴリ" data-category-path="/category_ja"></span>
+                        <span class="release_ja" alt="ニュースリリース" data-category-path="/category_ja/release_ja"></span>
+                        <span class="renkei" alt="自動連携" data-category-path="/renkei"></span>
+                        <span class="organization_ja" alt="組織・人事" data-category-path="/renkei/organization_ja"></span>
+            </span>
+            <span class="news_tx">組織改正、役員の管掌・担当・委嘱等の変更および人事異動について</span>
+        <span class="d_icon"><img src="/resources/templating-kit/themes/pop/img/defaulticon/common/pdf.png" alt="pdf"></span>
+        <span class="filesize">（214KB）</span>
+            <span class="n_icon"></span>
+                </a>
+        </div>
+    </li>
+<li class="no-img normal category_jaElm release_jaElm renkeiElm sustainability_jaElm" entrydate="2026/06/15">
+        <div class="item">
+                        <a href="/ja/news/news_olc/20260615/main/0/link/20260615.pdf" target="_blank">
+                            <span class="date">2026/06/15</span>
+            <span class="c_icon">
+                        <span class="category_ja" alt="新カテゴリ" data-category-path="/category_ja"></span>
+                        <span class="release_ja" alt="ニュースリリース" data-category-path="/category_ja/release_ja"></span>
+                        <span class="renkei" alt="自動連携" data-category-path="/renkei"></span>
+                        <span class="sustainability_ja" alt="サステナビリティ" data-category-path="/renkei/sustainability_ja"></span>
+            </span>
+            <span class="news_tx">テーマパーク事業などで発生する廃食油を航空燃料に再利用 日本航空株式会社と共同で「SAF循環モデル」を導入</span>
+        <span class="d_icon"><img src="/resources/templating-kit/themes/pop/img/defaulticon/common/pdf.png" alt="pdf"></span>
+        <span class="filesize">（107KB）</span>
+            <span class="n_icon"></span>
+                </a>
+        </div>
+    </li>
+<li class="no-img tdnet category_jaElm release_jaElm renkeiElm resultElm" entrydate="2026/04/28">
+        <div class="item">
+                            <a href="/ja/news/news_olc/auto_20260428513084/pdfFile.pdf" target="_blank">
+                            <span class="date">2026/04/28</span>
+            <span class="c_icon">
+                        <span class="category_ja" alt="新カテゴリ" data-category-path="/category_ja"></span>
+                        <span class="release_ja" alt="ニュースリリース" data-category-path="/category_ja/release_ja"></span>
+                        <span class="renkei" alt="自動連携" data-category-path="/renkei"></span>
+                        <span class="result" alt="決算・業績" data-category-path="/renkei/result"></span>
+            </span>
+            <span class="news_tx">2026年3月期 決算説明会</span>
+    <span class="d_icon"><img src="/resources/templating-kit/themes/pop/img/defaulticon/common/pdf.png" alt="pdf"></span>
+        <span class="filesize">（1,127KB）</span>
+            <span class="n_icon"></span>
+                </a>
+        </div>
+    </li>
+</ul>

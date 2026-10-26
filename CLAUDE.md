@@ -58,7 +58,7 @@ src/
 template.html                  # HTML template used for output
 ```
 
-Services currently registered in `main.ts`: Zenn Changelog, FF14 Lodestone (news / maintenance / update / obstacle), Lettuce Club (physical-up / rikei), dev1and, TDR Updates, Pop Team Epic, Fish 4koma, GitHub Events.
+Services currently registered in `main.ts`: Zenn Changelog, FF14 Lodestone (news / maintenance / update / obstacle), Lettuce Club (physical-up / rikei), dev1and, TDR Updates, Pop Team Epic, Fish 4koma, GitHub Events, Disney Parks New Shows.
 
 ### Adding a new RSS service
 

@@ -15,6 +15,7 @@ import TdrUpdates from './services/tdr-updates'
 import PopTeamEpic from './services/pop-team-epic'
 import Fish4Koma from './services/fish-4koma'
 import GitHubEvents from './services/github-events'
+import DisneyParksNewShows from './services/disney-parks-new-shows'
 import {
   fetchDeletedArticlesHistory,
   detectDeletedArticles,
@@ -64,8 +65,10 @@ async function generateRSSService(
       '@_xmlns:dc': 'https://purl.org/dc/elements/1.1/',
       '@_xmlns:content': 'https://purl.org/rss/1.0/modules/content/',
       '@_xmlns:atom': 'https://www.w3.org/2005/Atom',
-      channel: service.information(),
-      item: processedItems,
+      channel: {
+        ...service.information(),
+        item: processedItems,
+      },
     },
   }
 
@@ -99,6 +102,7 @@ async function generateRSS() {
     new PopTeamEpic(),
     new Fish4Koma(),
     new GitHubEvents(),
+    new DisneyParksNewShows(),
   ]
 
   // 各サービスの削除記事を検出してまとめる

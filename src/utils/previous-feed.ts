@@ -34,11 +34,53 @@ type PreviousFeedCache = Record<
 const feedCache: PreviousFeedCache = {}
 
 /**
- * GitHub Pagesから公開されているRSSフィードを取得する
- * @param serviceName サービス名
- * @returns 前回のRSSフィードのアイテム、または取得失敗時は空配列
+ * 前回フィードの取得結果
  */
-export async function getPreviousFeed(serviceName: string): Promise<RssItem[]> {
+export interface PreviousFeedResult {
+  /**
+   * ok: 取得できた / not-found: 404（未公開） / error: 通信エラー・想定外の応答・パース失敗
+   */
+  status: 'ok' | 'not-found' | 'error'
+  /** 前回のアイテム（ok 以外は空配列） */
+  items: RssItem[]
+}
+
+/**
+ * 前回フィードの XML からアイテムを取り出す。
+ * `<item>` は `<channel>` の中にあるが、`<channel>` の外（`<rss>` 直下）に出力していた旧形式も読む。
+ * @param xml 前回フィードの XML
+ * @returns 前回のアイテム
+ * @throws RSS として解釈できない場合
+ */
+export function parsePreviousFeed(xml: string): RssItem[] {
+  const parser = new XMLParser({
+    ignoreAttributes: false,
+  })
+  const parsed: {
+    rss?: {
+      channel?: {
+        item?: RssItem | RssItem[]
+      }
+      item?: RssItem | RssItem[]
+    }
+  } = parser.parse(xml)
+  if (parsed.rss === undefined) {
+    throw new Error('Previous feed is not an RSS document')
+  }
+  const items = parsed.rss.channel?.item ?? parsed.rss.item ?? []
+
+  // 配列でない場合（アイテムが1つだけの場合）は配列に変換
+  return Array.isArray(items) ? items : [items]
+}
+
+/**
+ * GitHub Pagesから公開されているRSSフィードを取得し、取得の成否を区別して返す
+ * @param serviceName サービス名
+ * @returns 取得結果
+ */
+export async function loadPreviousFeed(
+  serviceName: string
+): Promise<PreviousFeedResult> {
   const logger = Logger.configure('utils.getPreviousFeed')
 
   // キャッシュがあれば、それを使用
@@ -47,7 +89,7 @@ export async function getPreviousFeed(serviceName: string): Promise<RssItem[]> {
     Date.now() - feedCache[serviceName].lastFetched.getTime() < 3_600_000 // 1時間以内
   ) {
     logger.info(`🔄 Using cached feed for ${serviceName}`)
-    return feedCache[serviceName].items
+    return { status: 'ok', items: feedCache[serviceName].items }
   }
 
   try {
@@ -59,28 +101,17 @@ export async function getPreviousFeed(serviceName: string): Promise<RssItem[]> {
       signal: AbortSignal.timeout(10_000),
     })
 
+    if (res.status === 404) {
+      logger.warn(`❌ Previous feed not found: ${feedUrl}`)
+      return { status: 'not-found', items: [] }
+    }
     if (res.status !== 200) {
       logger.warn(`❌ Failed to fetch previous feed: ${res.status}`)
-      return []
+      return { status: 'error', items: [] }
     }
 
-    const text = await res.text()
-    const parser = new XMLParser({
-      ignoreAttributes: false,
-    })
-
     try {
-      const parsed: {
-        rss?: {
-          channel?: {
-            item?: RssItem | RssItem[]
-          }
-        }
-      } = parser.parse(text)
-      const items = parsed.rss?.channel?.item ?? []
-
-      // 配列でない場合（アイテムが1つだけの場合）は配列に変換
-      const itemsArray = Array.isArray(items) ? items : [items]
+      const itemsArray = parsePreviousFeed(await res.text())
 
       // キャッシュに保存
       feedCache[serviceName] = {
@@ -89,15 +120,25 @@ export async function getPreviousFeed(serviceName: string): Promise<RssItem[]> {
       }
 
       logger.info(`✅ Found ${itemsArray.length} previous items`)
-      return itemsArray
+      return { status: 'ok', items: itemsArray }
     } catch (error) {
       logger.error('❌ Failed to parse previous feed', error as Error)
-      return []
+      return { status: 'error', items: [] }
     }
   } catch (error) {
     logger.error('❌ Failed to fetch previous feed', error as Error)
-    return []
+    return { status: 'error', items: [] }
   }
+}
+
+/**
+ * GitHub Pagesから公開されているRSSフィードを取得する
+ * @param serviceName サービス名
+ * @returns 前回のRSSフィードのアイテム、または取得失敗時は空配列
+ */
+export async function getPreviousFeed(serviceName: string): Promise<RssItem[]> {
+  const result = await loadPreviousFeed(serviceName)
+  return result.items
 }
 
 /**
