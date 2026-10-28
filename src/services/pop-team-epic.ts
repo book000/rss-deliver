@@ -196,15 +196,15 @@ export default class PopTeamEpic extends BaseService {
     const image = PopTeamEpic.normalizeUrl(
       $('meta[property="og:image"]').attr('content') ?? ''
     )
-    return !title || !image
-      ? null
-      : {
+    return title && image
+      ? {
           title,
           url: takecomicSeriesUrl,
           image,
           siteName: '竹コミ！',
           source: 'takecomic',
         }
+      : null
   }
 
   /**
@@ -754,9 +754,9 @@ export default class PopTeamEpic extends BaseService {
       return null
     }
     const [year, month, day] = dateText.split('/', 3)
-    return !year || !month || !day
-      ? null
-      : new Date(`${year}-${month}-${day}T00:00:00+09:00`)
+    return year && month && day
+      ? new Date(`${year}-${month}-${day}T00:00:00+09:00`)
+      : null
   }
 
   private static normalizeUrl(url: string): string {
