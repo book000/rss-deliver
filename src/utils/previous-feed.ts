@@ -1,5 +1,6 @@
 import { XMLParser } from 'fast-xml-parser'
 import fs from 'node:fs'
+import * as cheerio from 'cheerio'
 import { Logger } from '@book000/node-utils'
 import { Item } from '@/model/collect-result'
 import { DeletedArticlesHistory } from '@/model/deleted-article'
@@ -172,6 +173,53 @@ export async function carryOverPreviousFeed(
   }
 
   try {
+    const assetDirectories: Record<string, string> = {
+      Fish4Koma: 'fish4koma',
+      TdrUpdates: 'tdr-updates',
+    }
+    const directory = assetDirectories[serviceName]
+    if (directory) {
+      const urls = new Set<string>()
+      for (const item of result.items) {
+        for (const content of [item.description, item['content:encoded']]) {
+          if (typeof content !== 'string') continue
+          const $ = cheerio.load(content)
+          $('img').each((_, image) => {
+            const source = $(image).attr('src')
+            if (!source) return
+            try {
+              const url = new URL(
+                source,
+                'https://book000.github.io/rss-deliver/'
+              )
+              const pattern = new RegExp(
+                String.raw`^/rss-deliver/${directory}/[a-f0-9]{32}\.(?:jpg|png)$`
+              )
+              if (
+                url.origin === 'https://book000.github.io' &&
+                pattern.test(url.pathname)
+              ) {
+                urls.add(url.href)
+              }
+            } catch {
+              logger.warn(`⚠️ Invalid image URL in previous feed: ${source}`)
+            }
+          })
+        }
+      }
+      for (const url of urls) {
+        const filename = new URL(url).pathname.split('/').pop()
+        const destination = `output/${directory}/${filename}`
+        if (fs.existsSync(destination)) continue
+        const response = await fetch(url, {
+          signal: AbortSignal.timeout(10_000),
+        })
+        if (!response.ok)
+          throw new Error(`Failed to fetch image ${url}: ${response.status}`)
+        fs.mkdirSync(`output/${directory}`, { recursive: true })
+        fs.writeFileSync(destination, Buffer.from(await response.arrayBuffer()))
+      }
+    }
     fs.writeFileSync(`output/${serviceName}.xml`, result.xml)
   } catch (error) {
     logger.error(
