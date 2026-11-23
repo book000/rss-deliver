@@ -28,7 +28,7 @@ pnpm exec tsx src/verify/disney-parks-new-shows.ts   # offline verification of D
 
 There is no build step and no test framework; `tsx` runs the TypeScript directly. Run `pnpm lint` before committing, and the verify script when you touch `src/utils/show-classifier.ts` or `src/services/disney-parks-new-shows.ts`. Node.js is pinned in `.node-version` and pnpm in `package.json`.
 
-CI (`.github/workflows/nodejs-ci-pnpm.yml`) calls the reusable pnpm workflow from `book000/templates`. `.depcheckrc.json` ignores the ESLint plugins that are only referenced from the config. `canvas` needs the apt packages in `.github/apt-packages.txt` to build, and the platforms of the native binaries of `canvas` and `sharp` are limited by `pnpm.supportedArchitectures` in `package.json`. CI must pass before merging.
+CI (`.github/workflows/nodejs-ci-pnpm.yml`) calls the reusable pnpm workflow from `book000/templates`. `canvas` needs the apt packages in `.github/apt-packages.txt` to build, and the platforms of the native binaries of `canvas` and `sharp` are limited by `pnpm.supportedArchitectures` in `package.json`. CI must pass before merging.
 
 ## Structure
 
