@@ -236,7 +236,7 @@ export default class PopTeamEpic extends BaseService {
 
       if (imageUrls.length === 0) {
         logger.warn(`❗ No images for ${episode.title}`)
-        continue
+        throw new Error(`No images for ${episode.title}`)
       }
 
       const itemTitle = episode.date

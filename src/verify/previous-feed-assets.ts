@@ -25,7 +25,9 @@ async function verify() {
       if (url.endsWith('.xml')) {
         const asset = url.includes('Fish4Koma')
           ? `fish4koma/${hash}.jpg`
-          : `tdr-updates/${hash}.png`
+          : url.includes('PopTeamEpic')
+            ? `popute/${hash}.jpg`
+            : `tdr-updates/${hash}.png`
         const html = `<img src="https://book000.github.io/rss-deliver/${asset}"><img src="https://example.com/image.png">`
         return Promise.resolve(
           new Response(
@@ -37,6 +39,7 @@ async function verify() {
     }
     for (const [service, asset] of [
       ['Fish4Koma', `fish4koma/${hash}.jpg`],
+      ['PopTeamEpic', `popute/${hash}.jpg`],
       ['TdrUpdates', `tdr-updates/${hash}.png`],
     ]) {
       assert.equal(await carryOverPreviousFeed(service), 'preserved')
