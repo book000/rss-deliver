@@ -43,17 +43,29 @@ export default class Fish4Koma extends BaseService {
     const parsed = parser.parse(await res.text()) as {
       'rdf:RDF': {
         channel: unknown
-        item?: {
-          title: string
-          link: string
-          description: string
-          'dc:date': string
-        }[]
+        item?:
+          | {
+              title: string
+              link: string
+              description: string
+              'dc:date': string
+            }[]
+          | {
+              title: string
+              link: string
+              description: string
+              'dc:date': string
+            }
       }
     }
-    const rssItems = parsed['rdf:RDF'].item
+    const rawItems = parsed['rdf:RDF'].item
+    const rssItems = rawItems
+      ? Array.isArray(rawItems)
+        ? rawItems
+        : [rawItems]
+      : []
 
-    if (!rssItems || rssItems.length === 0) {
+    if (rssItems.length === 0) {
       logger.warn('❗ No items found in RSS feed')
       return {
         status: false,
@@ -69,7 +81,7 @@ export default class Fish4Koma extends BaseService {
       const itemRes = await fetch(itemUrl)
       if (itemRes.status !== 200) {
         logger.warn(`❗ Failed to fetch item page (${itemRes.status})`)
-        continue
+        return { status: false, items: [] }
       }
 
       const $ = cheerio.load(await itemRes.text())
@@ -101,7 +113,7 @@ export default class Fish4Koma extends BaseService {
 
       if (images.length === 0) {
         logger.warn(`❗ No images found for: ${rssItem.title}`)
-        continue
+        return { status: false, items: [] }
       }
 
       if (!fs.existsSync('output/fish4koma/')) {
@@ -165,15 +177,16 @@ export default class Fish4Koma extends BaseService {
         }
       }
 
-      if (savedImageUrl) {
-        items.push({
-          title: rssItem.title,
-          link: itemUrl,
-          description: rssItem.description,
-          'content:encoded': `<img src="${savedImageUrl}">`,
-          pubDate: rssItem['dc:date'],
-        })
+      if (!savedImageUrl) {
+        return { status: false, items: [] }
       }
+      items.push({
+        title: rssItem.title,
+        link: itemUrl,
+        description: rssItem.description,
+        'content:encoded': `<img src="${savedImageUrl}">`,
+        pubDate: rssItem['dc:date'],
+      })
     }
 
     return {

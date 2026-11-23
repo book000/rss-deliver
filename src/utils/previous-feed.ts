@@ -175,6 +175,7 @@ export async function carryOverPreviousFeed(
   try {
     const assetDirectories: Record<string, string> = {
       Fish4Koma: 'fish4koma',
+      PopTeamEpic: 'popute',
       TdrUpdates: 'tdr-updates',
     }
     const directory = assetDirectories[serviceName]
