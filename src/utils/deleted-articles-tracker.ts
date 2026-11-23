@@ -1,7 +1,7 @@
 import { Logger } from '@book000/node-utils'
 import { Item } from '@/model/collect-result'
 import { DeletedArticle, DeletedArticlesHistory } from '@/model/deleted-article'
-import { writeFileSync } from 'node:fs'
+import { mkdtempSync, renameSync, rmSync, writeFileSync } from 'node:fs'
 import path from 'node:path'
 
 interface RssItem {
@@ -182,7 +182,8 @@ export function updateDeletedArticlesHistory(
 }
 
 /**
- * Writes the history to `output/deleted-articles-history.json`.
+ * Atomically replaces `output/deleted-articles-history.json`.
+ * @throws If the history cannot be written
  */
 export function saveDeletedArticlesHistory(
   history: DeletedArticlesHistory
@@ -195,10 +196,20 @@ export function saveDeletedArticlesHistory(
       'output',
       'deleted-articles-history.json'
     )
-    writeFileSync(outputPath, JSON.stringify(history, null, 2))
+    const temporaryDirectory = mkdtempSync(
+      path.join(path.dirname(outputPath), '.history-')
+    )
+    try {
+      const temporaryPath = path.join(temporaryDirectory, 'history.json')
+      writeFileSync(temporaryPath, JSON.stringify(history, null, 2))
+      renameSync(temporaryPath, outputPath)
+    } finally {
+      rmSync(temporaryDirectory, { recursive: true, force: true })
+    }
     logger.info(`💾 Saved deleted articles history to ${outputPath}`)
   } catch (error) {
     logger.error('❌ Failed to save deleted articles history', error as Error)
+    throw error
   }
 }
 

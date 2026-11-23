@@ -39,7 +39,7 @@ async function verify() {
       ['Fish4Koma', `fish4koma/${hash}.jpg`],
       ['TdrUpdates', `tdr-updates/${hash}.png`],
     ]) {
-      assert.equal(await carryOverPreviousFeed(service), true)
+      assert.equal(await carryOverPreviousFeed(service), 'preserved')
       assert.equal(fs.readFileSync(`output/${asset}`, 'utf8'), 'image bytes')
       assert.ok(
         fs.readFileSync(`output/${service}.xml`, 'utf8').includes(asset)
@@ -49,10 +49,16 @@ async function verify() {
       requests.some((url) => url.startsWith('https://example.com')),
       false
     )
+    globalThis.fetch = () =>
+      Promise.resolve(new Response(null, { status: 404 }))
+    assert.equal(await carryOverPreviousFeed('NeverPublished'), 'not-found')
+    globalThis.fetch = () =>
+      Promise.resolve(new Response(null, { status: 503 }))
+    assert.equal(await carryOverPreviousFeed('Unavailable'), 'error')
     fs.rmSync(`output/fish4koma/${hash}.jpg`)
     fs.rmSync('output/Fish4Koma.xml')
     globalThis.fetch = () => Promise.resolve(new Response('', { status: 503 }))
-    assert.equal(await carryOverPreviousFeed('Fish4Koma'), false)
+    assert.equal(await carryOverPreviousFeed('Fish4Koma'), 'error')
     assert.equal(fs.existsSync('output/Fish4Koma.xml'), false)
   } finally {
     globalThis.fetch = originalFetch
