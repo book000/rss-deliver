@@ -233,7 +233,7 @@ function verifyClassifier(): void {
     ['A25', 'Actualités du parc', '', 'Les nouveaux feux d’artifice du parc.'],
     ['A26', 'All-New Show™ Coming to Disneyland', '', ''],
     ['A27', 'New™ Parade℠ Debuts This Summer', '', ''],
-    ['A28', 'ＮＥＷ　ＰＡＲＡＤＥ　Ｄｅｂｕｔｓ', '', ''],
+    ['A28', 'ＮＥＷ\u3000ＰＡＲＡＤＥ\u3000Ｄｅｂｕｔｓ', '', ''],
     ['A29', '新ｼｮｰがｽﾀｰﾄ', '', ''],
     ['A30', '初めてのショー', '', ''],
   ]
@@ -530,7 +530,7 @@ function verifyParsers(): void {
   check(
     'paris: title keeps the original text (entities decoded, U+00A0 kept)',
     paris[0].title,
-    'Indiana Jones™ et le Temple du Péril : une rénovation d’envergure à partir de janvier 2027'
+    'Indiana Jones™ et le Temple du Péril\u00A0: une rénovation d’envergure à partir de janvier 2027'
   )
 
   check(
