@@ -85,7 +85,9 @@ async function generateRSSService(
     )
   }
 
-  await carryOverPreviousFeed(filename)
+  if ((await carryOverPreviousFeed(filename)) === 'error') {
+    throw new Error(`Failed to preserve previous feed: ${filename}`)
+  }
   return undefined
 }
 
@@ -112,6 +114,7 @@ async function generateRSS() {
   ]
 
   const allDeletedArticles: DeletedArticle[] = []
+  const failures: Error[] = []
 
   const promises: Promise<void>[] = services.map(async (service) => {
     try {
@@ -147,6 +150,11 @@ async function generateRSS() {
         `❌ Error occurred while generating RSS: ${service.constructor.name}`,
         error as Error
       )
+      failures.push(
+        new Error(`Failed to generate ${service.constructor.name}`, {
+          cause: error,
+        })
+      )
     }
   })
 
@@ -161,7 +169,19 @@ async function generateRSS() {
     deletedHistory,
     allDeletedArticles
   )
-  saveDeletedArticlesHistory(deletedHistory)
+  try {
+    saveDeletedArticlesHistory(deletedHistory)
+  } catch (error) {
+    failures.push(
+      new Error('Failed to save deleted articles history', { cause: error })
+    )
+  }
+  if (failures.length > 0) {
+    throw new AggregateError(
+      failures,
+      'Output integrity failures prevent publication'
+    )
+  }
 }
 
 function generateList() {

@@ -50,7 +50,7 @@ CI (`.github/workflows/nodejs-ci-pnpm.yml`) calls the reusable pnpm workflow fro
 4. Log with `Logger.configure(...)` from `@book000/node-utils`.
 5. Do not implement `pubDate` fallback or deleted-article tracking in a service; `main.ts` and `BaseService` handle them.
 
-When a source is unavailable, return `{ status: false, items: [] }` (a service that throws is also caught per service in `main.ts`), so one failing source does not stop the run. `main.ts` then copies the previously published feed to `output/` unchanged (`carryOverPreviousFeed`), so the feed stays on the site; no file is written only if the service has never been published or the previous feed cannot be loaded.
+When a source is unavailable, return `{ status: false, items: [] }` (a service that throws is also caught per service in `main.ts`), so one failing source does not stop the run. `main.ts` then copies the previously published feed to `output/` unchanged (`carryOverPreviousFeed`), so the feed stays on the site. If the previous feed returns 404, no file is written; other failures to load or preserve it abort publication.
 
 ## Conventions
 

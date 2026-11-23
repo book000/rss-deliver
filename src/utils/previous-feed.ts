@@ -154,14 +154,13 @@ export async function getPreviousFeed(serviceName: string): Promise<RssItem[]> {
 
 /**
  * Copies the previously published feed to `output/<serviceName>.xml` unchanged, so that a failing service keeps its feed on the deployed site.
- * Writes nothing if the previous feed was never published or could not be loaded.
- * Never throws.
+ * A missing feed is distinguished from a failure to preserve it.
  * @param serviceName Service class name
- * @returns Whether the previous feed was written
+ * @returns Preservation status
  */
 export async function carryOverPreviousFeed(
   serviceName: string
-): Promise<boolean> {
+): Promise<'preserved' | 'not-found' | 'error'> {
   const logger = Logger.configure(`utils.carryOverPreviousFeed.${serviceName}`)
 
   const result = await loadPreviousFeed(serviceName)
@@ -169,7 +168,7 @@ export async function carryOverPreviousFeed(
     logger.warn(
       `⚠️ No previous feed to carry over for ${serviceName} (${result.status})`
     )
-    return false
+    return result.status === 'not-found' ? 'not-found' : 'error'
   }
 
   try {
@@ -226,11 +225,11 @@ export async function carryOverPreviousFeed(
       `❌ Failed to write carried-over feed for ${serviceName}`,
       error as Error
     )
-    return false
+    return 'error'
   }
 
   logger.info(`📦 Carried over previous feed for ${serviceName}`)
-  return true
+  return 'preserved'
 }
 
 /**

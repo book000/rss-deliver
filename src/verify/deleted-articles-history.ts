@@ -95,6 +95,56 @@ async function verify(): Promise<void> {
       assert.notEqual(result.status, 0)
       assert.match(result.stdout + result.stderr, /HTTP 503/)
       assert.deepEqual(JSON.parse(readFileSync(historyPath, 'utf8')), history)
+      for (const failure of ['feed', 'history']) {
+        writeFileSync(historyPath, JSON.stringify(history))
+        writeFileSync(
+          driver,
+          `import fs from 'node:fs';
+import { syncBuiltinESMExports } from 'node:module';
+if (${JSON.stringify(failure)} === 'history') {
+  fs.renameSync = () => { throw new Error('Simulated history rename failure') };
+  syncBuiltinESMExports();
+}
+globalThis.fetch = async (input) => {
+  const url = String(input);
+  if (url.includes('deleted-articles-history.json')) return Response.json(${JSON.stringify(history)});
+  if (url.includes('book000.github.io/rss-deliver/')) return new Response(null, { status: ${failure === 'feed' ? 503 : 404} });
+  return new Response(null, { status: 503 });
+};
+await import(${JSON.stringify(mainUrl)});
+`
+        )
+        const failureResult = spawnSync(
+          process.execPath,
+          [
+            '--import',
+            createRequire(path.join(process.cwd(), 'package.json')).resolve(
+              'tsx'
+            ),
+            driver,
+          ],
+          {
+            cwd: directory,
+            encoding: 'utf8',
+            env: {
+              ...process.env,
+              TSX_TSCONFIG_PATH: path.resolve('tsconfig.json'),
+            },
+            timeout: 30_000,
+          }
+        )
+        assert.equal(failureResult.status, 1, failureResult.stderr)
+        assert.match(
+          failureResult.stdout + failureResult.stderr,
+          /Output integrity failures prevent publication/
+        )
+        if (failure === 'history') {
+          assert.deepEqual(
+            JSON.parse(readFileSync(historyPath, 'utf8')),
+            history
+          )
+        }
+      }
     } finally {
       rmSync(directory, { recursive: true, force: true })
     }

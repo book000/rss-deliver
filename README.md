@@ -10,7 +10,7 @@ This is a private-use project (`"private": true`). The sources and the published
 
 1. Loads the deleted-articles history from `https://book000.github.io/rss-deliver/deleted-articles-history.json`.
 2. Runs every service in parallel. For each service it loads the previously published feed from GitHub Pages, calls the service's `collect()`, fills in missing `pubDate` values, and writes `output/<ServiceClassName>.xml`. One failing service does not stop the others, and its previously published feed is copied to `output/` unchanged so that it stays on the site until the service succeeds again.
-3. Compares the previous feed with the new items to detect articles that disappeared, and records them in `output/deleted-articles-history.json` (entries older than 30 days are dropped). The file is written on every run, because `output/` is deployed wholesale and a skipped write would drop it from the site.
+3. Compares the previous feed with the new items to detect articles that disappeared, and records them in `output/deleted-articles-history.json` (entries older than 30 days are dropped). The file is atomically replaced on every run, because `output/` is deployed wholesale; a write failure aborts publication.
 4. Writes `output/index.html`, a list of the generated feeds built from `template.html`.
 
 `pubDate` handling: an item without a `pubDate` inherits it from the previous feed, then from the deleted-articles history, and finally falls back to the current time.
@@ -85,7 +85,7 @@ The `Update RSS` workflow (`.github/workflows/update-rss.yml`) runs hourly (`0 *
 5. Sends a Discord notification (`DISCORD_WEBHOOK`) if a step fails.
 6. Uploads `output/` as the GitHub Pages artifact.
 
-A separate `deploy` job on `ubuntu-latest` then deploys the artifact to GitHub Pages. Because `output/` is uploaded as a whole, a service that produced no file in a run is absent from the deployed site until a later run succeeds. A failing service normally keeps its previous feed, so this applies only to a service that has never been published or whose previous feed cannot be loaded.
+A separate `deploy` job on `ubuntu-latest` then deploys the artifact to GitHub Pages. Because `output/` is uploaded as a whole, a service that produced no file in a run is absent from the deployed site until a later run succeeds. A failing service keeps its previous feed; if the feed or its required assets cannot be preserved, publication fails. A confirmed missing previous feed is omitted until the service succeeds.
 
 `Update RSS` uses the `update-rss` concurrency group: a running run is never cancelled, and at most one further run waits behind it (a newer waiting run replaces an older one), so runs do not pile up while the runner is unavailable.
 
